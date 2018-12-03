@@ -1,6 +1,6 @@
 <template>
     <el-button icon @click="click">
-        <el-icon>{{style.icon}}</el-icon>
+        <el-icon></el-icon>
     </el-button>
 </template>
 

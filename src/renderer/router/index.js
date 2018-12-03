@@ -14,7 +14,16 @@ export default new Router({
       {
         path:'/Menu',
           name:'Menu',
-          component:require('@/pages/Menu').default
-      }
+          component:require('@/pages/Menu').default,
+          children:[
+              {
+                  path:'/Sketch',
+                  name:'Sketch',
+                  component:require('@/pages/Sketch').default,
+              }
+          ]
+      },
+
+
   ]
 })

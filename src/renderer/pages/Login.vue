@@ -16,12 +16,16 @@
 </template>
 
 <script>
+    const {ipcRenderer: ipc} = require('electron');
     export default {
         data(){
             return{
                 loginform:{
                     userName:'',
                     userPassword:'',
+                },
+                items:{
+                  name:'',
                 }
             }
         },
@@ -30,6 +34,11 @@
               let url = 'http://localhost:8083/login';
               this.$http.get(url,{params:this.loginform}).then((response)=>{
                   if (response.data.code=='200'){
+                      debugger
+                      this.items.name=JSON.parse(sessionStorage.getItem('user'));
+                      console.log(name);
+                      debugger
+                      ipc.send('success');
                       this.$router.push({path:'/Menu'})
                   }
               })

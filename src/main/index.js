@@ -23,7 +23,7 @@ function createWindow () {
     height: 763,
     useContentSize: true,
     width: 1000,
-     /* frame:false*/
+      frame:false
   })
 
   mainWindow.loadURL(winURL)
@@ -32,6 +32,8 @@ function createWindow () {
     mainWindow = null
   })
 }
+
+
 
 app.on('ready', createWindow)
 

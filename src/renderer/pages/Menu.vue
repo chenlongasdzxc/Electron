@@ -1,48 +1,120 @@
 <template>
-    <div>
+    <div style="height: 100%">
         <div>
-        <el-card shadow="always" style="margin: -10px -10px 0 -10px;background-color: whitesmoke;height: 40px">
-            <el-button type="text" class="iconfont icon-caidan" style="margin-top:-20px;pxpadding-top: -40px" aria-label="主菜单" @click="back"></el-button>
-        </el-card>
+            <el-card shadow="always" style="margin: -7px -10px 0 -10px;background-color: whitesmoke;height: 30px">
+                <div class="button_el">
+                    <el-button type="text" class="iconfont icon-jianhao" @click="windowMin"></el-button>
+                    <el-button type="text" class="iconfont icon-chuangkou" @click="windowMax"></el-button>
+                    <el-button type="text" class="iconfont icon-guanbi" @click="windowClose"></el-button>
+                </div>
+            </el-card>
         </div>
+        <div>Welcome{{items.name}}</div>
         <div>
-            <el-tabs  style="margin-left: 200px;">
-                <el-tab-pane label="用户管理">用户管理</el-tab-pane>
-                <el-tab-pane label="配置管理">配置管理</el-tab-pane>
-                <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-                <el-tab-pane label="定时任务">定时任务</el-tab-pane>
-            </el-tabs>
+            <el-row>
+                <el-col>
+                    <el-table
+                            :data="tableData"
+                            border
+                            style="width: 60%">
+                        <el-table-column
+                                fixed
+                                prop="id"
+                                label="序号"
+                                width="50"
+                        ></el-table-column>
+                        <el-table-column
+                                fixed
+                                prop="userName"
+                                label="姓名"
+                                min-width="50"
+                        ></el-table-column>
+                        <el-table-column
+                                fixed
+                                prop="sketchName"
+                                label="活动名称"
+                                width="100"
+                        ></el-table-column>
+                        <el-table-column
+                                fixed
+                                prop="type"
+                                label="活动类型"
+                                min-width="150"
+                        ></el-table-column>
+                        <el-table-column
+                                fixed
+                                prop="sketchScore"
+                                label="素拓分"
+                                width="80"
+                        ></el-table-column>
+                        <el-table-column
+                                fixed
+                                prop="sketchStates"
+                                label="状态"
+                                width="50"
+                        ></el-table-column>
+                        <el-table-column
+                                fixed
+                                label="操作"
+                        ></el-table-column>
+                    </el-table>
+                </el-col>
+            </el-row>
         </div>
     </div>
-
 </template>
 
 <script>
-    import IconBtn from "./../components/IconButton";
+    const {ipcRenderer: ipc} = require('electron');
     export default {
-        name:'App',
-        components:{IconBtn},
-        data(){
-            return{
-
+        data() {
+            return {
+                items: {
+                    name: '',
+                },
+                tableData: [],
+                sketchName: '',
+                sketchScore: '',
+                sketchStates: '',
+                sketchType: '',
             }
         },
-        methods:{
-            back:function () {
-                this.$router.push({path:'/'})
+        created() {
+            this.getSketchList();
+        },
+        methods: {
+            windowMax: function () {
+                ipc.send('max')
             },
-            handleOpen:function (key,keyPath) {
-                console.log(key,keyPath)
+            windowClose: function () {
+                ipc.send('close')
             },
-            handleClose:function (key,keyPath) {
-                console.log(key,keyPath)
+            windowMin: function () {
+                ipc.send('min')
             },
+
+            /**
+             * 获取素拓分
+             * **/
+            getSketchList: function () {
+                let url = 'http://localhost:8083/Sketch/findAll';
+                this.$http.get(url).then((response) => {
+                    if (response.data.code == 200) {
+                        this.tableData = response.data.data;
+                    }
+                })
+            }
+
         }
     }
 </script>
 
 <style>
-    .iconfontclass{
-        margin: -30px;
+    .button_el {
+        position: relative;
+        margin-top: -30px;
+        margin-left: 0px;
+        float: right;
+        float: top;
     }
 </style>
