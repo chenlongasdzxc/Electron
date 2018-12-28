@@ -20,12 +20,12 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 763,
+    height:663,
     useContentSize: true,
-    width: 1000,
+    width: 900,
       frame:false
   })
-
+    /*ipcMain.on('success',e => mainWindow.setSize(763,1000))*/
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
