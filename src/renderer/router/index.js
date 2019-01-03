@@ -41,6 +41,11 @@ export default new Router({
                     path: '/MoralPlus',
                     name: 'MoralPlus',
                     component: require('@/moral/MoralPlus').default,
+                },
+                {
+                    path: '/StudentInfo',
+                    name: 'StudentInfo',
+                    component: require('@/pages/StudentInfo').default,
                 }
             ],
         },

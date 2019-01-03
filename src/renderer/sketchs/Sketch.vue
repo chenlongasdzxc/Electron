@@ -44,7 +44,14 @@
                                             @change="changePaySelect(scope.$index)"
                                             filterable
                                             placeholder="请选择"
-                                        ></el-select>
+                                        >
+                                            <el-option
+                                                    v-for="item in sketchList"
+                                                    :key="item.skethName"
+                                                    :label="item.sketchName"
+                                                    :value="item.sketchName">
+                                            ></el-option>
+                                        </el-select>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -203,6 +210,7 @@
         data(){
             return{
                 personalSketch:[],
+                sketchList:[],
                 tableData:[],
                 sketchData:[],
                 userName:'',
@@ -242,6 +250,11 @@
 
             },
             changePaySelect:function(){
+
+            },
+
+            selectSketchList:function(){
+                let url = 'http://localhost:8083/SketchScore/findFuzzy';
 
             },
 

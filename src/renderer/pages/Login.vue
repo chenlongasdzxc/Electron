@@ -17,7 +17,9 @@
 
 <script>
     const {ipcRenderer: ipc} = require('electron');
+    import Config from '../config'
     export default {
+
         data(){
             return{
                 loginform:{
@@ -31,11 +33,12 @@
         },
         methods:{
           loginButton:function () {
-              let url = 'http://localhost:8083/login';
-              const that = this;
-              this.$http.get(url,{params:this.loginform}).then((response)=>{
+              this.$http.get(Config.login,{params:this.loginform}).then((response)=>{
                   if (response.data.code=='200'){
-                      const token = response.data.data;
+                      sessionStorage.setItem("userName",this.loginform.userName)
+                      const token = response.data.data.data;
+                      console.log(token);
+                      sessionStorage.setItem("token",token);
                       this.$router.push({path:'/Menu'})
                   }
                   if(response.data.code=='401'){

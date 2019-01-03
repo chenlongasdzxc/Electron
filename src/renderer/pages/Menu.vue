@@ -61,7 +61,19 @@
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="5">
-
+                            <template slot="title" style="padding: 0px 0px 0px 0px">考勤管理</template>
+                            <el-menu-item-group>
+                                <el-menu-item index="" style="min-width: 50px">通勤信息</el-menu-item>
+                            </el-menu-item-group>
+                            <el-menu-item-group>
+                                <el-menu-item index="/" style="min-width: 50px">考勤管理</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="6">
+                            <template slot="title" style="padding: 0px 0px 0px 0px">个人中心</template>
+                            <el-menu-item-group>
+                                <el-menu-item index="/StudentInfo" style="min-width: 50px">个人信息</el-menu-item>
+                            </el-menu-item-group>
                         </el-submenu>
                     </el-menu>
                 </el-aside>

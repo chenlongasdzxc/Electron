@@ -35,7 +35,7 @@
         border-left: 4px solid #2BA943;
         text-align: left;
         padding-left: 15px;
-        line-height: 35px;
+        line-height: 36px;
 
     }
 
