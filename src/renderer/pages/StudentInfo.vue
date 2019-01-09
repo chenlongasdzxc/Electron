@@ -53,7 +53,11 @@
                     </el-row>
                 </form-panel>
                 <form-panel name="密码修改" align="left" isNone="false" collapsible>
-                    <i>新密码</i><el-input v-model="userPassword" size="small" style="width: 150px"></el-input>
+                    <el-form ref="form" v-model="passwordForm">
+                        <el-form-item label="新密码">
+                            <el-input v-model="passwordForm.userPassword" size="small" style="width: 150px"></el-input>
+                        </el-form-item>
+                    </el-form>
                     <VButton @click="saveNewPassword">保存</VButton>
                 </form-panel>
             </el-card>
@@ -72,8 +76,13 @@
         name: "StudentInfo",
         data() {
             return {
-                userPassword: '',
-                uid:'',
+                passwordForm:{
+                    id:'',
+                    userPassword: '',
+
+                },
+
+                uid: '',
                 studentInfo: [],
                 studentForm: {
                     id: '',
@@ -115,40 +124,33 @@
                 })
             },
             saveStudentInfo: function () {
-                const that = this;
                 let url = Config.studentInfo + '/update';
                 this.$http.post(url, {params: this.studentForm}).then(response => {
                     if (response.data.code == '200') {
-                        debugger
+
                     }
                 })
             },
-            saveNewPassword:function () {
-               this.getId();
-               debugger
-               let studentId = this.uid;
-               debugger
-               this.$http.post(Config.userInfo + '/changePassword',{params:{id:studentId,userPassword: this.userPassword}}).then(response=>{
-                   debugger
-                   if (response.data.code=='200'){
-                       this.$message({
-                           message:'修改成功',
-                           type:'warning'
-                       })
-                   }
-               })
-            },
-            getId:function () {
+
+            /**
+             * description:修改密码
+             * **/
+            saveNewPassword: function () {
                 debugger
-                const userName = sessionStorage.getItem("userName");
-                const that =this;
-                this.$http.get(Config.userInfo + '/find',{params:{userName:userName}}).then(response=>{
+                this.passwordForm.id = sessionStorage.getItem("uid");
+                debugger
+                let url = Config.userInfo +'/changePassword' /*+"?"+ "id=" + this.passwordForm.id +"&"+ "userPassword=" + this.passwordForm.userPassword*/;
+                this.$http.post(url,{params:this.passwordForm}).then(response => {
                     debugger
-                    if (response.data.code=='200'){
-                        that.uid = response.data.data;
+                    if (response.data.code == '200') {
+                        this.$message({
+                            message: '修改成功',
+                            type: 'warning'
+                        })
                     }
                 })
             },
+
         }
     }
 </script>

@@ -28,10 +28,24 @@ function Gettoken(next) {
     next();
 }
 
+function Getid(){
+    const userName = sessionStorage.getItem("userName");
+    let url = 'http://localhost:8083/user/find'
+    axios.get(url,{params:{userName:userName}}).then(response=>{
+        if (response.data.code == '200'){
+            const uid = response.data.data;
+            sessionStorage.setItem("uid",uid);
+        }
+    })
+
+}
+
 router.beforeEach((to,from,next)=>{
     console.log("--------");
     console.log(to.query)
     Gettoken(next);
+    Getid(next);
+    next()
     console.log(to.query)
 })
 

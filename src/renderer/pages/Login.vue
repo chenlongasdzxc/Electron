@@ -37,7 +37,6 @@
                   if (response.data.code=='200'){
                       sessionStorage.setItem("userName",this.loginform.userName)
                       const token = response.data.data.data;
-                      console.log(token);
                       sessionStorage.setItem("token",token);
                       this.$router.push({path:'/Menu'})
                   }
