@@ -16,7 +16,7 @@
                                 <li><label>寝室号：</label>{{studentInfo.roomNumber}}</li>
                             </ul>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="15">
                             <ul>
                                 <li><label>联系电话：</label>{{studentInfo.phoneNumber}}</li>
                                 <li><label>邮箱：</label>{{studentInfo.email}}</li>
@@ -31,32 +31,50 @@
                     </el-row>
                 </form-panel>
                 <form-panel name="个人信息编辑" align="left" isNone="false" collapsible>
-                    <div slot="header">
-                        <VButton @click="saveStudentInfo">保存</VButton>
-                    </div>
                     <el-row>
-                        <el-col :span="8" style="padding-left: 0px">
-                            <el-form ref="form" :model="studentForm" label-width="100px" label-position="left">
+                        <el-form ref="form" :model="studentForm" label-width="100px" label-position="left">
+                            <el-col :span="10" style="padding-left: 0px">
                                 <el-form-item label="联系电话">
                                     <el-input v-model="studentForm.phoneNumber" size="small"
                                               style="width: 150px"></el-input>
                                 </el-form-item>
                                 <el-form-item label="邮箱">
-                                    <el-input v-model="studentForm.studentName" size="small"
+                                    <el-input v-model="studentForm.email" size="small"
                                               style="width: 150px"></el-input>
                                 </el-form-item>
                                 <el-form-item label="身份证号码">
-                                    <el-input v-model="studentForm.idCard" size="small" style="width: 150px"></el-input>
+                                    <el-input v-model="studentForm.idCard" size="small"
+                                              style="width: 150px"></el-input>
                                 </el-form-item>
-                            </el-form>
-                        </el-col>
+                            </el-col>
+                            <el-col :span="10">
+                                <el-form-item label="民族">
+                                    <el-select v-model="studentForm.nation" placeholder="请选择">
+                                        <el-option v-for="item in options"
+                                                   :key="item.studentForm"
+                                                   :label="item.label"
+                                                   :value="item.value"
+                                        ></el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item label="籍贯">
+                                    <el-input v-model="studentForm.originPlace" size="small"
+                                              style="width: 150px"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-form>
                     </el-row>
+                    <div>
+                        <VButton @click="cleanStudentInfo">重置</VButton>
+                        <VButton @click="saveStudentInfo">保存</VButton>
+                    </div>
                 </form-panel>
                 <form-panel name="密码修改" align="left" isNone="false" collapsible>
                     <el-form ref="form" v-model="passwordForm">
                         <el-form-item label="新密码">
                             <el-input v-model="passwordForm.userPassword" size="small" style="width: 150px"></el-input>
                         </el-form-item>
+                        <VInput></VInput>
                     </el-form>
                     <VButton @click="saveNewPassword">保存</VButton>
                 </form-panel>
@@ -70,14 +88,19 @@
     import VButton from '../components/Button'
     import Config from '../config'
     import FormPanel from '../components/FormPanel'
+    import VInput from  '../components/Input'
 
     export default {
-        components: {VButton, FormPanel},
+        components: {VButton, FormPanel,VInput},
         name: "StudentInfo",
         data() {
             return {
-                passwordForm:{
-                    id:'',
+                options: [{
+                    value: '',
+                    label: '汉族',
+                }],
+                passwordForm: {
+                    id: '',
                     userPassword: '',
 
                 },
@@ -102,16 +125,24 @@
                     adress: '',
                     politicesStatus: '',
                     fileCard: '',
+                    nation: '',
+                    originPlace: '',
                 },
             }
         },
         mounted() {
             this.findStudentInfo();
+            this.findStudentForm();
         },
         methods: {
             backToMenu: function () {
                 this.$router.push({path: '/Menu'})
             },
+
+
+            /**
+             * @description 查找个人基本信息
+             * **/
             findStudentInfo: function () {
                 const that = this;
                 let url = Config.studentInfo + '/get';
@@ -123,29 +154,61 @@
                     }
                 })
             },
+
+            /**
+             * @description 查找编辑信息
+             * **/
+            findStudentForm: function () {
+                const that = this;
+                let url = Config.studentInfo + '/get';
+                const name = sessionStorage.getItem("userName");
+                this.$http.get(url, {params: {userName: name}}).then(function (response) {
+                    if (response.data.code == '200') {
+                        sessionStorage.setItem("userInfo", response.data.data);
+                        that.studentForm = response.data.data;
+                    }
+                })
+            },
+            /**
+             * @description:重置
+             * **/
+            cleanStudentInfo: function () {
+
+            },
+
+            /**
+             * @description 保存编辑信息
+             * **/
             saveStudentInfo: function () {
                 let url = Config.studentInfo + '/update';
-                this.$http.post(url, {params: this.studentForm}).then(response => {
+                this.$http.post(url, this.studentForm).then(response => {
                     if (response.data.code == '200') {
-
+                        this.$notify({
+                            title: '提示',
+                            message: '编辑成功'
+                        })
+                        this.findStudentInfo();
                     }
                 })
             },
 
             /**
-             * description:修改密码
+             * @description:修改密码
              * **/
             saveNewPassword: function () {
-                debugger
                 this.passwordForm.id = sessionStorage.getItem("uid");
-                debugger
-                let url = Config.userInfo +'/changePassword' /*+"?"+ "id=" + this.passwordForm.id +"&"+ "userPassword=" + this.passwordForm.userPassword*/;
-                this.$http.post(url,{params:this.passwordForm}).then(response => {
-                    debugger
+                let url = Config.userInfo + '/changePassword';
+                this.$http.post(url, this.passwordForm).then(response => {
                     if (response.data.code == '200') {
-                        this.$message({
-                            message: '修改成功',
-                            type: 'warning'
+                        this.$notify({
+                            title: '提示',
+                            message: '密码修改成功'
+                        })
+                    }
+                    if (response.data.code == '402') {
+                        this.$notify({
+                            title: '提示',
+                            message: '密码相同，请重新输入'
                         })
                     }
                 })
@@ -155,6 +218,6 @@
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>

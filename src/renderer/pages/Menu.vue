@@ -14,13 +14,13 @@
                                        style="color: black"></el-button>
                         </div>
                         <div class="button_menu">
-                            <el-button type="text" class="el-icon-menu" @click="menuShow"></el-button>
+                            <el-button type="text" class="el-icon-menu" @click="menuShow != menuShow"></el-button>
                         </div>
                     </el-card>
                 </div>
             </el-header>
             <el-container>
-                <el-aside style="width: 150px;background-color: #f0f0f0">
+                <el-aside style="width: 150px;background-color: #f0f0f0" v-show="menuShow" class="transition-box">
                     <el-menu :default-active="defaultActive" :router="true" >
                         <el-submenu index="1">
                             <template slot="title" style="padding: 0px 0px 0px 0px"><i></i>素拓分管理</template>
@@ -110,6 +110,7 @@
                 items: {
                     name: '',
                 },
+                menuShow: true,
             }
         },
         created() {
@@ -134,9 +135,7 @@
             windowMin: function () {
                 ipc.send('min')
             },
-            menuShow: function () {
 
-            },
             getCookie: function () {
                 var cookieName = 'studentNumber';
                 var cookie = document.cookie.split(";");

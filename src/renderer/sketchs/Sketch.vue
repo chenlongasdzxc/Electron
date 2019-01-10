@@ -235,7 +235,6 @@
             },
             getPersonalSketchList:function () {
                 var studentNum = sessionStorage.getItem("number");
-                let url1  = 'http://localhost:8083'
                 let url = 'http://localhost:8083/Sketch/findByStudentNumber';
                 this.$http.get(url,{params:{studentNumber:studentNum}}).then((response)=>{
                     if (response.data.code==200){

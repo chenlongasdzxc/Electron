@@ -5,4 +5,5 @@ export default {
     studentInfo: `${baseIp}/studentInfo`,
     userInfo:`${baseIp}/user`,
     login:`${baseIp}/login`,
+    sketch:`${baseIp}/sketch`,
 }
