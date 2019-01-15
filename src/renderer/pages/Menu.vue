@@ -94,7 +94,7 @@
                     </el-aside>
                 </transition>
                 <el-container>
-                    <el-main>
+                    <el-main style="padding: 0 0 0 0">
                         <router-view></router-view>
                     </el-main>
                     <el-footer

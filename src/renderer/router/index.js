@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '../pages/Index'
-
 Vue.use(Router)
-
 
 export default new Router({
     routes: [
@@ -50,12 +47,12 @@ export default new Router({
                 {
                     path: '/StudentInformation',
                     name: 'StudentInformation',
-                    component: require('@/studentInfo/StudentInformation').default,
+                    component: require('@/studentInformation/StudentInformation').default,
                 },
                 {
                     path: '/StudentFileCard',
                     name: 'StudentFileCard',
-                    component: require('@/studentInfo/StudentFileCard').default,
+                    component: require('@/studentInformation/StudentFileCard').default,
                 },
             ],
         },

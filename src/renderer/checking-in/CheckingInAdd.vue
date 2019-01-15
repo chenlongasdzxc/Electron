@@ -1,12 +1,14 @@
 <template>
     <div>
-        success
+        <el-card>
+
+        </el-card>
     </div>
 </template>
 
 <script>
     export default {
-        name: "StudentInformation"
+        name: "CheckingInAdd"
     }
 </script>
 

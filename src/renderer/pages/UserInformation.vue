@@ -151,10 +151,6 @@
             this.findStudentForm();
         },
         methods: {
-            backToMenu: function () {
-                this.$router.push({path: '/Menu'})
-            },
-
 
             /**
              * @description 查找个人基本信息
@@ -218,18 +214,16 @@
              * **/
             saveNewPassword: function () {
                 this.passwordForm.id = sessionStorage.getItem("uid");
-                let url = Config.userInfo + '/changePassword';
-                this.$http.post(url, this.passwordForm).then(response => {
+                this.$http.post(Config.userInfo + '/changePassword', this.passwordForm).then(response => {
                     if (response.data.code == '200') {
                         this.$notify({
                             title: '提示',
                             message: '密码修改成功'
                         })
-                    }
-                    if (response.data.code == '402') {
+                    }else {
                         this.$notify({
                             title: '提示',
-                            message: '密码相同，请重新输入'
+                            message: '修改失败'
                         })
                     }
                 })
