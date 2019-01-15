@@ -2,7 +2,62 @@
     <div>
         <div>
             <el-card>
-                <form-panel name="上传素拓分" align="left" isNone="false" collapsible>
+                <form-panel name="我的素拓分" align="left">
+                    <div style="font-family: 黑体;font-size: 16px">
+                        <el-table
+                                :data="tableData"
+                                border
+                                size="small"
+                                height="250"
+                                style="width: 100%;text-align: center"
+                        >
+                            <el-table-column
+                                    fixed
+                                    prop="id"
+                                    label="序号"
+                                    min-width="50"
+                            ></el-table-column>
+                            <el-table-column
+                                    fixed
+                                    prop="sketchName"
+                                    label="活动名称"
+                                    min-width="80"
+                            ></el-table-column>
+                            <el-table-column
+                                    fixed
+                                    prop="type"
+                                    label="活动类型"
+                                    min-width="80"
+                            ></el-table-column>
+                            <el-table-column
+                                    fixed
+                                    prop="createDate"
+                                    label="日期"
+                                    min-width="100"
+                            >
+                            </el-table-column>
+                            <el-table-column
+                                    fixed
+                                    prop="sketchScore"
+                                    label="素拓分"
+                                    min-width="80"
+                            ></el-table-column>
+                            <el-table-column
+                                    fixed
+                                    prop="sketchStates"
+                                    label="状态"
+                                    min-width="80"
+                            ></el-table-column>
+                            <el-table-column
+                                    fixed
+                                    label="操作"
+                            >
+                                <VButton @click="deleteSketchPerson"></VButton>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                </form-panel>
+                <form-panel name="新增素拓分" align="left" isNone="false" collapsible>
                     <div slot="header" style="margin-top: 0">
                         <VButton @click="addSketch">增行</VButton>
                         <VButton @click="deleteSketch">移除</VButton>
@@ -67,58 +122,6 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                    </div>
-                </form-panel>
-                <form-panel name="我的素拓分" align="left" isNone="false" collapsible>
-                    <div style="font-family: 黑体;font-size: 16px">
-                    <el-table
-                            :data="tableData"
-                            border
-                            size="small"
-                            style="width: 100%"
-                            >
-                        <el-table-column
-                                fixed
-                                prop="id"
-                                label="序号"
-                                width="50"
-                        ></el-table-column>
-                        <el-table-column
-                                fixed
-                                prop="sketchName"
-                                label="活动名称"
-                                width="100"
-                        ></el-table-column>
-                        <el-table-column
-                                fixed
-                                prop="type"
-                                label="活动类型"
-                                width="150"
-                        ></el-table-column>
-                        <el-table-column
-                                fixed
-                                prop="createDate"
-                                label="日期"
-                                width="100"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                fixed
-                                prop="sketchScore"
-                                label="素拓分"
-                                width="80"
-                        ></el-table-column>
-                        <el-table-column
-                                fixed
-                                prop="sketchStates"
-                                label="状态"
-                                width="80"
-                        ></el-table-column>
-                        <el-table-column
-                                fixed
-                                label="操作"
-                        ></el-table-column>
-                    </el-table>
                     </div>
                 </form-panel>
                 <form-panel name="班级素拓分" align="left" isNone="false" collapsible>
@@ -195,9 +198,6 @@
                 </form-panel>
             </el-card>
         </div>
-        <div>
-            <VButton @click="backTo">返回</VButton>
-        </div>
     </div>
 </template>
 
@@ -230,9 +230,10 @@
             this.getPersonalSketchList();
         },
         methods:{
-            backTo:function(){
-              this.$router.push({path:'/Menu'});
-            },
+
+            /**
+             * @description 获取学生素拓list
+             * **/
             getPersonalSketchList:function () {
                 var studentNum = sessionStorage.getItem("number");
                 let url = 'http://localhost:8083/Sketch/findByStudentNumber';
@@ -252,10 +253,6 @@
 
             },
 
-            selectSketchList:function(){
-                let url = 'http://localhost:8083/SketchScore/findFuzzy';
-
-            },
 
             /**
              * 新增行
@@ -279,7 +276,14 @@
              * **/
             savePersonSketch:function () {
 
-            }
+            },
+
+            /**
+             * 删除个人素拓分
+             * **/
+            deleteSketchPerson:function () {
+
+            },
         }
     }
 </script>

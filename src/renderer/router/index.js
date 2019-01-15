@@ -43,24 +43,22 @@ export default new Router({
                     component: require('@/moral/MoralPlus').default,
                 },
                 {
-                    path: '/StudentInfo',
-                    name: 'StudentInfo',
-                    component: require('@/pages/StudentInfo').default,
-                }
+                    path: '/UserInformation',
+                    name: 'UserInformation',
+                    component: require('@/pages/UserInformation').default,
+                },
+                {
+                    path: '/StudentInformation',
+                    name: 'StudentInformation',
+                    component: require('@/studentInfo/StudentInformation').default,
+                },
+                {
+                    path: '/StudentFileCard',
+                    name: 'StudentFileCard',
+                    component: require('@/studentInfo/StudentFileCard').default,
+                },
             ],
         },
-
-        {
-            path: '/StudentInfo',
-            name: 'StudentInfo',
-            component: require('@/pages/StudentInfo').default,
-        },
-        {
-            path: '/Index',
-            name: 'Index',
-            component: index,
-
-        }
 
     ]
 })
