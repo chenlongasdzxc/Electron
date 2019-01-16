@@ -54,6 +54,16 @@ export default new Router({
                     name: 'StudentFileCard',
                     component: require('@/studentInformation/StudentFileCard').default,
                 },
+                {
+                    path: '/DataDictionary',
+                    name: 'DataDictionary',
+                    component: require('@/dataDictionary/DataDictionary').default,
+                },
+                {
+                    path: '/DataDictionaryEdit',
+                    name: 'DataDictionaryEdit',
+                    component: require('@/dataDictionary/DataDictionaryEdit').default,
+                },
             ],
         },
 

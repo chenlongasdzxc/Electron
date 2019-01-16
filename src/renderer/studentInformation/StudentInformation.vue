@@ -18,9 +18,69 @@
                         :data="studentInformationData"
                         border
                         height="300"
-                        style="width: 100%;text-align: center;font-size: 13px"
+                        style="width: 100%;text-align: center;font-size: 11px"
                     >
-
+                        <el-table-column
+                            fixed
+                            prop="xuhao"
+                            label="序号"
+                            width="50"
+                        ></el-table-column>
+                        <el-table-column
+                            fixed
+                            prop="studentName"
+                            label="姓名"
+                            width="60"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="sex"
+                                label="性别"
+                                width="50"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="studentNumber"
+                                label="学号"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="studentClass"
+                                label="班级"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="roomNumber"
+                                label="寝室号"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="phoneNumber"
+                                label="联系电话"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="politicesStatus"
+                                label="政治面貌"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="idCard"
+                                label="身份证号"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="email"
+                                label="邮箱"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="bankNumber"
+                                label="银行号码"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="bankName"
+                                label="开户银行"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="adress"
+                                label="家庭住址"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="fileCard"
+                                label="建档立卡"
+                        ></el-table-column>
                     </el-table>
                 </div>
             </FormPanel>
@@ -43,15 +103,38 @@
                 studentInformationData:[],
             }
         },
-
+        mounted(){
+          this.getStudentInformationData();
+        },
         methods:{
+
+            /**
+             * @description获取学生基本信息
+             * **/
+            getStudentInformationData:function(){
+                this.$http.get(Config.studentInfo+ '/findFuzzy').then(response=>{
+                    if (response.data.code == '200'){
+                        this.studentInformationData = response.data.data;
+                    }else{
+                        this.studentInformationData = response.data.data;
+                    }
+                })
+            },
 
             /**
              * @description搜索学生信息
              * **/
             searchStudentInformation:function () {
-                this.$http.get(Config.studentInfo + '/findFuzzy',this.findWord).then(response=>{
-
+                const parms = {
+                    findWord: this.findWord,
+                };
+                const p = JSON.parse(JSON.stringify(parms));
+                this.$http.get(Config.studentInfo + '/findFuzzy',{params:p}).then(response=>{
+                        if (response.data.code =='200'){
+                            this.studentInformationData = response.data.data;
+                        } else {
+                            this.studentInformationData = response.data.data;
+                        }
                 })
             },
 
