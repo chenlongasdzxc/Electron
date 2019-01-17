@@ -93,10 +93,10 @@
                             <el-submenu index="8">
                                 <template slot="title" style="padding: 0 0 0 0 ">数据字典</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/DataDictionary" style="min-width: 50px">数据字典查看</el-menu-item>
+                                    <el-menu-item index="/DataDictionary" style="min-width: 50px">查看数据字典</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/DataDictionaryEdit" style="min-width: 50px">编辑数据字典</el-menu-item>
+                                    <el-menu-item index="/DataDictionaryEdit" style="min-width: 50px">设置数据字典</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                         </el-menu>
@@ -108,7 +108,7 @@
                     </el-main>
                     <el-footer
                             style="background: #fff; color: #999; font-size: 12px; text-align: right; vertical-align: center;height: 20px">
-                        @slicepoker
+                        @Silence
                     </el-footer>
                 </el-container>
             </el-container>

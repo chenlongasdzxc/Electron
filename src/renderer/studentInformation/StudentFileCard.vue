@@ -6,6 +6,7 @@
                         :data="studentFileCardData"
                         border
                         height="200"
+                        size="small"
                         style="width: 100%;text-align: center;font-size: 13px">
                     <el-table-column
                             fixed
@@ -52,6 +53,7 @@
                             :data="setFileCardData"
                             border
                             height="200"
+                            size="small"
                             style="width: 100%;text-align: center;font-size: 13px">
                         >
                         <el-table-column
@@ -104,6 +106,10 @@
             this.getFileCardData();
         },
         methods: {
+
+            /**
+             * @description获取已建档立卡人员信息
+             * **/
             getFileCardData: function () {
                 const that = this;
                 this.$http.get(Config.studentInfo + '/getFileCard').then(response => {

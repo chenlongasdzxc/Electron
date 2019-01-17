@@ -6,12 +6,18 @@
                     <el-table
                             :data="sketchData"
                             border
+                            size="small"
                             height="250"
                             style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                     >
                         <el-table-column
                                 prop="type"
                                 label="素拓分类型"
+                                min-width="100"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="description"
+                                label="描述"
                                 min-width="200"
                         ></el-table-column>
                         <el-table-column
@@ -50,7 +56,8 @@
                         <el-table
                                 :data="moralPlusData"
                                 border
-                                height="250"
+                                size="small"
+                                height="300"
                                 style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                         >
                             <el-table-column
@@ -82,7 +89,8 @@
                         <el-table
                                 :data="moralDeductionData"
                                 border
-                                height="250"
+                                size="small"
+                                height="300"
                                 style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                         >
                             <el-table-column
@@ -195,9 +203,13 @@
                 const params = {
                     keyWord: this.findword,
                 };
-                const p = JSON.parse(JSON.stringify(parms));
-                this.$http.get().then(response => {
-
+                const p = JSON.parse(JSON.stringify(params));
+                this.$http.get(Config.moralDeduction + '/findFuzzy',{params: p}).then(response => {
+                    if (response.data.code == '200'){
+                        this.moralDeductionData = response.data.data.content
+                    } else {
+                        this.moralDeductionData = response.data.data.content
+                    }
                 })
             },
 

@@ -16,9 +16,10 @@
                 <div>
                     <el-table
                         :data="studentInformationData"
-                        border
                         height="300"
-                        style="width: 100%;text-align: center;font-size: 11px"
+                        border
+                        size="small"
+                        style="width: 100%;text-align: center;font-size: 12px"
                     >
                         <el-table-column
                             fixed
@@ -40,26 +41,32 @@
                         <el-table-column
                                 prop="studentNumber"
                                 label="学号"
+                                min-width="86"
                         ></el-table-column>
                         <el-table-column
                                 prop="studentClass"
                                 label="班级"
+                                min-width="86"
                         ></el-table-column>
                         <el-table-column
                                 prop="roomNumber"
                                 label="寝室号"
+                                width="60"
                         ></el-table-column>
                         <el-table-column
                                 prop="phoneNumber"
                                 label="联系电话"
+                                width="90"
                         ></el-table-column>
                         <el-table-column
                                 prop="politicesStatus"
                                 label="政治面貌"
+                                width="70"
                         ></el-table-column>
                         <el-table-column
                                 prop="idCard"
                                 label="身份证号"
+                                min-width="126"
                         ></el-table-column>
                         <el-table-column
                                 prop="email"
