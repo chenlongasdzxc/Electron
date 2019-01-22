@@ -22,7 +22,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     height:663,
     useContentSize: true,
-    width: 900,
+    width: 1000,
       frame:false
   })
     /*ipcMain.on('success',e => mainWindow.setSize(763,1000))*/

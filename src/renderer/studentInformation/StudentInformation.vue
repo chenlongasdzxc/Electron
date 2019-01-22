@@ -18,7 +18,7 @@
                         :data="studentInformationData"
                         height="300"
                         border
-                        size="small"
+                        size="mini"
                         style="width: 100%;text-align: center;font-size: 12px"
                     >
                         <el-table-column
@@ -90,6 +90,19 @@
                         ></el-table-column>
                     </el-table>
                 </div>
+                <div>
+                    <el-pagination
+                            style="display: flex;justify-content: center"
+                            background
+                            @size-change="page_handlePageSizeChange"
+                            @current-change="page_handlePageCurrentChange"
+                            layout="prev, pager, next"
+                            :current-page="page.currentPage"
+                            :page-size="page.size"
+                            :total="page.total"
+                    >
+                    </el-pagination>
+                </div>
             </FormPanel>
             <FormPanel name="导出Excel" align="left"></FormPanel>
             <VButton @click="exportExcel">导出</VButton>
@@ -108,6 +121,11 @@
             return{
                 findWord:'',
                 studentInformationData:[],
+                page:{
+                    total:1,
+                    size:20,
+                    currentPage: 1,
+                }
             }
         },
         mounted(){
@@ -119,9 +137,16 @@
              * @description获取学生基本信息
              * **/
             getStudentInformationData:function(){
-                this.$http.get(Config.studentInfo+ '/findFuzzy').then(response=>{
+                const that = this;
+                let params = {
+                    sort: 'id,desc',
+                    size: that.page.size,
+                    page: that.page.currentPage - 1,
+                }
+                this.$http.get(Config.studentInfo+ '/findFuzzy',{params:params}).then(response=>{
                     if (response.data.code == '200'){
-                        this.studentInformationData = response.data.data;
+                        that.studentInformationData = response.data.data.content;
+                        that.page.total = response.data.data.totalElements;
                     }else{
                         this.studentInformationData = response.data.data;
                     }
@@ -150,6 +175,24 @@
              * **/
             exportExcel:function () {
 
+            },
+
+            /**
+             * @description学生信息分页size事件
+             * **/
+            page_handlePageSizeChange(value){
+                this.page.size = value;
+                this.page.currentPage = 1;
+                this.getStudentInformationData();
+            },
+
+
+            /**
+             * @description学生信息分页page事件
+             * **/
+            page_handlePageCurrentChange(value){
+              this.page.currentPage = value;
+              this.getStudentInformationData();
             },
 
         },

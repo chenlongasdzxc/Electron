@@ -5,9 +5,7 @@
                 <FormPanel name="素拓分数据字典" align="left">
                     <el-table
                             :data="sketchData"
-                            border
-                            size="small"
-                            height="250"
+                            size="mini"
                             style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                     >
                         <el-table-column
@@ -41,6 +39,19 @@
                                 label="获奖者3"
                         ></el-table-column>
                     </el-table>
+                    <div >
+                        <el-pagination
+                                style="display: flex;justify-content: center"
+                                background
+                                @size-change="page_handleSizeChange"
+                                @current-change="page_handleCurrentChange"
+                                layout="prev, pager, next"
+                                :current-page="page.currentPage"
+                                :page-size="page.size"
+                                :total="page.total"
+                               >
+                        </el-pagination>
+                    </div>
                 </FormPanel>
             </div>
             <div>
@@ -55,9 +66,7 @@
                     <div>
                         <el-table
                                 :data="moralPlusData"
-                                border
-                                size="small"
-                                height="300"
+                                size="mini"
                                 style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                         >
                             <el-table-column
@@ -74,6 +83,19 @@
                             ></el-table-column>
                         </el-table>
                     </div>
+                    <div >
+                        <el-pagination
+                                style="display: flex;justify-content: center"
+                                background
+                                @size-change="page_handleMoralPlusSizeChange"
+                                @current-change="page_handleMoralPlusCurrentChange"
+                                layout="prev, pager, next"
+                                :current-page="pageMoralPlus.currentPage"
+                                :page-size="pageMoralPlus.size"
+                                :total="pageMoralPlus.total"
+                        >
+                        </el-pagination>
+                    </div>
                 </FormPanel>
             </div>
             <div>
@@ -88,9 +110,7 @@
                     <div>
                         <el-table
                                 :data="moralDeductionData"
-                                border
-                                size="small"
-                                height="300"
+                                size="mini"
                                 style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                         >
                             <el-table-column
@@ -106,6 +126,19 @@
                                     label="德育减分分数"
                             ></el-table-column>
                         </el-table>
+                    </div>
+                    <div >
+                        <el-pagination
+                                style="display: flex;justify-content: center"
+                                background
+                                @size-change="page_handleMoralDeductionSizeChange"
+                                @current-change="page_handleMoralDeductionCurrentChange"
+                                layout="prev, pager, next"
+                                :current-page="pageMoralDeduction.currentPage"
+                                :page-size="pageMoralDeduction.size"
+                                :total="pageMoralDeduction.total"
+                        >
+                        </el-pagination>
                     </div>
                 </FormPanel>
             </div>
@@ -127,6 +160,21 @@
                 sketchData: [],
                 moralPlusData: [],
                 moralDeductionData: [],
+                page: {
+                    currentPage: 1,
+                    total: 1,
+                    size: 10
+                },
+                pageMoralPlus:{
+                    currentPage: 1,
+                    total : 1,
+                    size: 10
+                },
+                pageMoralDeduction:{
+                    currentPage: 1,
+                    total : 1,
+                    size: 10
+                },
                 keyword: '',
                 findword: '',
             }
@@ -141,11 +189,18 @@
              * @description获取素拓分数据字典
              * **/
             getSketchData: function () {
-                this.$http.get(Config.sketchScore + '/findFuzzy').then(response => {
+                const that = this;
+                let params = {
+                    sort: 'id,desc',
+                    size: that.page.size,
+                    page: that.page.currentPage - 1,
+                };
+                this.$http.get(Config.sketchScore + '/findFuzzy',{params:params}).then(response => {
                     if (response.data.code == '200') {
-                        this.sketchData = response.data.data;
+                        that.sketchData = response.data.data.content;
+                        that.page.total = response.data.data.totalElements;
                     } else {
-                        this.sketchData = response.data.data;
+                        that.sketchData = response.data.data.content;
                     }
                 })
             },
@@ -154,11 +209,18 @@
              * @description获取德育加分数据字典
              * **/
             getMoralPlusData: function () {
-                this.$http.get(Config.moralPlus + '/findAll').then(response => {
+                const that = this;
+                let params = {
+                    sort: 'id,desc',
+                    size: that.pageMoralPlus.size,
+                    page: that.pageMoralPlus.currentPage - 1,
+                };
+                this.$http.get(Config.moralPlus + '/findFuzzy',{params:params}).then(response => {
                     if (response.data.code == '200') {
-                        this.moralPlusData = response.data.data;
+                        that.moralPlusData = response.data.data.content;
+                        that.pageMoralPlus.total = response.data.data.totalElements;
                     } else {
-                        this.moralPlusData = response.data.data;
+                        that.moralPlusData = response.data.data;
                     }
                 })
             },
@@ -166,12 +228,19 @@
             /**
              * @description获取德育减分数据字典
              * **/
-            getMoralDeductionData:function(){
-                this.$http.get(Config.moralDeduction + '/findAll').then(response=>{
-                    if (response.data.code == '200'){
-                        this.moralDeductionData = response.data.data;
-                    } else{
-                        this.moralDeductionData = response.data.data;
+            getMoralDeductionData: function () {
+                const that = this;
+                let params = {
+                    sort: 'id,desc',
+                    size: that.pageMoralDeduction.size,
+                    page: that.pageMoralDeduction.currentPage - 1,
+                };
+                this.$http.get(Config.moralDeduction + '/findFuzzy',{params:params}).then(response => {
+                    if (response.data.code == '200') {
+                        that.moralDeductionData = response.data.data.content;
+                        that.pageMoralDeduction.total = response.data.data.totalElements;
+                    } else {
+                        that.moralDeductionData = response.data.data;
                     }
                 })
             },
@@ -204,8 +273,8 @@
                     keyWord: this.findword,
                 };
                 const p = JSON.parse(JSON.stringify(params));
-                this.$http.get(Config.moralDeduction + '/findFuzzy',{params: p}).then(response => {
-                    if (response.data.code == '200'){
+                this.$http.get(Config.moralDeduction + '/findFuzzy', {params: p}).then(response => {
+                    if (response.data.code == '200') {
                         this.moralDeductionData = response.data.data.content
                     } else {
                         this.moralDeductionData = response.data.data.content
@@ -213,6 +282,50 @@
                 })
             },
 
+
+            page_handleSizeChange(value) {
+                this.page.size = value;
+                this.page.currentPage = 1;
+                this.getSketchData();
+            },
+
+
+            page_handleCurrentChange(value) {
+                this.page.currentPage = value;
+                this.getSketchData();
+            },
+
+            /**
+             * @description 德育加分分页大小变化
+             * **/
+            page_handleMoralPlusSizeChange(value){
+              this.pageMoralPlus.size = value;
+              this.pageMoralPlus.currentPage = 1;
+              this.getMoralPlusData();
+            },
+
+            /**
+             * @description 德育加分分页页码变化
+             * **/
+            page_handleMoralPlusCurrentChange(value){
+              this.pageMoralPlus.currentPage = value;
+              this.getMoralPlusData();
+            },
+
+            /**
+             * @description 德育减分分页size变化
+             * **/
+            page_handleMoralDeductionSizeChange(value){
+                this.pageMoralDeduction.size = value;
+                this.pageMoralDeduction.currentPage = 1;
+            },
+
+            /**
+             * @description 德育减分分页页码变化
+             * **/
+            page_handleMoralDeductionCurrentChange(value){
+                this.pageMoralDeduction.currentPage = value;
+            },
         }
     }
 </script>

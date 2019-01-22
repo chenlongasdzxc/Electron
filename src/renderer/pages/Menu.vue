@@ -25,7 +25,11 @@
             <el-container style="height: calc( 100vh - 40px)">
                 <transition name="el-zoom-in-top">
                     <el-aside style="width: 150px" v-show="menuShow" class="transition-box">
-                        <el-menu :default-active="defaultActive" :router="true">
+                        <el-menu
+                                :default-active="defaultActive"
+                                :router="true"
+                                :unique-opened="true"
+                        >
                             <el-submenu index="1">
                                 <template slot="title" style="padding: 0px 0px 0px 0px"><i></i>素拓分管理</template>
                                 <el-menu-item-group>
@@ -96,7 +100,8 @@
                                     <el-menu-item index="/DataDictionary" style="min-width: 50px">查看数据字典</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/DataDictionaryEdit" style="min-width: 50px">设置数据字典</el-menu-item>
+                                    <el-menu-item index="/DataDictionaryEdit" style="min-width: 50px">设置数据字典
+                                    </el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                         </el-menu>
