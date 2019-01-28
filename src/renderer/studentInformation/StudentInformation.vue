@@ -15,23 +15,30 @@
                 </div>
                 <div>
                     <el-table
-                        :data="studentInformationData"
-                        height="300"
-                        border
-                        size="mini"
-                        style="width: 100%;text-align: center;font-size: 12px"
+                            :data="studentInformationData"
+                            border
+                            :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                            :cell-style="function({row, column, rowIndex, columnIndex}) {
+                            if (columnIndex === 4) {
+                            return 'text-align: left'
+                            } else {
+                                return 'text-align: center'
+                            }
+                                }"
+                            size="mini"
+                            style="width: 100%"
                     >
                         <el-table-column
-                            fixed
-                            prop="xuhao"
-                            label="序号"
-                            width="50"
+                                fixed
+                                type="index"
+                                label="序号"
+                                width="50"
                         ></el-table-column>
                         <el-table-column
-                            fixed
-                            prop="studentName"
-                            label="姓名"
-                            width="60"
+                                fixed
+                                prop="studentName"
+                                label="姓名"
+                                width="60"
                         ></el-table-column>
                         <el-table-column
                                 prop="sex"
@@ -96,7 +103,7 @@
                             background
                             @size-change="page_handlePageSizeChange"
                             @current-change="page_handlePageCurrentChange"
-                            layout="prev, pager, next"
+                            layout="prev, pager, next,total"
                             :current-page="page.currentPage"
                             :page-size="page.size"
                             :total="page.total"
@@ -115,39 +122,39 @@
     import FormPanel from '../components/FormPanel'
     import DataTable from '../components/DataTable'
     import Config from '../Config'
+
     export default {
-        components:{VButton,FormPanel,DataTable},
-        data(){
-            return{
-                findWord:'',
-                studentInformationData:[],
-                page:{
-                    total:1,
-                    size:20,
+        components: {VButton, FormPanel, DataTable},
+        data() {
+            return {
+                findWord: '',
+                studentInformationData: [],
+                page: {
+                    total: 1,
+                    size: 10,
                     currentPage: 1,
                 }
             }
         },
-        mounted(){
-          this.getStudentInformationData();
+        mounted() {
+            this.getStudentInformationData();
         },
-        methods:{
+        methods: {
 
             /**
              * @description获取学生基本信息
              * **/
-            getStudentInformationData:function(){
+            getStudentInformationData: function () {
                 const that = this;
                 let params = {
-                    sort: 'id,desc',
                     size: that.page.size,
                     page: that.page.currentPage - 1,
                 }
-                this.$http.get(Config.studentInfo+ '/findFuzzy',{params:params}).then(response=>{
-                    if (response.data.code == '200'){
+                this.$http.get(Config.studentInfo + '/findFuzzy', {params: params}).then(response => {
+                    if (response.data.code == '200') {
                         that.studentInformationData = response.data.data.content;
                         that.page.total = response.data.data.totalElements;
-                    }else{
+                    } else {
                         this.studentInformationData = response.data.data;
                     }
                 })
@@ -156,31 +163,33 @@
             /**
              * @description搜索学生信息
              * **/
-            searchStudentInformation:function () {
+            searchStudentInformation: function () {
+                const that = this;
                 const parms = {
                     findWord: this.findWord,
                 };
                 const p = JSON.parse(JSON.stringify(parms));
-                this.$http.get(Config.studentInfo + '/findFuzzy',{params:p}).then(response=>{
-                        if (response.data.code =='200'){
-                            this.studentInformationData = response.data.data;
-                        } else {
-                            this.studentInformationData = response.data.data;
-                        }
+                this.$http.get(Config.studentInfo + '/findFuzzy', {params: p}).then(response => {
+                    if (response.data.code == '200') {
+                        that.studentInformationData = response.data.data.content;
+                        that.page.total = response.data.data.totalElements;
+                    } else {
+                        that.studentInformationData = response.data.data;
+                    }
                 })
             },
 
             /**
              * @description导出学生信息Excel
              * **/
-            exportExcel:function () {
+            exportExcel: function () {
 
             },
 
             /**
              * @description学生信息分页size事件
              * **/
-            page_handlePageSizeChange(value){
+            page_handlePageSizeChange(value) {
                 this.page.size = value;
                 this.page.currentPage = 1;
                 this.getStudentInformationData();
@@ -190,9 +199,9 @@
             /**
              * @description学生信息分页page事件
              * **/
-            page_handlePageCurrentChange(value){
-              this.page.currentPage = value;
-              this.getStudentInformationData();
+            page_handlePageCurrentChange(value) {
+                this.page.currentPage = value;
+                this.getStudentInformationData();
             },
 
         },

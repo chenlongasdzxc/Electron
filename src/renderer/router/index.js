@@ -64,6 +64,11 @@ export default new Router({
                     name: 'DataDictionaryEdit',
                     component: require('@/dataDictionary/DataDictionaryEdit').default,
                 },
+                {
+                    path: '/CheckingInAdd',
+                    name: 'CheckingInAdd',
+                    component: require('@/checking-in/CheckingInAdd').default,
+                },
             ],
         },
 

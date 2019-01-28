@@ -9,6 +9,14 @@
                             <el-table
                                     :data="sketchScoreData"
                                     height="200"
+                                    :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                    :cell-style="function({row, column, rowIndex, columnIndex}) {
+                            if (columnIndex === 4) {
+                            return 'text-align: left'
+                            } else {
+                                return 'text-align: center'
+                            }
+                                }"
                                     style="font-size: 12px"
                                     size="mini"
                             >
@@ -25,9 +33,10 @@
                                         label="操 作"
                                 >
                                     <template slot-scope="scope">
-                                        <el-button size="mini" type="primary" @click="dialogFormVisible = true">编辑
+                                        <el-button size="mini" type="primary" @click="updateSketchScore(scope.row)">编辑
                                         </el-button>
-                                        <el-button size="mini" type="danger" @click="deleteSketchScore(scope.row)">删除</el-button>
+                                        <el-button size="mini" type="danger" @click="deleteSketchScore(scope.row)">删除
+                                        </el-button>
                                     </template>
 
                                 </el-table-column>
@@ -38,7 +47,7 @@
                                         background
                                         @size-change="page_handleSketchScoreSizeChange"
                                         @current-change="page_handleSketchScoreCurrentChange"
-                                        layout="prev, pager, next"
+                                        layout="prev, pager, next,total"
                                         :current-page="pageSketchScore.currentPage"
                                         :page-size="pageSketchScore.size"
                                         :total="pageSketchScore.total"
@@ -49,45 +58,46 @@
                     </el-col>
                     <el-col :span="12">
                         <FormPanel name="素拓分数据字典新增" align="left">
-                            <el-form ref="form" :model="sketchScoreEditForm" size="small" label-width="70px" style="padding: 0 0 0 0 ">
-                                    <el-form-item label="类型名称" style="background-color: darkgrey">
-                                        <el-input v-model="sketchScoreEditForm.type" size="small"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="类型描述" style="background-color: darkgrey">
-                                        <el-input v-model="sketchScoreEditForm.description"></el-input>
-                                    </el-form-item>
+                            <el-form ref="form" :model="sketchScoreAddForm" size="small" label-width="70px"
+                                     style="padding: 0 0 0 0 ">
+                                <el-form-item label="类型名称">
+                                    <el-input v-model="sketchScoreAddForm.type" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="类型描述">
+                                    <el-input v-model="sketchScoreAddForm.description" type="textarea"></el-input>
+                                </el-form-item>
                                 <el-row :gutter="180">
                                     <el-col :span="12">
-                                        <el-form-item label="参与者" style="background-color: darkgrey">
-                                            <el-input v-model="sketchScoreEditForm.participant"></el-input>
+                                        <el-form-item label="参与者">
+                                            <el-input v-model="sketchScoreAddForm.participant"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
-                                        <el-form-item label="组织者" style="background-color: darkgrey">
-                                            <el-input v-model="sketchScoreEditForm.organizer"></el-input>
+                                        <el-form-item label="组织者">
+                                            <el-input v-model="sketchScoreAddForm.organizer"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-row :gutter="2">
                                     <el-col :span="8">
-                                    <el-form-item label="获奖者1" style="background-color: darkgrey">
-                                        <el-input v-model="sketchScoreEditForm.winnerOne"></el-input>
-                                    </el-form-item>
+                                        <el-form-item label="获奖者1" >
+                                            <el-input v-model="sketchScoreAddForm.winnerOne"></el-input>
+                                        </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                    <el-form-item label="获奖者2" style="background-color: darkgrey">
-                                        <el-input v-model="sketchScoreEditForm.winnerTwo"></el-input>
-                                    </el-form-item>
+                                        <el-form-item label="获奖者2">
+                                            <el-input v-model="sketchScoreAddForm.winnerTwo"></el-input>
+                                        </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                    <el-form-item label="获奖者3" style="background-color: darkgrey">
-                                        <el-input v-model="sketchScoreEditForm.winnerThree"></el-input>
-                                    </el-form-item>
+                                        <el-form-item label="获奖者3">
+                                            <el-input v-model="sketchScoreAddForm.winnerThree"></el-input>
+                                        </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <div style="float: right">
-                                <el-button size="small" type="danger">取消</el-button>
-                                <el-button size="small" type="primary" @click="saveSketchScore">保存</el-button>
+                                    <el-button size="small" type="danger">取消</el-button>
+                                    <el-button size="small" type="primary" @click="saveSketchScore">保存</el-button>
                                 </div>
                             </el-form>
                         </FormPanel>
@@ -102,20 +112,29 @@
                             <div>
                                 <el-input style="width: 80%" size="mini" v-model="moralPlusKeyword"
                                           class="value-search-box"
-                                          placeholder="请输入查询条件"><i slot="prefix" class="el-input__icon el-icon-search"></i>
+                                          placeholder="请输入查询条件"><i slot="prefix"
+                                                                   class="el-input__icon el-icon-search"></i>
                                 </el-input>
                                 <VButton @click="searchMoralPlus" style="float: right">搜索</VButton>
                             </div>
                             <el-table
                                     :data="moralPlusData"
                                     height="200"
+                                    :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                    :cell-style="function({row, column, rowIndex, columnIndex}) {
+                            if (columnIndex === 4) {
+                            return 'text-align: left'
+                            } else {
+                                return 'text-align: center'
+                            }
+                                }"
                                     style="font-size: 12px"
                                     size="mini"
                             >
                                 <el-table-column
                                         prop="moralPlusName"
                                         label="项目名称"
-                                        width="100"
+                                        width="110"
                                 ></el-table-column>
                                 <el-table-column
                                         prop="moralPlusType"
@@ -130,9 +149,10 @@
                                         label="操 作"
                                 >
                                     <template slot-scope="scope">
-                                        <el-button size="mini" type="primary" @click="dialogFormVisible = true">编辑
+                                        <el-button size="mini" type="primary" @click="updateMoralPlus(scope.row)">编辑
                                         </el-button>
-                                        <el-button size="mini" type="danger" @click="deleteMoralScore(scope.row)">删除</el-button>
+                                        <el-button size="mini" type="danger" @click="deleteMoralScore(scope.row)">删除
+                                        </el-button>
                                     </template>
 
                                 </el-table-column>
@@ -143,7 +163,7 @@
                                         background
                                         @size-change="page_handleMoralPlusSizeChange"
                                         @current-change="page_handleMoralPlusCurrentChange"
-                                        layout="prev, pager, next"
+                                        layout="prev, pager, next,total"
                                         :current-page="pageMoralPlus.currentPage"
                                         :page-size="pageMoralPlus.size"
                                         :total="pageMoralPlus.total"
@@ -154,7 +174,30 @@
                     </el-col>
                     <el-col :span="12">
                         <FormPanel name="德育加分数据字典新增" align="left">
-
+                            <el-form :model="moralPlusAddForm" size="small" style="font-size: 12px;text-align: left">
+                                <el-form-item label="德育加分名称" :label-width="formLabelWidth">
+                                    <el-input v-model="moralPlusAddForm.moralPlusName"></el-input>
+                                </el-form-item>
+                                <el-row>
+                                    <el-col :span="12">
+                                        <el-form-item label="德育加分类型" :label-width="formLabelWidth">
+                                            <el-input v-model="moralPlusAddForm.moralPlusType"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <el-form-item label="德育加分分数" :label-width="formLabelWidth">
+                                            <el-input v-model="moralPlusAddForm.moralPlusScore"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-form-item label="德育加分描述" :label-width="formLabelWidth">
+                                    <el-input v-model="moralPlusAddForm.description"type="textarea"></el-input>
+                                </el-form-item>
+                            </el-form>
+                            <div style="float: right">
+                                <el-button size="small" type="danger">取消</el-button>
+                                <el-button size="small" type="primary" @click="saveMoralPlus">保存</el-button>
+                            </div>
                         </FormPanel>
                     </el-col>
                 </el-row>
@@ -167,13 +210,22 @@
                             <div>
                                 <el-input style="width: 80%" size="mini" v-model="moralPlusKeyword"
                                           class="value-search-box"
-                                          placeholder="请输入查询条件"><i slot="prefix" class="el-input__icon el-icon-search"></i>
+                                          placeholder="请输入查询条件"><i slot="prefix"
+                                                                   class="el-input__icon el-icon-search"></i>
                                 </el-input>
                                 <VButton @click="searchMoralPlus" style="float: right">搜索</VButton>
                             </div>
                             <el-table
                                     :data="moralDeductionData"
                                     height="200"
+                                    :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                    :cell-style="function({row, column, rowIndex, columnIndex}) {
+                            if (columnIndex === 4) {
+                            return 'text-align: left'
+                            } else {
+                                return 'text-align: center'
+                            }
+                                }"
                                     style="font-size: 12px"
                                     size="mini"
                             >
@@ -195,9 +247,11 @@
                                         label="操 作"
                                 >
                                     <template slot-scope="scope">
-                                        <el-button size="mini" type="primary" @click="dialogFormVisible = true">编辑
+                                        <el-button size="mini" type="primary" @click="updateMoralDeduction(scope.row)">编辑
                                         </el-button>
-                                        <el-button size="mini" type="danger" @click="deleteMoralDeduction(scope.row)">删除</el-button>
+                                        <el-button size="mini" type="danger" @click="deleteMoralDeduction(scope.row)">
+                                            删除
+                                        </el-button>
                                     </template>
 
                                 </el-table-column>
@@ -208,7 +262,7 @@
                                         background
                                         @size-change="page_handleMoralDeductionSizeChange"
                                         @current-change="page_handleMoralDeductionCurrentChange"
-                                        layout="prev, pager, next"
+                                        layout="prev, pager, next,total"
                                         :current-page="pageMoralDeduction.currentPage"
                                         :page-size="pageMoralDeduction.size"
                                         :total="pageMoralDeduction.total"
@@ -219,26 +273,139 @@
                     </el-col>
                     <el-col :span="12">
                         <FormPanel name="德育减分数据字典新增" align="left">
-
+                            <el-form :model="moralDeductionAddForm" size="small" style="font-size: 12px;text-align: left">
+                                <el-form-item label="德育减分名称" :label-width="formLabelWidth">
+                                    <el-input v-model="moralDeductionAddForm.moralDeductionName"></el-input>
+                                </el-form-item>
+                                <el-row>
+                                    <el-col :span="12">
+                                        <el-form-item label="德育减分类型" :label-width="formLabelWidth">
+                                            <el-input v-model="moralDeductionAddForm.moralDeductionType"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <el-form-item label="德育减分分数" :label-width="formLabelWidth">
+                                            <el-input v-model="moralDeductionAddForm.moralDeductionScore"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-form-item label="德育减分描述" :label-width="formLabelWidth">
+                                    <el-input v-model="moralDeductionAddForm.description"type="textarea"></el-input>
+                                </el-form-item>
+                            </el-form>
+                            <div style="float: right">
+                                <el-button size="small" type="danger">取消</el-button>
+                                <el-button size="small" type="primary" @click="saveMoralDeductionAdd">保存</el-button>
+                            </div>
                         </FormPanel>
                     </el-col>
                 </el-row>
             </div>
         </el-card>
 
-
+        <!--素拓分数据字典编辑弹窗-->
         <el-dialog title="素拓分数据字典编辑" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
+            <el-form :model="sketchScoreEditForm" size="small" style="font-size: 12px;text-align: left">
                 <el-form-item label="素拓分类型" :label-width="formLabelWidth">
-                    <el-input v-model="form.type" autocomplete="off"></el-input>
+                    <el-input v-model="sketchScoreEditForm.type" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="类型描述" :label-width="formLabelWidth">
-                    <el-input v-model="form.description" autocomplete="off"></el-input>
+                    <el-input v-model="sketchScoreEditForm.description" autocomplete="off" type="textarea"></el-input>
                 </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="参与者" :label-width="formWidth">
+                            <el-input v-model="sketchScoreEditForm.participant" autocomplete="off" style="width: 80px"
+                                      size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="组织者" :label-width="formWidth">
+                            <el-input v-model="sketchScoreEditForm.organizer" autocomplete="off" style="width: 80px"
+                                      size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="获奖者1" :label-width="formWidth">
+                            <el-input v-model="sketchScoreEditForm.winnerOne" autocomplete="off" style="width: 80px"
+                                      size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="获奖者2" :label-width="formWidth">
+                            <el-input v-model="sketchScoreEditForm.winnerTwo" autocomplete="off" style="width: 80px"
+                                      size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="获奖者3" :label-width="formWidth">
+                            <el-input v-model="sketchScoreEditForm.winnerThree" autocomplete="off" style="width: 80px"
+                                      size="small"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="saveSketchScoreEdit">保存</el-button>
+            </div>
+        </el-dialog>
+
+        <!--德育加分数据字典编辑弹窗-->
+        <el-dialog title="德育加分数据字典编辑" :visible.sync="moralPlusFormVisible">
+            <el-form :model="sketchScoreEditForm" size="small" style="font-size: 12px;text-align: left">
+                <el-form-item label="德育加分名称" :label-width="formLabelWidth">
+                    <el-input v-model="moralPlusEditForm.moralPlusName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="德育加分类型" :label-width="formLabelWidth">
+                            <el-input v-model="moralPlusEditForm.moralPlusType" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="德育加分分数" :label-width="formLabelWidth">
+                            <el-input v-model="moralPlusEditForm.moralPlusScore" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="德育加分描述" :label-width="formLabelWidth">
+                    <el-input v-model="moralPlusEditForm.description" autocomplete="off" type="textarea"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="moralPlusFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveMoralPlusEditForm">保存</el-button>
+            </div>
+        </el-dialog>
+
+        <!--德育减分数据字典编辑弹窗-->
+        <el-dialog title="德育减分数据字典编辑" :visible.sync="moralDeductionFormVisible">
+            <el-form :model="moralDeductionEditForm" size="small" style="font-size: 12px;text-align: left">
+                <el-form-item label="德育减分名称" :label-width="formLabelWidth">
+                    <el-input v-model="moralDeductionEditForm.moralDeductionName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="德育减分类型" :label-width="formLabelWidth">
+                            <el-input v-model="moralDeductionEditForm.moralDeductionType" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="德育减分分数" :label-width="formLabelWidth">
+                            <el-input v-model="moralDeductionEditForm.moralDeductionScore" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="德育减分描述" :label-width="formLabelWidth">
+                    <el-input v-model="moralDeductionEditForm.description" autocomplete="off" type="textarea"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="moralDeductionFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveMoralDeductionEdit">保存</el-button>
             </div>
         </el-dialog>
     </div>
@@ -255,25 +422,27 @@
         data() {
             return {
                 dialogFormVisible: false,
+                moralPlusFormVisible: false,
+                moralDeductionFormVisible:false,
                 sketchScoreData: [],
-                moralPlusData:[],
-                moralDeductionData:[],
-                pageSketchScore:{
+                moralPlusData: [],
+                moralDeductionData: [],
+                pageSketchScore: {
                     currentPage: 1,
-                    total : 1,
+                    total: 1,
                     size: 4
                 },
-                pageMoralPlus:{
+                pageMoralPlus: {
                     currentPage: 1,
-                    total : 1,
+                    total: 1,
                     size: 4
                 },
-                pageMoralDeduction:{
+                pageMoralDeduction: {
                     currentPage: 1,
-                    total : 1,
+                    total: 1,
                     size: 4
                 },
-                sketchScoreEditForm: {
+                sketchScoreAddForm: {
                     type: '',
                     description: '',
                     participant: '',
@@ -282,12 +451,49 @@
                     winnerTwo: '',
                     winnerThree: '',
                 },
-                form: {
+                sketchScoreEditForm: {
+                    id: '',
                     name: '',
                     description: '',
+                    type: '',
+                    participant: '',
+                    organizer: '',
+                    winnerOne: '',
+                    winnerTwo: '',
+                    winnerThree: '',
                 },
-                formLabelWidth: '130px',
-                moralPlusKeyword:'',
+                moralPlusAddForm:{
+                    moralPlusName: '',
+                    moralPlusType: '',
+                    moralPlusScore:'',
+                    description: '',
+                },
+                moralPlusEditForm: {
+                    id:'',
+                    moralPlusName: '',
+                    moralPlusType: '',
+                    moralPlusScore:'',
+                    description: '',
+
+                },
+                moralDeductionEditForm: {
+                    id:'',
+                    moralDeductionName: '',
+                    moralDeductionScore: '',
+                    moralDeductionType:'',
+                    description: '',
+
+                },
+                moralDeductionAddForm:{
+                    id:'',
+                    moralDeductionName: '',
+                    moralDeductionScore: '',
+                    moralDeductionType:'',
+                    description: '',
+                },
+                formLabelWidth: '100px',
+                formWidth: '80px',
+                moralPlusKeyword: '',
             }
         },
         mounted() {
@@ -298,18 +504,35 @@
         methods: {
 
             /**
-             * @description新增素拓分数据字典
+             * @description编辑素拓分数据字典
              * **/
-            addSKetchScoreRow: function () {
-
+            saveSketchScoreEdit: function () {
+                this.$http.post(Config.sketchScore + '/update', this.sketchScoreEditForm).then(response => {
+                    if (response.data.code == '200') {
+                        this.dialogFormVisible = false;
+                        this.$message({
+                            showClose: true,
+                            message: '编辑成功',
+                            type: 'success'
+                        });
+                        this.getSketchScoreData();
+                    } else {
+                        this.dialogFormVisible = false;
+                        this.$message({
+                            showClose: true,
+                            message: '编辑失败',
+                            type: 'error'
+                        });
+                    }
+                })
             },
 
             /**
              * @description移除新增的素拓分数据字典
              * **/
             deleteSketchScore: function (SketchScoreDeletedata) {
-                this.$http.post(Config.sketchScore + '/delete',SketchScoreDeletedata).then(response=>{
-                    if (response.data.code == '200'){
+                this.$http.post(Config.sketchScore + '/delete', SketchScoreDeletedata).then(response => {
+                    if (response.data.code == '200') {
                         this.$message({
                             showClose: true,
                             message: '删除成功',
@@ -336,7 +559,7 @@
                     size: that.pageSketchScore.size,
                     page: that.pageSketchScore.currentPage - 1,
                 };
-                this.$http.get(Config.sketchScore + '/findFuzzy',{params:params}).then(response => {
+                this.$http.get(Config.sketchScore + '/findFuzzy', {params: params}).then(response => {
                     if (response.data.code == '200') {
                         that.sketchScoreData = response.data.data.content;
                         that.pageSketchScore.total = response.data.data.totalElements;
@@ -348,29 +571,29 @@
             /**
              * @description新增保存素拓分数据字典
              * **/
-            saveSketchScore:function () {
-                this.$http.post(Config.sketchScore + '/add',this.sketchScoreEditForm).then(response=>{
-                        if(response.data.code == '200'){
-                            this.$message({
-                                showClose: true,
-                                message: '保存成功',
-                                type: 'success'
-                            });
-                            this.getSketchScoreData();
-                        }else {
-                            this.$message({
-                                showClose: true,
-                                message: '新增失败',
-                                type: 'error'
-                            });
-                        }
+            saveSketchScore: function () {
+                this.$http.post(Config.sketchScore + '/update', this.sketchScoreAddForm).then(response => {
+                    if (response.data.code == '200') {
+                        this.$message({
+                            showClose: true,
+                            message: '保存成功',
+                            type: 'success'
+                        });
+                        this.getSketchScoreData();
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '新增失败',
+                            type: 'error'
+                        });
+                    }
                 })
             },
 
             /**
              * @description搜索德育加分数据字典
              * **/
-            searchMoralPlus:function(){
+            searchMoralPlus: function () {
                 const parms = {
                     keyWord: this.moralPlusKeyword,
                 };
@@ -391,14 +614,14 @@
             /**
              * @description 获取德育加分数据字典
              * **/
-            getMoralPlusData:function () {
+            getMoralPlusData: function () {
                 const that = this;
                 let params = {
                     sort: 'id,desc',
                     size: that.pageMoralPlus.size,
                     page: that.pageMoralPlus.currentPage - 1,
                 };
-                this.$http.get(Config.moralPlus + '/findFuzzy',{params:params}).then(response => {
+                this.$http.get(Config.moralPlus + '/findFuzzy', {params: params}).then(response => {
                     if (response.data.code == '200') {
                         that.moralPlusData = response.data.data.content;
                         that.pageMoralPlus.total = response.data.data.totalElements;
@@ -409,33 +632,56 @@
             },
 
             /**
-             * @description 删除德育加分数据字典
+             * @description保存编辑德育加分数据字典数据
              * **/
-            deleteMoralScore:function (moralPlus) {
-              this.$http.post(Config.moralPlus + '/delete',moralPlus).then(response=>{
+            saveMoralPlusEditForm:function(){
+              this.$http.post(Config.moralPlus + '/add',this.moralPlusEditForm).then(response=>{
                   if (response.data.code == '200'){
+                      this.moralPlusFormVisible = false;
                       this.$message({
                           showClose: true,
-                          message: '删除德育加分数据字典成功',
+                          message: '编辑成功',
                           type: 'success'
                       });
                       this.getMoralPlusData();
-                  }else {
+                  } else {
                       this.$message({
                           showClose: true,
-                          message: '删除德育加分数据字典失败',
-                          type: 'error'
+                          message: '编辑失败',
+                          type: 'danger'
                       });
                   }
               })
             },
 
             /**
+             * @description 删除德育加分数据字典
+             * **/
+            deleteMoralScore: function (moralPlus) {
+                this.$http.post(Config.moralPlus + '/delete', moralPlus).then(response => {
+                    if (response.data.code == '200') {
+                        this.$message({
+                            showClose: true,
+                            message: '删除德育加分数据字典成功',
+                            type: 'success'
+                        });
+                        this.getMoralPlusData();
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '删除德育加分数据字典失败',
+                            type: 'error'
+                        });
+                    }
+                })
+            },
+
+            /**
              * @description 删除德育减分数据字典
              * **/
-            deleteMoralDeduction:function (moralDeduction) {
-                this.$http.post(Config.moralDeduction + '/delete',moralDeduction).then(response=>{
-                    if (response.data.code == '200'){
+            deleteMoralDeduction: function (moralDeduction) {
+                this.$http.post(Config.moralDeduction + '/delete', moralDeduction).then(response => {
+                    if (response.data.code == '200') {
                         this.$message({
                             showClose: true,
                             message: '删除德育减分数据字典成功',
@@ -455,27 +701,27 @@
             /**
              * @description 获取德育减分数据字典
              * **/
-            getMoralDeductionData:function () {
+            getMoralDeductionData: function () {
                 const that = this;
                 let params = {
                     sort: 'id,desc',
                     size: that.pageMoralDeduction.size,
                     page: that.pageMoralDeduction.currentPage - 1,
                 }
-              this.$http.get(Config.moralDeduction + '/findFuzzy',{params:params}).then(response=>{
-                  if (response.data.code == '200'){
-                      that.moralDeductionData = response.data.data.content;
-                      that.pageMoralDeduction.total = response.data.data.totalElements;
-                  } else {
-                      that.moralDeductionData = response.data.data.content;
-                  }
-              })
+                this.$http.get(Config.moralDeduction + '/findFuzzy', {params: params}).then(response => {
+                    if (response.data.code == '200') {
+                        that.moralDeductionData = response.data.data.content;
+                        that.pageMoralDeduction.total = response.data.data.totalElements;
+                    } else {
+                        that.moralDeductionData = response.data.data.content;
+                    }
+                })
             },
 
             /**
              * @description 素拓分数据字典size事件
              * **/
-            page_handleSketchScoreSizeChange(value){
+            page_handleSketchScoreSizeChange(value) {
                 this.pageSketchScore.size = value;
                 this.pageSketchScore.currentPage = 1;
                 this.getSketchScoreData();
@@ -484,7 +730,7 @@
             /**
              * @description 素拓分数据字典page事件
              * **/
-            page_handleSketchScoreCurrentChange(value){
+            page_handleSketchScoreCurrentChange(value) {
                 this.pageSketchScore.currentPage = value;
                 this.getSketchScoreData();
             },
@@ -493,7 +739,7 @@
              * @description德育加分数据字典分页size事件
              * **/
 
-            page_handleMoralPlusSizeChange(value){
+            page_handleMoralPlusSizeChange(value) {
                 this.pageMoralPlus.size = value;
                 this.pageMoralPlus.currentPage = 1;
                 this.getMoralPlusData();
@@ -502,31 +748,131 @@
             /**
              * @description德育加分数据字典分页page事件
              * **/
-            page_handleMoralPlusCurrentChange(value){
-              this.pageMoralPlus.currentPage = value;
-              this.getMoralPlusData();
+            page_handleMoralPlusCurrentChange(value) {
+                this.pageMoralPlus.currentPage = value;
+                this.getMoralPlusData();
             },
 
             /**
              * @description德育减分数据字典分页size事件
              * **/
-            page_handleMoralDeductionSizeChange(value){
-              this.pageMoralDeduction.size =value;
-              this.pageMoralDeduction.currentPage = 1;
-              this.getMoralDeductionData();
+            page_handleMoralDeductionSizeChange(value) {
+                this.pageMoralDeduction.size = value;
+                this.pageMoralDeduction.currentPage = 1;
+                this.getMoralDeductionData();
             },
 
             /**
              * @description德育减分数据字典分页page事件
              * **/
-            page_handleMoralDeductionCurrentChange(value){
-              this.pageMoralDeduction.currentPage = value;
-              this.getMoralDeductionData();
+            page_handleMoralDeductionCurrentChange(value) {
+                this.pageMoralDeduction.currentPage = value;
+                this.getMoralDeductionData();
             },
+
+
+            /**
+             * @description素拓分数据字典编辑
+             * **/
+            updateSketchScore: function (sketchScore) {
+                this.dialogFormVisible = true;
+                this.sketchScoreEditForm.type = sketchScore.type;
+                this.sketchScoreEditForm.id = sketchScore.id;
+                this.sketchScoreEditForm.description = sketchScore.description;
+                this.sketchScoreEditForm.organizer = sketchScore.organizer;
+                this.sketchScoreEditForm.winnerOne = sketchScore.winnerOne;
+                this.sketchScoreEditForm.winnerTwo = sketchScore.winnerTwo;
+                this.sketchScoreEditForm.winnerThree = sketchScore.winnerThree;
+                this.sketchScoreEditForm.participant = sketchScore.participant;
+            },
+
+            /**
+             * @description德育加分数据字典编辑
+             * **/
+            updateMoralPlus:function (moralPlusInfo) {
+                this.moralPlusFormVisible = true;
+                this.moralPlusEditForm.id = moralPlusInfo.id;
+                this.moralPlusEditForm.moralPlusName = moralPlusInfo.moralPlusName;
+                this.moralPlusEditForm.moralPlusScore = moralPlusInfo.moralPlusScore;
+                this.moralPlusEditForm.moralPlusType = moralPlusInfo.moralPlusType;
+                this.moralPlusEditForm.description = moralPlusInfo.description;
+
+            },
+
+            /**
+             * @description编辑德育减分数据字典
+             * **/
+            saveMoralDeductionEdit:function () {
+                this.$http.post(Config.moralDeduction + '/add',this.moralDeductionEditForm).then(response=>{
+                    if(response.data.code == '200'){
+
+                    }else {
+
+                    }
+                })
+            },
+
+            /**
+             * @description德育减分数据字典数据获取
+             * **/
+            updateMoralDeduction:function (moralDeductionInfo) {
+                this.moralDeductionFormVisible = true;
+                this.moralDeductionEditForm.id = moralDeductionInfo.id;
+                this.moralDeductionEditForm.moralDeductionName = moralDeductionInfo.moralDeductionName;
+                this.moralDeductionEditForm.moralDeductionType = moralDeductionInfo.moralDeductionType;
+                this.moralDeductionEditForm.moralDeductionScore = moralDeductionInfo.moralDeductionScore;
+                this.moralDeductionEditForm.description = moralDeductionInfo.description;
+            },
+
+            /**
+             * @description保存新增德育加分数据字典
+             * **/
+            saveMoralPlus:function () {
+                this.$http.post(Config.moralPlus + '/add',this.moralPlusAddForm).then(response=>{
+                    if (response.data.code == '200'){
+                        this.$message({
+                            showClose: true,
+                            message: '新增成功',
+                            type: 'success'
+                        });
+                        this.getMoralPlusData();
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '新增失败',
+                            type: 'danger'
+                        });
+                    }
+                })
+            },
+
+            /**
+             * @description保存新增德育减分数据字典
+             * **/
+            saveMoralDeductionAdd:function () {
+                this.$http.post(Config.moralDeduction + '/add',this.moralDeductionAddForm).then(response=>{
+                    if (response.data.code == '200'){
+                        this.$message({
+                            showClose: true,
+                            message: '新增成功',
+                            type: 'success'
+                        });
+                        this.getMoralDeductionData()
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '新增失败',
+                            type: 'danger'
+                        });
+                    }
+                })
+            }
         }
     }
 </script>
 
 <style scoped>
+    .dataCardInput {
 
+    }
 </style>

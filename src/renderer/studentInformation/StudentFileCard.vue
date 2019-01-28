@@ -123,7 +123,7 @@
             },
 
             /**
-             * 查找设置建档立卡的学生信息
+             * @description查找设置建档立卡的学生信息
              * **/
             searchSetFileCardStudent: function () {
                 const parms = {
@@ -138,7 +138,7 @@
             },
 
             /**
-             * 取消建档立卡
+             * @description取消建档立卡
              * **/
             cancelFileCard: function (fileCardData) {
                 fileCardData.fileCard=false;

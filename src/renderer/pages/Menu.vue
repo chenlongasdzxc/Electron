@@ -71,7 +71,7 @@
                             <el-submenu index="5">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">考勤管理</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="" style="min-width: 50px">通勤信息</el-menu-item>
+                                    <el-menu-item index="/CheckingInAdd" style="min-width: 50px">通勤信息</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
                                     <el-menu-item index="/" style="min-width: 50px">考勤管理</el-menu-item>
@@ -112,8 +112,8 @@
                         <router-view></router-view>
                     </el-main>
                     <el-footer
-                            style="background: #fff; color: #999; font-size: 12px; text-align: right; vertical-align: center;height: 20px">
-                        @Silence
+                            style="background: #fff; color: #999; font-size: 12px; text-align: right; vertical-align: center;height: 20px;font-family: 'Arial Rounded MT Bold'">
+                        @Maybe
                     </el-footer>
                 </el-container>
             </el-container>

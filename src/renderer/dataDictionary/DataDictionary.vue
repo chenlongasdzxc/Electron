@@ -6,6 +6,14 @@
                     <el-table
                             :data="sketchData"
                             size="mini"
+                            :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                            :cell-style="function({row, column, rowIndex, columnIndex}) {
+                            if (columnIndex === 4) {
+                            return 'text-align: left'
+                            } else {
+                                return 'text-align: center'
+                            }
+                                }"
                             style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                     >
                         <el-table-column
@@ -45,7 +53,7 @@
                                 background
                                 @size-change="page_handleSizeChange"
                                 @current-change="page_handleCurrentChange"
-                                layout="prev, pager, next"
+                                layout="prev, pager, next,total"
                                 :current-page="page.currentPage"
                                 :page-size="page.size"
                                 :total="page.total"
@@ -67,6 +75,14 @@
                         <el-table
                                 :data="moralPlusData"
                                 size="mini"
+                                :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                :cell-style="function({row, column, rowIndex, columnIndex}) {
+                            if (columnIndex === 4) {
+                            return 'text-align: left'
+                            } else {
+                                return 'text-align: center'
+                            }
+                                }"
                                 style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                         >
                             <el-table-column
@@ -89,7 +105,7 @@
                                 background
                                 @size-change="page_handleMoralPlusSizeChange"
                                 @current-change="page_handleMoralPlusCurrentChange"
-                                layout="prev, pager, next"
+                                layout="prev, pager, next,total"
                                 :current-page="pageMoralPlus.currentPage"
                                 :page-size="pageMoralPlus.size"
                                 :total="pageMoralPlus.total"
@@ -111,6 +127,14 @@
                         <el-table
                                 :data="moralDeductionData"
                                 size="mini"
+                                :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                :cell-style="function({row, column, rowIndex, columnIndex}) {
+                            if (columnIndex === 4) {
+                            return 'text-align: left'
+                            } else {
+                                return 'text-align: center'
+                            }
+                                }"
                                 style="font-size: 12px;font-family: 'Script MT Bold';text-align: center"
                         >
                             <el-table-column
@@ -133,7 +157,7 @@
                                 background
                                 @size-change="page_handleMoralDeductionSizeChange"
                                 @current-change="page_handleMoralDeductionCurrentChange"
-                                layout="prev, pager, next"
+                                layout="prev, pager, next,total"
                                 :current-page="pageMoralDeduction.currentPage"
                                 :page-size="pageMoralDeduction.size"
                                 :total="pageMoralDeduction.total"

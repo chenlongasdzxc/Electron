@@ -6,6 +6,8 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/iconfont/iconfont.css'
 import echarts from 'echarts'
+import '../../static/css/index.css'
+import Config from './Config'
 Vue.prototype.$echarts = echarts
 Vue.use(Element)
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
@@ -16,7 +18,7 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  components: { App },
+  components: { App,Config },
   router,
   template: '<App/>'
 }).$mount('#app')
@@ -28,25 +30,35 @@ function Gettoken(next) {
     next();
 }
 
-function Getid(){
+
+function GetStudentInfo(){
     const userName = sessionStorage.getItem("userName");
-    let url = 'http://localhost:8083/user/find'
-    axios.get(url,{params:{userName:userName}}).then(response=>{
-        if (response.data.code == '200'){
-            const uid = response.data.data;
-            sessionStorage.setItem("uid",uid);
+    axios.get(Config.studentInfo + '/get',{params:{userName:userName}}).then(response=>{
+        if (response.data.code == '200' ){
+            const userClass = response.data.data;
+            sessionStorage.setItem("userClass",userClass);
         }
     })
+}
 
+function GetUserInfo(){
+    const name = sessionStorage.getItem("userName");
+    let p = {
+        userName: name
+    }
+    axios.get(Config.studentInfo + '/findPersonalInfo',{params:p}).then(response=>{
+        if (response.data.code == '200'){
+            const user = response.data.data;
+            sessionStorage.setItem("user",JSON.stringify(user));
+        }
+    })
 }
 
 router.beforeEach((to,from,next)=>{
-    console.log("--------");
-    console.log(to.query)
     Gettoken(next);
-    Getid(next);
+    GetStudentInfo(next);
+    GetUserInfo(next);
     next()
-    console.log(to.query)
 })
 
 

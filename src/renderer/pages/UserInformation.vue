@@ -6,26 +6,26 @@
                     <el-row>
                         <el-col :span="8" style="padding-left: 0px">
                             <ul>
-                                <li><label>姓名：</label>{{studentInfo.studentName}}</li>
-                                <li><label>性别：</label>{{studentInfo.sex}}</li>
-                                <li><label>民族：</label>{{studentInfo.nation}}</li>
-                                <li><label>籍贯：</label>{{studentInfo.originPlace}}</li>
-                                <li><label>年级：</label>{{studentInfo.grade}}</li>
-                                <li><label>专业：</label>{{studentInfo.major}}</li>
-                                <li><label>班级：</label>{{studentInfo.studentClass}}</li>
-                                <li><label>寝室：</label>{{studentInfo.roomNumber}}</li>
+                                <li><label>姓名：</label>{{personalInfo.studentName}}</li>
+                                <li><label>性别：</label>{{personalInfo.sex}}</li>
+                                <li><label>民族：</label>{{personalInfo.nation}}</li>
+                                <li><label>籍贯：</label>{{personalInfo.originPlace}}</li>
+                                <li><label>年级：</label>{{personalInfo.grade}}</li>
+                                <li><label>专业：</label>{{personalInfo.major}}</li>
+                                <li><label>班级：</label>{{personalInfo.studentClass}}</li>
+                                <li><label>寝室：</label>{{personalInfo.roomNumber}}</li>
                             </ul>
                         </el-col>
                         <el-col :span="15">
                             <ul>
-                                <li><label>联系电话：</label>{{studentInfo.phoneNumber}}</li>
-                                <li><label>邮箱号码：</label>{{studentInfo.email}}</li>
-                                <li><label>身份证号：</label>{{studentInfo.idCard}}</li>
-                                <li><label>银行卡号：</label>{{studentInfo.bankNumber}}</li>
-                                <li><label>开户银行：</label>{{studentInfo.bankName}}</li>
-                                <li><label>家庭住址：</label>{{studentInfo.adress}}</li>
-                                <li><label>政治面貌：</label>{{studentInfo.politicesStatus}}</li>
-                                <li><label>建档立卡：</label>{{studentInfo.fileCard}}</li>
+                                <li><label>联系电话：</label>{{personalInfo.phoneNumber}}</li>
+                                <li><label>邮箱号码：</label>{{personalInfo.email}}</li>
+                                <li><label>身份证号：</label>{{personalInfo.idCard}}</li>
+                                <li><label>银行卡号：</label>{{personalInfo.bankNumber}}</li>
+                                <li><label>开户银行：</label>{{personalInfo.bankName}}</li>
+                                <li><label>家庭住址：</label>{{personalInfo.adress}}</li>
+                                <li><label>政治面貌：</label>{{personalInfo.politicesStatus}}</li>
+                                <li><label>建档立卡：</label>{{personalInfo.fileCard}}</li>
                             </ul>
                         </el-col>
                     </el-row>
@@ -122,7 +122,7 @@
                 },
 
                 uid: '',
-                studentInfo: [],
+                personalInfo: [],
                 studentForm: {
                     id: '',
                     phoneNumber: '',
@@ -157,16 +157,14 @@
              * **/
             findStudentInfo: function () {
                 const that = this;
-                let url = Config.studentInfo + '/get';
                 const name = sessionStorage.getItem("userName");
-                this.$http.get(url, {params: {userName: name}}).then(function (response) {
+                this.$http.get(Config.studentInfo + '/findPersonalInfo', {params: {userName: name}}).then(function (response) {
                     if (response.data.code == '200') {
-                        sessionStorage.setItem("userInfo", response.data.data);
-                        that.studentInfo = response.data.data;
+                        that.personalInfo = response.data.data;
                         if (response.data.data.fileCard == '1') {
-                            that.studentInfo.fileCard = '是'
+                            that.personalInfo.fileCard = '是'
                         } else {
-                            that.studentInfo.fileCard = '否'
+                            that.personalInfo.fileCard = '否'
                         }
                     }
                 })
@@ -220,7 +218,7 @@
                             title: '提示',
                             message: '密码修改成功'
                         })
-                    }else {
+                    } else {
                         this.$notify({
                             title: '提示',
                             message: '修改失败'
