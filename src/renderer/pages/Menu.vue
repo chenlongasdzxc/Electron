@@ -71,10 +71,13 @@
                             <el-submenu index="5">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">考勤管理</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/CheckingInAdd" style="min-width: 50px">通勤信息</el-menu-item>
+                                    <el-menu-item index="/PersonalCheckingIn" style="min-width: 50px">我的考勤</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/" style="min-width: 50px">考勤管理</el-menu-item>
+                                    <el-menu-item index="/CheckingInAdd" style="min-width: 50px">上传考勤</el-menu-item>
+                                </el-menu-item-group>
+                                <el-menu-item-group>
+                                    <el-menu-item index="/CheckingManage" style="min-width: 50px">考勤管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="6">

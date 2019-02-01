@@ -69,6 +69,16 @@ export default new Router({
                     name: 'CheckingInAdd',
                     component: require('@/checking-in/CheckingInAdd').default,
                 },
+                {
+                    path: '/PersonalCheckingIn',
+                    name: 'PersonalCheckingIn',
+                    component: require('@/checking-in/PersonalCheckingIn').default,
+                },
+                {
+                    path: '/CheckingManage',
+                    name: 'CheckingManage',
+                    component: require('@/checking-in/CheckingManage').default,
+                },
             ],
         },
 
