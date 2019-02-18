@@ -79,6 +79,11 @@ export default new Router({
                     name: 'CheckingManage',
                     component: require('@/checking-in/CheckingManage').default,
                 },
+                {
+                    path: '/AskForLeave',
+                    name: 'AskForLeave',
+                    component: require('@/checking-in/AskForLeave').default,
+                },
             ],
         },
 

@@ -74,6 +74,9 @@
                                     <el-menu-item index="/PersonalCheckingIn" style="min-width: 50px">我的考勤</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
+                                    <el-menu-item index="/AskForLeave" style="min-width: 50px">请假申请</el-menu-item>
+                                </el-menu-item-group>
+                                <el-menu-item-group>
                                     <el-menu-item index="/CheckingInAdd" style="min-width: 50px">上传考勤</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>

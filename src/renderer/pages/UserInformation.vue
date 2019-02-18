@@ -30,7 +30,7 @@
                         </el-col>
                     </el-row>
                 </form-panel>
-                <form-panel name="个人信息编辑" align="left" isNone="false" collapsible>
+                <form-panel name="个人信息编辑" align="left">
                     <el-row>
                         <el-form ref="form" :model="studentForm" label-width="100px" label-position="left">
                             <el-col :span="12" style="padding-left: 0px">
@@ -171,15 +171,13 @@
             },
 
             /**
-             * @description 查找编辑信息
+             * @description 查找个人信息编辑数据
              * **/
             findStudentForm: function () {
                 const that = this;
-                let url = Config.studentInfo + '/get';
                 const name = sessionStorage.getItem("userName");
-                this.$http.get(url, {params: {userName: name}}).then(function (response) {
+                this.$http.get(Config.studentInfo + '/findPersonalInfo', {params: {userName: name}}).then(function (response) {
                     if (response.data.code == '200') {
-                        sessionStorage.setItem("userInfo", response.data.data);
                         that.studentForm = response.data.data;
                     }
                 })
@@ -211,7 +209,8 @@
              * @description:修改密码
              * **/
             saveNewPassword: function () {
-                this.passwordForm.id = sessionStorage.getItem("uid");
+                let i = JSON.parse(sessionStorage.getItem("user"));
+                this.passwordForm.id = i.id;
                 this.$http.post(Config.userInfo + '/changePassword', this.passwordForm).then(response => {
                     if (response.data.code == '200') {
                         this.$notify({

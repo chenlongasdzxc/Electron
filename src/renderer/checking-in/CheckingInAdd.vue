@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-card>
-            <FormPanel name="考勤信息" align="left">
+            <FormPanel name="班级缺勤信息" align="left">
                 <div>
                     <el-input style="width: 90%" size="small" v-model="keyword"
                               class="value-search-box"
@@ -96,7 +96,7 @@
                     </el-pagination>
                 </div>
             </FormPanel>
-            <FormPanel name="上传考勤" align="left">
+            <FormPanel name="新增缺勤信息" align="left">
                 <div style="width: 80%;margin-left: 10%">
                     <el-row :gutter="40">
                         <el-col :span="12">

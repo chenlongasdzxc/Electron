@@ -9,4 +9,5 @@ export default {
     moralPlus:`${baseIp}/MoralPlus`,   //德育加分数据字典
     moralDeduction:`${baseIp}/moralDeduction`,  //德育减分数据字典
     checkingIn:`${baseIp}/studentChecking`,  //考勤
+    Leaving:`${baseIp}/Leaving`, //请假
 }

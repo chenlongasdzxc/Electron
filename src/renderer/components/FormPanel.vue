@@ -33,6 +33,7 @@
 
     .sub-form-header-box {
         border-left: 4px solid #2BA943;
+       /* border-left: 4px solid #444444;*/
         text-align: left;
         padding-left: 15px;
         line-height: 36px;
