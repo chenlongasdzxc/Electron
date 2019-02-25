@@ -1,201 +1,141 @@
+<!--todo 编辑未审核素拓分-->
+
 <template>
     <div>
         <div>
             <el-card>
                 <form-panel name="我的素拓分" align="left">
-                    <div style="font-family: 黑体;font-size: 16px">
-                        <el-table
-                                :data="tableData"
-                                border
-                                size="small"
-                                height="250"
-                                style="width: 100%;text-align: center"
+                    <el-table
+                            :data="personalSketchData"
+                            border
+                            :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                            size="mini"
+                            style="width: 100%"
+                    >
+                        <el-table-column
+                                fixed
+                                align="center"
+                                type="index"
+                                label="序号"
+                                width="60px"
+                        ></el-table-column>
+                        <el-table-column
+                                fixed
+                                prop="sketchName"
+                                align="center"
+                                label="素拓分名称"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="type"
+                                align="center"
+                                label="素拓分类型"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="sketchScore"
+                                align="center"
+                                label="素拓分分数"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="sketchPart"
+                                align="center"
+                                label="参与角色"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="createDate"
+                                align="center"
+                                label="上传日期"
+                        ></el-table-column>
+                        <el-table-column
+                                label="状态"
+                                align="center"
                         >
-                            <el-table-column
-                                    fixed
-                                    prop="id"
-                                    label="序号"
-                                    min-width="50"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="sketchName"
-                                    label="活动名称"
-                                    min-width="80"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="type"
-                                    label="活动类型"
-                                    min-width="80"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="createDate"
-                                    label="日期"
-                                    min-width="100"
-                            >
-                            </el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="sketchScore"
-                                    label="素拓分"
-                                    min-width="80"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="sketchStates"
-                                    label="状态"
-                                    min-width="80"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    label="操作"
-                            >
-                                <VButton @click="deleteSketchPerson"></VButton>
-                            </el-table-column>
-                        </el-table>
+                            <template slot-scope="scope">
+                                <el-tag type="warning" size="mini" v-if="scope.row.sketchStates =='SK001' ">未审核
+                                </el-tag>
+                                <el-tag type="success" size="mini" v-if="scope.row.sketchStates =='SK002' ">审核通过
+                                </el-tag>
+                                <el-tag type="danger" size="mini" v-if="scope.row.sketchStates =='SK003' ">审核未通过
+                                </el-tag>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                align="center"
+                        >
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="danger" @click="updatePersonalSketch(scope.row)">编辑
+                                </el-button>
+                                <el-button size="mini" type="warning" @click="deletePersonalSketch(scope.row)">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div>
+                        <el-pagination
+                                style="display: flex;justify-content: center"
+                                background
+                                @size-change="personalSketchPageSize"
+                                @current-change="personalSketchPageCurrent"
+                                layout="prev, pager, next,total"
+                                :current-page="personalSketchPage.currentPage"
+                                :page-size="personalSketchPage.size"
+                                :total="personalSketchPage.total"
+                        >
+                        </el-pagination>
                     </div>
                 </form-panel>
-                <form-panel name="新增素拓分" align="left" isNone="false" collapsible>
-                    <div slot="header" style="margin-top: 0">
-                        <VButton @click="addSketch">增行</VButton>
-                        <VButton @click="deleteSketch">移除</VButton>
-                        <VButton @click="savePersonSketch">保存</VButton>
-                    </div>
-                    <div>
-                        <el-table
-                            :data="sketchData"
-                            border
-                        >
-                            <el-table-column
-                                type="selection"
-                                width="40"
-                            ></el-table-column>
-                            <el-table-column
-                                label="活动名称"
-                                min-width="100"
-                            >
-                                <template slot-scope="scope">
-                                    <div>
-                                        <el-autocomplete
-                                            class="inline-input"
-                                            @select="handleSelect"
-                                            :disabled="scope.row.isEditable"
-                                            v-model="scope.row.transfer"
-                                            placeholder="请输入名称"
-                                        ></el-autocomplete>
-                                    </div>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                label="活动类型"
-                                min-width="100"
-                            >
-                                <template slot-scope="scope">
-                                    <div>
-                                        <el-select
-                                            v-model="scope.row.payment"
-                                            @change="changePaySelect(scope.$index)"
-                                            filterable
-                                            placeholder="请选择"
-                                        >
+
+
+                <form-panel name="新增素拓分" align="left">
+                    <div style="width: 80%;margin-left: 10%">
+                        <div class="form-title">
+                            <span>素拓分信息</span>
+                        </div>
+                        <div>
+                            <el-form ref="form" :model="sketch" label-width="100px">
+                                <el-row>
+                                    <el-col :span="12">
+                                        <el-form-item label="素拓分名称:">
+                                            <el-input v-model="sketch.sketchName" size="small"
+                                                      style="width: 200px"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <el-form-item label="素拓分类型:">
+                                            <el-select v-model="sketch.type" size="small" style="width: 200px">
+                                                <el-option
+                                                        v-for="item in sketchTypeData"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value"
+                                                ></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <div>
+                                    <el-form-item label="参与角色:">
+                                        <el-select v-model="sketch.sketchPart" size="small" style="width: 200px">
                                             <el-option
-                                                    v-for="item in sketchList"
-                                                    :key="item.skethName"
-                                                    :label="item.sketchName"
-                                                    :value="item.sketchName">
+                                                    v-for="item in sketchPart"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
                                             ></el-option>
                                         </el-select>
+                                    </el-form-item>
+                                    <div style="float: right">
+                                        <el-button size="small" type="danger">取消</el-button>
+                                        <el-button size="small" type="primary" @click="savePersonalSketch">保存
+                                        </el-button>
                                     </div>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                label="参与角色"
-                                min-width="100"
-                            >
-                                <template slot-scope="scope">
-                                    <div>
-                                        <el-select
-                                        ></el-select>
-                                    </div>
-                                </template>
-                            </el-table-column>
-                        </el-table>
+                                </div>
+                            </el-form>
+                        </div>
                     </div>
                 </form-panel>
-                <form-panel name="班级素拓分" align="left" isNone="false" collapsible>
-                    <DataTable
-                            ref="notBorrowingMoney"
-                            :height="table.height"
-                            :url.sync=findBorrowUrl
-                            operational_width="20px"
-                    >
-                        <el-table-column prop="studentNumber" label="学号" sortable="custom"/>
-                        <el-table-column prop="type"label="类型" sortable="custom"/>
-                        <el-table-column prop="sketchScore" label="素拓分" sortable="custom"/>
-                        <el-table-column prop="sketchName" label="素拓分名称" sortable="custom"/>
-                        <el-table-column prop="creatDate" label="创建时间" sortable="custom"/>
-                    </DataTable>
-                </form-panel>
-                <form-panel name="素拓分审核" align="left" isNone="false" collapsible>
-                    <div style="font-family: 黑体;font-size: 16px">
-                        <el-table
-                                :data="tableData"
-                                border
-                                size="small"
-                                style="width: 100%"
-                                height="250"
-                                @selection-change="handleSelectionChange"
-                        >
-                            <el-table-column
-                                    fixed
-                                    prop="id"
-                                    label="序号"
-                                    width="50"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="sketchName"
-                                    label="活动名称"
-                                    width="100"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="type"
-                                    label="活动类型"
-                                    width="150"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="createDate"
-                                    label="日期"
-                                    width="100"
-                            >
-                            </el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="sketchScore"
-                                    label="素拓分"
-                                    width="80"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    prop="sketchStates"
-                                    label="状态"
-                                    width="80"
-                            ></el-table-column>
-                            <el-table-column
-                                    fixed
-                                    label="操作"
-                            >
-                                <template slot-scope="scope">
-                                    <VButton>审核</VButton>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                </form-panel>
+
+
             </el-card>
         </div>
     </div>
@@ -205,85 +145,182 @@
     import VButton from '../components/Button'
     import FormPanel from '../components/FormPanel'
     import DataTable from '../components/DataTable'
-    export default {
-        components:{VButton,FormPanel,DataTable},
-        data(){
-            return{
-                personalSketch:[],
-                sketchList:[],
-                tableData:[],
-                sketchData:[],
-                userName:'',
-                sketchScore:'',
-                sketchStates:'',
-                createDate:'',
-                type:'',
-                table:{
-                    height:250,
-                    data: null,
-                },
-                findBorrowUrl:'',
+    import Config from '../Config'
 
+    export default {
+        components: {VButton, FormPanel, DataTable},
+        data() {
+            return {
+                personalSketchData: [],
+                personalData: '',
+                personalSketchPage: {
+                    size: 10,
+                    total: 1,
+                    currentPage: 1
+                },
+                sketch: {
+                    sketchName: '',
+                    type: '',
+                    sketchPart: '',
+                    getDate: '',
+                },
+                sketchPart: [{
+                    value: '参与者',
+                    label: '参与者'
+                }, {
+                    value: '组织者',
+                    label: '组织者'
+                }, {
+                    value: '获奖者1',
+                    label: '获奖者1'
+                }, {
+                    value: '获奖者2',
+                    label: '获奖者2'
+                }, {
+                    value: '获奖者3',
+                    label: '获奖者3'
+                },
+                ],
+                sketchTypeData: [],
             }
         },
-        created(){
-            this.getPersonalSketchList();
+        mounted() {
+            this.personalData = JSON.parse(sessionStorage.getItem("user"));
+            this.getPersonalSketchData();
+            this.getSketchTypeData();
         },
-        methods:{
+        methods: {
 
             /**
              * @description 获取学生素拓list
              * **/
-            getPersonalSketchList:function () {
-                var studentNum = sessionStorage.getItem("number");
-                let url = 'http://localhost:8083/Sketch/findByStudentNumber';
-                this.$http.get(url,{params:{studentNumber:studentNum}}).then((response)=>{
-                    if (response.data.code==200){
-                        this.tableData = response.data.data;
+            getPersonalSketchData: function () {
+                const that = this;
+                const params = {
+                    studentNumber: that.personalData.studentNumber,
+                    size: this.personalSketchPage.size,
+                    page: this.personalSketchPage.currentPage - 1,
+                    sort: 'id,desc',
+                }
+                this.$http.get(Config.sketch + '/personal', {params: params})
+                    .then((response) => {
+                        if (response.data.code == '200') {
+                            this.personalSketchData = response.data.data.content;
+                            this.personalSketchPage.total = response.data.data.totalElements;
+                        } else {
+                            this.personalSketchData = response.data.data.content;
+                        }
+                    })
+            },
+
+            /**
+             * @description个人素拓分分页page事件
+             * **/
+            personalSketchPageSize: function (value) {
+                this.personalSketchPage.size = value;
+                this.personalSketchPage.currentPage = 1;
+                this.getPersonalSketchData();
+            },
+
+            /**
+             * @description个人素拓分页current事件
+             * **/
+            personalSketchPageCurrent: function (value) {
+                this.personalSketchPage.currentPage = value;
+                this.getPersonalSketchData();
+            },
+
+            /**
+             * @description 获取素拓分类型
+             * **/
+            getSketchTypeData: function () {
+                this.$http.get(Config.sketchScore + '/find').then(response => {
+                    if (response.data.code == '200') {
+                        var list = response.data.data;
+                        if (list) {
+                            for (var i = 0; i < list.length; i++) {
+                                var option = {
+                                    label: list[i].type,
+                                    value: list[i].type,
+                                }
+                                this.sketchTypeData.push(option);
+                            }
+                        }
+                    } else {
+                        self.$message({
+                            showClose: true,
+                            message: '获取失败！',
+                            type: 'error'
+                        });
                     }
-            })
-        },
-            handleSelectionChange:function(){
-
-            },
-            handleSelect:function (val) {
-
-            },
-            changePaySelect:function(){
-
-            },
-
-
-            /**
-             * 新增行
-             * **/
-            addSketch:function () {
-                this.sketchData.push({
-                    transfer:'',
-                    payment:'',
-                    index: this.sketchData.length
                 })
-
-            },
-            /**
-             * 删除行
-             * **/
-            deleteSketch:function () {
-
-            },
-            /**
-             * 批量保存
-             * **/
-            savePersonSketch:function () {
-
             },
 
             /**
-             * 删除个人素拓分
+             * @description 保存新增个人素拓分
              * **/
-            deleteSketchPerson:function () {
-
+            savePersonalSketch: function () {
+                const params = {
+                    studentNumber: this.personalData.studentNumber,
+                    studentName: this.personalData.studentName,
+                    grade: this.personalData.grade,
+                    studentClass: this.personalData.studentClass,
+                    major: this.personalData.major,
+                    sketchName: this.sketch.sketchName,
+                    type: this.sketch.type,
+                    sketchPart: this.sketch.sketchPart,
+                }
+                console.log(params)
+                this.$http.post(Config.sketch + '/update', params).then(response => {
+                    if (response.data.code == '200') {
+                        this.$message({
+                            message: '上传成功',
+                            type: 'success',
+                            center: true
+                        })
+                        this.getPersonalSketchData();
+                    } else {
+                        this.$message({
+                            message: '上传失败',
+                            type: 'warning',
+                            center: true
+                        });
+                        this.getPersonalSketchData();
+                    }
+                })
             },
+
+            /**
+             *@description 删除个人素拓分
+             * **/
+            deletePersonalSketch: function (value) {
+                this.$http.get(Config.sketch + '/delete',{params:{id:value.id}})
+                    .then(response=>{
+                        if (response.data.code == '200') {
+                            this.$message({
+                                message:'删除成功',
+                                center:true,
+                                type:'success'
+                            })
+                            this.getPersonalSketchData();
+                        } else {
+                            this.$message({
+                                message:'删除失败',
+                                center:true,
+                                type:'warning'
+                            })
+                        }
+                        this.getPersonalSketchData();
+                    })
+            },
+
+            /**
+             * @description 编辑个人素拓分
+             * **/
+            updatePersonalSketch: function (value) {
+                console.log(value)
+            }
+
         }
     }
 </script>

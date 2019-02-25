@@ -112,68 +112,6 @@
                     </el-table>
                 </div>
             </FormPanel>
-            <!--请假详情-->
-            <FormPanel align="left" name="请假详情">
-                <div>
-                    <el-table
-                            :data="leaveData"
-                            border
-                            :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
-                            size="mini"
-                            style="width: 100%"
-                    >
-                        <el-table-column
-                                fixed
-                                align="center"
-                                type="index"
-                                label="序号"
-                                width="60px"
-                        ></el-table-column>
-                        <el-table-column
-                                fixed
-                                prop="studentName"
-                                align="center"
-                                label="姓名"
-                                width="60px"
-                        ></el-table-column>
-                        <el-table-column
-                                prop="studentClass"
-                                align="center"
-                                label="班级"
-                                width="100px"
-                        ></el-table-column>
-                        <el-table-column
-                                prop="leaveName"
-                                align="center"
-                                label="请假科目"
-                        ></el-table-column>
-                        <el-table-column
-                                prop="leaveDateStart"
-                                align="center"
-                                label="请假开始时间"
-                        ></el-table-column>
-                        <el-table-column
-                                prop="leaveDateEnd"
-                                align="center"
-                                label="请假结束时间"
-                        ></el-table-column>
-                        <el-table-column
-                                prop="leaveValue"
-                                align="center"
-                                label="请假理由"
-                        ></el-table-column>
-                        <el-table-column
-                                label="操作"
-                                align="center"
-                        >
-                            <template slot-scope="scope">
-                                <el-button size="mini" type="success" @click="applyLeave(scope.row)">通过</el-button>
-                                <el-button size="mini" type="danger" @click="applyFiled(scope.row)">不通过</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </FormPanel>
         </el-card>
     </div>
 </template>
@@ -195,13 +133,13 @@
                     leaveDateStart: '',
                     leaveDateEnd: '',
                 },
-                leaveData:[],
                 personalLeaving:[],
+                personalInfo:[],
             }
         },
 
         mounted(){
-            this.getLeaveData();
+            this.personalInfo = JSON.parse(sessionStorage.getItem("user"));
             this.getPersonalLeavingData();
         },
         methods: {
@@ -210,13 +148,12 @@
              * @description保存个人请假数据
              * **/
             saveLeaving: function () {
-                let personalInfo = JSON.parse(sessionStorage.getItem("user"));
                 let params = {
-                    studentNumber: personalInfo.studentNumber,
-                    studentClass: personalInfo.studentClass,
-                    studentName: personalInfo.studentName,
-                    grade: personalInfo.grade,
-                    major: personalInfo.major,
+                    studentNumber: this.personalInfo.studentNumber,
+                    studentClass: this.personalInfo.studentClass,
+                    studentName: this.personalInfo.studentName,
+                    grade: this.personalInfo.grade,
+                    major: this.personalInfo.major,
                     leaveName: this.leaving.leaveName,
                     leaveValue: this.leaving.leaveValue,
                     leaveDateStart: this.leaving.leaveDate[0],
@@ -247,31 +184,11 @@
 
 
             /**
-             * @description获取请假详情数据
-             * **/
-            getLeaveData:function () {
-                let personalInfo = JSON.parse(sessionStorage.getItem("user"));
-                let params = {
-                    grade: personalInfo.grade,
-                    major: personalInfo.major,
-                }
-                this.$http.get(Config.Leaving + '/find',{params:params}).then(response=>{
-                    if (response.data.code == '200'){
-                        this.leaveData = response.data.data.content;
-                    } else {
-                        this.leaveData = response.data.data.content;
-                    }
-                })
-            },
-
-
-            /**
              * @description获取个人请假数据
              * **/
             getPersonalLeavingData:function(){
-                let personalInfo = JSON.parse(sessionStorage.getItem("user"));
                 let params = {
-                    studentNumber: personalInfo.studentNumber,
+                    studentNumber: this.personalInfo.studentNumber,
                 }
                 this.$http.get(Config.Leaving + '/findPersonal',{params:params}).then(response=>{
                     if (response.data.code == '200'){
@@ -279,62 +196,6 @@
                     } else {
                         this.personalLeaving = response.data.data.content;
                     }
-                })
-            },
-
-            /**
-             * @description审核请假数据
-             * **/
-            applyLeave:function (value) {
-               value.applyValue = '予以通过';
-               value.states = 'DO002';
-                this.$http.post(Config.Leaving + '/update',value).then(response=>{
-                    if (response.data.code == '200'){
-                        this.$message({
-                            type: 'success',
-                            message: '保存成功',
-                            center:true
-                        })
-                        this.getLeaveData();
-                        this.getPersonalLeavingData();
-                    }else {
-                        this.$message({
-                            type: 'warning',
-                            message: '保存失败',
-                            center:true
-                        })
-                        this.getPersonalLeavingData();
-                        this.getLeaveData();
-                    }
-
-                })
-            },
-
-            /**
-             * @description审核不通过
-             * **/
-            applyFiled:function(value){
-                value.applyValue = '理由不充分';
-                value.states = 'DO003';
-                this.$http.post(Config.Leaving + '/update',value).then(response=>{
-                    if (response.data.code == '200'){
-                        this.$message({
-                            type: 'success',
-                            message: '保存成功',
-                            center:true
-                        })
-                        this.getLeaveData();
-                        this.getPersonalLeavingData();
-                    }else {
-                        this.$message({
-                            type: 'warning',
-                            message: '保存失败',
-                            center:true
-                        })
-                        this.getPersonalLeavingData();
-                        this.getLeaveData();
-                    }
-
                 })
             },
 

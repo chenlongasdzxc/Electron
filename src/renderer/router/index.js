@@ -25,6 +25,11 @@ export default new Router({
                     component: require('@/sketchs/SketchAudit').default,
                 },
                 {
+                    path: '/SketchView',
+                    name: 'SketchView',
+                    component: require('@/sketchs/SketchView').default,
+                },
+                {
                     path: '/Moral',
                     name: 'Moral',
                     component: require('@/moral/Moral').default,
