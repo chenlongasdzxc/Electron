@@ -36,7 +36,7 @@
                                     <el-menu-item index="/Sketch" style="min-width: 50px">我的素拓分</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/SketchAudit" style="min-width: 50px">素拓分审核</el-menu-item>
+                                    <el-menu-item index="/SketchManage" style="min-width: 50px">素拓分审核</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
                                 </el-menu-item-group>

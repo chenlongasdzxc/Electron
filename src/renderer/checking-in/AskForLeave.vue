@@ -106,7 +106,10 @@
                                 width="80px"
                         >
                             <template slot-scope="scope">
-                                <el-button size="mini" type="danger" @click="deleteLeaving(scope.row)">删除</el-button>
+                                <el-button size="mini" type="danger"
+                                           @click="deleteLeaving(scope.row)"
+                                           :disabled="buttonDisabled(scope.row)"
+                                >删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -236,6 +239,15 @@
                 })
 
             },
+
+            buttonDisabled:function (value) {
+                if (value.states == 'DO002') {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
         }
     }
 </script>

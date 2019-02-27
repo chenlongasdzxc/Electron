@@ -5,6 +5,7 @@
         <div>
             <el-card>
                 <form-panel name="我的素拓分" align="left">
+                    <!--表格数据-->
                     <el-table
                             :data="personalSketchData"
                             border
@@ -63,13 +64,18 @@
                                 align="center"
                         >
                             <template slot-scope="scope">
-                                <el-button size="mini" type="danger" @click="updatePersonalSketch(scope.row)">编辑
-                                </el-button>
-                                <el-button size="mini" type="warning" @click="deletePersonalSketch(scope.row)">删除
-                                </el-button>
+                                <el-button size="mini" type="danger"
+                                           @click="updatePersonalSketch(scope.row)"
+                                           :disabled="buttonDisable(scope.row)"
+                                >编辑</el-button>
+                                <el-button size="mini" type="warning"
+                                           @click="deletePersonalSketch(scope.row)"
+                                           :disabled="buttonDisable(scope.row)"
+                                >删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页-->
                     <div>
                         <el-pagination
                                 style="display: flex;justify-content: center"
@@ -319,6 +325,15 @@
              * **/
             updatePersonalSketch: function (value) {
                 console.log(value)
+            },
+
+
+            buttonDisable:function (value) {
+                if (value.sketchStates == 'SK002'){
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
         }

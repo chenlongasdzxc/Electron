@@ -20,9 +20,9 @@ export default new Router({
                     component: require('@/sketchs/Sketch').default,
                 },
                 {
-                    path: '/SketchAudit',
-                    name: 'SketchAudit',
-                    component: require('@/sketchs/SketchAudit').default,
+                    path: '/SketchManage',
+                    name: 'SketchManage',
+                    component: require('@/sketchs/SketchManage').default,
                 },
                 {
                     path: '/SketchView',
