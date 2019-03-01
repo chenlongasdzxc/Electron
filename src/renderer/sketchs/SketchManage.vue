@@ -244,6 +244,7 @@
                     .then(response => {
                         if (response.data.code == '200') {
                             this.checkedSketchData = response.data.data.content;
+                            this.sketchCheckedPage.total = response.data.data.totalElements;
                         } else {
 
                         }
@@ -327,13 +328,18 @@
                 this.getSketchData();
             },
 
-
+            /**
+             * @description已审核数据分页page事件
+             * **/
             sketchCheckedPageSize:function (value) {
                 this.sketchCheckedPage.size = value;
                 this.sketchCheckedPage.currentPage = 1;
                 this.getCheckedSketchData();
             },
 
+            /**
+             * @description未审核数据分页current事件
+             * **/
             sketchCheckedCurrentPage:function (value) {
                 this.sketchCheckedPage.currentPage = value;
                 this.getCheckedSketchData();

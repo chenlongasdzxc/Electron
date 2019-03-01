@@ -18,7 +18,6 @@
                                 align="center"
                                 type="index"
                                 label="序号"
-                                width="60px"
                         ></el-table-column>
                         <el-table-column
                                 fixed
@@ -40,11 +39,17 @@
                                 prop="sketchPart"
                                 align="center"
                                 label="参与角色"
+                                width="80px"
                         ></el-table-column>
                         <el-table-column
                                 prop="createDate"
                                 align="center"
                                 label="上传日期"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="applyStudentName"
+                                align="center"
+                                label="审核人"
                         ></el-table-column>
                         <el-table-column
                                 label="状态"
@@ -67,11 +72,13 @@
                                 <el-button size="mini" type="danger"
                                            @click="updatePersonalSketch(scope.row)"
                                            :disabled="buttonDisable(scope.row)"
-                                >编辑</el-button>
+                                >编辑
+                                </el-button>
                                 <el-button size="mini" type="warning"
                                            @click="deletePersonalSketch(scope.row)"
                                            :disabled="buttonDisable(scope.row)"
-                                >删除</el-button>
+                                >删除
+                                </el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -144,6 +151,40 @@
 
             </el-card>
         </div>
+
+        <div>
+            <el-dialog title="个人素拓分编辑" :visible.sync="sketchFormVisible">
+                <el-form :model="sketchDialogForm" size="small" style="font-size: 12px;text-align: left">
+                    <el-form-item label="素拓分名称" :label-width="formLabelWidth">
+                        <el-input v-model="sketchDialogForm.sketchName" size="small" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="素拓分类型" :label-width="formLabelWidth">
+                        <el-select v-model="sketchDialogForm.type" size="small" style="width: 200px">
+                            <el-option
+                                    v-for="item in sketchTypeData"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="参与角色" :label-width="formLabelWidth">
+                        <el-select v-model="sketchDialogForm.sketchPart" size="small" style="width: 200px">
+                            <el-option
+                                    v-for="item in sketchPart"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="sketchFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="saveUpdateSketch">保存</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -157,12 +198,20 @@
         components: {VButton, FormPanel, DataTable},
         data() {
             return {
+                formLabelWidth: '100px',
                 personalSketchData: [],
                 personalData: '',
+                sketchFormVisible: false,
                 personalSketchPage: {
                     size: 10,
                     total: 1,
                     currentPage: 1
+                },
+                sketchDialogForm: {
+                    id: '',
+                    sketchName: '',
+                    type: '',
+                    sketchPart: '',
                 },
                 sketch: {
                     sketchName: '',
@@ -246,14 +295,14 @@
                         if (list) {
                             for (var i = 0; i < list.length; i++) {
                                 var option = {
-                                    label: list[i].type,
-                                    value: list[i].type,
+                                    label: list[i],
+                                    value: list[i],
                                 }
                                 this.sketchTypeData.push(option);
                             }
                         }
                     } else {
-                        self.$message({
+                        this.$message({
                             showClose: true,
                             message: '获取失败！',
                             type: 'error'
@@ -275,6 +324,7 @@
                     sketchName: this.sketch.sketchName,
                     type: this.sketch.type,
                     sketchPart: this.sketch.sketchPart,
+
                 }
                 console.log(params)
                 this.$http.post(Config.sketch + '/update', params).then(response => {
@@ -300,20 +350,20 @@
              *@description 删除个人素拓分
              * **/
             deletePersonalSketch: function (value) {
-                this.$http.get(Config.sketch + '/delete',{params:{id:value.id}})
-                    .then(response=>{
+                this.$http.get(Config.sketch + '/delete', {params: {id: value.id}})
+                    .then(response => {
                         if (response.data.code == '200') {
                             this.$message({
-                                message:'删除成功',
-                                center:true,
-                                type:'success'
+                                message: '删除成功',
+                                center: true,
+                                type: 'success'
                             })
                             this.getPersonalSketchData();
                         } else {
                             this.$message({
-                                message:'删除失败',
-                                center:true,
-                                type:'warning'
+                                message: '删除失败',
+                                center: true,
+                                type: 'warning'
                             })
                         }
                         this.getPersonalSketchData();
@@ -324,16 +374,57 @@
              * @description 编辑个人素拓分
              * **/
             updatePersonalSketch: function (value) {
-                console.log(value)
+                this.sketchFormVisible = true;
+                this.sketchDialogForm.sketchName = value.sketchName;
+                this.sketchDialogForm.id = value.id;
+                this.sketchDialogForm.sketchPart = value.sketchPart;
+                this.sketchDialogForm.type = value.type;
             },
 
 
-            buttonDisable:function (value) {
-                if (value.sketchStates == 'SK002'){
+            buttonDisable: function (value) {
+                if (value.sketchStates == 'SK002') {
                     return true;
                 } else {
                     return false;
                 }
+            },
+
+            /**
+             * @保存编辑的素拓分详情
+             * **/
+            saveUpdateSketch: function () {
+                const params = {
+                    studentNumber: this.personalData.studentNumber,
+                    studentName: this.personalData.studentName,
+                    grade: this.personalData.grade,
+                    studentClass: this.personalData.studentClass,
+                    major: this.personalData.major,
+                    sketchName: this.sketchDialogForm.sketchName,
+                    type: this.sketchDialogForm.type,
+                    sketchPart: this.sketchDialogForm.sketchPart,
+                    id:this.sketchDialogForm.id,
+                }
+                console.log(params)
+                this.$http.post(Config.sketch + '/update', params).then(response => {
+                    if (response.data.code == '200') {
+                        this.$message({
+                            message: '上传成功',
+                            type: 'success',
+                            center: true
+                        })
+                        this.getPersonalSketchData();
+                        this.sketchFormVisible=false;
+                    } else {
+                        this.$message({
+                            message: '上传失败',
+                            type: 'warning',
+                            center: true
+                        });
+                        this.getPersonalSketchData();
+                        this.sketchFormVisible=false;
+                    }
+                })
             }
 
         }

@@ -10,4 +10,6 @@ export default {
     moralDeduction:`${baseIp}/moralDeduction`,  //德育减分数据字典
     checkingIn:`${baseIp}/studentChecking`,  //考勤
     Leaving:`${baseIp}/Leaving`, //请假
+    SketchAnalysis:`${baseIp}/sketchAnalysis`, //素拓分求和
+    SketchCount:`${baseIp}/SketchCount`,  //素拓分总分
 }
