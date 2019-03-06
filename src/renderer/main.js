@@ -8,7 +8,6 @@ import './assets/iconfont/iconfont.css'
 import echarts from 'echarts'
 import '../../static/css/index.css'
 import Config from './Config'
-
 Vue.prototype.$echarts = echarts
 Vue.use(Element)
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))

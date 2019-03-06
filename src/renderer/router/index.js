@@ -89,6 +89,26 @@ export default new Router({
                     name: 'AskForLeave',
                     component: require('@/checking-in/AskForLeave').default,
                 },
+                {
+                    path: '/MoralPlusDataDictionary',
+                    name: 'MoralPlusDataDictionary',
+                    component: require('@/dataDictionary/MoralPlusDataDictionary').default,
+                },
+                {
+                    path: '/MoralDeductionDataDicitionary',
+                    name: 'MoralDeductionDataDicitionary',
+                    component: require('@/dataDictionary/MoralDeductionDataDicitionary').default,
+                },
+                {
+                    path: '/SketchDataDictionary',
+                    name: 'SketchDataDictionary',
+                    component: require('@/dataDictionary/SketchDataDictionary').default,
+                },
+                {
+                    path: '/MoralOutDataDictionary',
+                    name: 'MoralOutDataDictionary',
+                    component: require('@/dataDictionary/MoralOutDataDictionary').default,
+                }
             ],
         },
 

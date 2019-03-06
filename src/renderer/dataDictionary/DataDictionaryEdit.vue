@@ -8,7 +8,6 @@
                         <FormPanel name="素拓分数据字典编辑" align="left">
                             <el-table
                                     :data="sketchScoreData"
-                                    height="200"
                                     :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
                                     :cell-style="function({row, column, rowIndex, columnIndex}) {
                             if (columnIndex === 4) {
@@ -80,7 +79,7 @@
                                 </el-row>
                                 <el-row :gutter="2">
                                     <el-col :span="8">
-                                        <el-form-item label="获奖者1" >
+                                        <el-form-item label="获奖者1">
                                             <el-input v-model="sketchScoreAddForm.winnerOne"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -119,7 +118,6 @@
                             </div>
                             <el-table
                                     :data="moralPlusData"
-                                    height="200"
                                     :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
                                     :cell-style="function({row, column, rowIndex, columnIndex}) {
                             if (columnIndex === 4) {
@@ -191,12 +189,116 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="德育加分描述" :label-width="formLabelWidth">
-                                    <el-input v-model="moralPlusAddForm.description"type="textarea"></el-input>
+                                    <el-input v-model="moralPlusAddForm.description" type="textarea"></el-input>
                                 </el-form-item>
                             </el-form>
                             <div style="float: right">
                                 <el-button size="small" type="danger">取消</el-button>
                                 <el-button size="small" type="primary" @click="saveMoralPlus">保存</el-button>
+                            </div>
+                        </FormPanel>
+                    </el-col>
+                </el-row>
+            </div>
+            <!--课外加分数据字典操作-->
+            <div>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <FormPanel name="课外加分数据字典编辑" align="left">
+                            <div>
+                                <el-input style="width: 80%" size="mini" v-model="moralOutKeyword"
+                                          class="value-search-box"
+                                          placeholder="请输入查询条件"><i slot="prefix"
+                                                                   class="el-input__icon el-icon-search"></i>
+                                </el-input>
+                                <VButton @click="searchMoralPlus" style="float: right">搜索</VButton>
+                            </div>
+                            <el-table
+                                    :data="moralOutData"
+                                    border
+                                    :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                    size="mini"
+                                    style="width: 100%">
+                                <el-table-column
+                                        label="名称"
+                                        prop="moralOutName"
+                                        align="center"
+                                        width="100px"
+                                ></el-table-column>
+                                <el-table-column
+                                        label="类型"
+                                        prop="moralOutType"
+                                        align="center"
+                                        width="80px"
+                                ></el-table-column>
+                                <el-table-column
+                                        label="描述"
+                                        prop="value"
+                                        align="center"
+                                ></el-table-column>
+                                <el-table-column
+                                        label="操作"
+                                        align="center"
+                                >
+                                    <template slot-scope="scope">
+                                        <el-button size="mini" type="primary" @click="updateMoralOut(scope.row)">编辑
+                                        </el-button>
+                                        <el-button size="mini" type="danger" @click="deleteMoralOut(scope.row)">删除
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                            <div>
+                                <div>
+                                    <el-pagination
+                                            style="display: flex;justify-content: center"
+                                            background
+                                            @size-change="page_handleMoralOutSizeChange"
+                                            @current-change="page_handleMoralOutCurrentChange"
+                                            layout="prev, pager, next,total"
+                                            :current-page="pageMoralOut.currentPage"
+                                            :page-size="pageMoralOut.size"
+                                            :total="pageMoralOut.total"
+                                    >
+                                    </el-pagination>
+                                </div>
+                            </div>
+                        </FormPanel>
+                    </el-col>
+                    <el-col :span="12">
+                        <FormPanel name="课外加分数据字典新增" align="left">
+                            <el-form :model="moralOutAddForm" size="small" style="font-size: 12px;text-align: left">
+                                <el-row>
+                                    <el-col :span="12">
+                                        <el-form-item label="课外加分名称" :label-width="formLabelWidth">
+                                            <el-input v-model="moralOutAddForm.moralOutName"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <el-form-item label="课外加分类型" :label-width="formLabelWidth">
+                                            <el-input v-model="moralOutAddForm.moralOutType"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="12">
+                                        <el-form-item label="课外加分级别" :label-width="formLabelWidth">
+                                            <el-input v-model="moralOutAddForm.states"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <el-form-item label="课外加分分数" :label-width="formLabelWidth">
+                                            <el-input v-model="moralOutAddForm.moralOutScore"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-form-item label="课外加分描述" :label-width="formLabelWidth">
+                                    <el-input v-model="moralPlusAddForm.value" type="textarea"></el-input>
+                                </el-form-item>
+                            </el-form>
+                            <div style="float: right">
+                                <el-button size="small" type="danger">取消</el-button>
+                                <el-button size="small" type="primary" @click="saveMoralOut">保存</el-button>
                             </div>
                         </FormPanel>
                     </el-col>
@@ -217,7 +319,6 @@
                             </div>
                             <el-table
                                     :data="moralDeductionData"
-                                    height="200"
                                     :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
                                     :cell-style="function({row, column, rowIndex, columnIndex}) {
                             if (columnIndex === 4) {
@@ -247,7 +348,8 @@
                                         label="操 作"
                                 >
                                     <template slot-scope="scope">
-                                        <el-button size="mini" type="primary" @click="updateMoralDeduction(scope.row)">编辑
+                                        <el-button size="mini" type="primary" @click="updateMoralDeduction(scope.row)">
+                                            编辑
                                         </el-button>
                                         <el-button size="mini" type="danger" @click="deleteMoralDeduction(scope.row)">
                                             删除
@@ -273,7 +375,8 @@
                     </el-col>
                     <el-col :span="12">
                         <FormPanel name="德育减分数据字典新增" align="left">
-                            <el-form :model="moralDeductionAddForm" size="small" style="font-size: 12px;text-align: left">
+                            <el-form :model="moralDeductionAddForm" size="small"
+                                     style="font-size: 12px;text-align: left">
                                 <el-form-item label="德育减分名称" :label-width="formLabelWidth">
                                     <el-input v-model="moralDeductionAddForm.moralDeductionName"></el-input>
                                 </el-form-item>
@@ -290,7 +393,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="德育减分描述" :label-width="formLabelWidth">
-                                    <el-input v-model="moralDeductionAddForm.description"type="textarea"></el-input>
+                                    <el-input v-model="moralDeductionAddForm.description" type="textarea"></el-input>
                                 </el-form-item>
                             </el-form>
                             <div style="float: right">
@@ -381,6 +484,7 @@
             </div>
         </el-dialog>
 
+        <!--课外加分数据字典编辑弹窗-->
         <!--德育减分数据字典编辑弹窗-->
         <el-dialog title="德育减分数据字典编辑" :visible.sync="moralDeductionFormVisible">
             <el-form :model="moralDeductionEditForm" size="small" style="font-size: 12px;text-align: left">
@@ -395,12 +499,14 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="德育减分分数" :label-width="formLabelWidth">
-                            <el-input v-model="moralDeductionEditForm.moralDeductionScore" autocomplete="off"></el-input>
+                            <el-input v-model="moralDeductionEditForm.moralDeductionScore"
+                                      autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-form-item label="德育减分描述" :label-width="formLabelWidth">
-                    <el-input v-model="moralDeductionEditForm.description" autocomplete="off" type="textarea"></el-input>
+                    <el-input v-model="moralDeductionEditForm.description" autocomplete="off"
+                              type="textarea"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -423,8 +529,9 @@
             return {
                 dialogFormVisible: false,
                 moralPlusFormVisible: false,
-                moralDeductionFormVisible:false,
+                moralDeductionFormVisible: false,
                 sketchScoreData: [],
+                moralOutData: [],
                 moralPlusData: [],
                 moralDeductionData: [],
                 pageSketchScore: {
@@ -442,6 +549,11 @@
                     total: 1,
                     size: 4
                 },
+                pageMoralOut: {
+                    currentPage: 1,
+                    total: 1,
+                    size: 4
+                },
                 sketchScoreAddForm: {
                     type: '',
                     description: '',
@@ -450,6 +562,14 @@
                     winnerOne: '',
                     winnerTwo: '',
                     winnerThree: '',
+                },
+                moralOutAddForm: {
+                    moralOutName: '',
+                    moralOutType: '',
+                    moralOutScore: '',
+                    states:'',
+                    value: '',
+
                 },
                 sketchScoreEditForm: {
                     id: '',
@@ -462,44 +582,46 @@
                     winnerTwo: '',
                     winnerThree: '',
                 },
-                moralPlusAddForm:{
+                moralPlusAddForm: {
                     moralPlusName: '',
                     moralPlusType: '',
-                    moralPlusScore:'',
+                    moralPlusScore: '',
                     description: '',
                 },
                 moralPlusEditForm: {
-                    id:'',
+                    id: '',
                     moralPlusName: '',
                     moralPlusType: '',
-                    moralPlusScore:'',
+                    moralPlusScore: '',
                     description: '',
 
                 },
                 moralDeductionEditForm: {
-                    id:'',
+                    id: '',
                     moralDeductionName: '',
                     moralDeductionScore: '',
-                    moralDeductionType:'',
+                    moralDeductionType: '',
                     description: '',
 
                 },
-                moralDeductionAddForm:{
-                    id:'',
+                moralDeductionAddForm: {
+                    id: '',
                     moralDeductionName: '',
                     moralDeductionScore: '',
-                    moralDeductionType:'',
+                    moralDeductionType: '',
                     description: '',
                 },
                 formLabelWidth: '100px',
                 formWidth: '80px',
                 moralPlusKeyword: '',
+                moralOutKeyword: '',
             }
         },
         mounted() {
             this.getSketchScoreData();
             this.getMoralPlusData();
             this.getMoralDeductionData();
+            this.getMoralOutData();
         },
         methods: {
 
@@ -634,24 +756,24 @@
             /**
              * @description保存编辑德育加分数据字典数据
              * **/
-            saveMoralPlusEditForm:function(){
-              this.$http.post(Config.moralPlus + '/add',this.moralPlusEditForm).then(response=>{
-                  if (response.data.code == '200'){
-                      this.moralPlusFormVisible = false;
-                      this.$message({
-                          showClose: true,
-                          message: '编辑成功',
-                          type: 'success'
-                      });
-                      this.getMoralPlusData();
-                  } else {
-                      this.$message({
-                          showClose: true,
-                          message: '编辑失败',
-                          type: 'danger'
-                      });
-                  }
-              })
+            saveMoralPlusEditForm: function () {
+                this.$http.post(Config.moralPlus + '/add', this.moralPlusEditForm).then(response => {
+                    if (response.data.code == '200') {
+                        this.moralPlusFormVisible = false;
+                        this.$message({
+                            showClose: true,
+                            message: '编辑成功',
+                            type: 'success'
+                        });
+                        this.getMoralPlusData();
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '编辑失败',
+                            type: 'danger'
+                        });
+                    }
+                })
             },
 
             /**
@@ -674,6 +796,100 @@
                         });
                     }
                 })
+            },
+
+            /**
+             * @description获取课外加分数据字典
+             * **/
+            getMoralOutData: function () {
+                const that = this;
+                let parmams = {
+                    sort: 'id,desc',
+                    size: that.pageMoralOut.size,
+                    page: that.pageMoralOut.currentPage - 1,
+                }
+                this.$http.get(Config.moralOut + '/findFuzzy', {params: parmams})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.moralOutData = response.data.data.content;
+                            this.pageMoralOut.total = response.data.data.totalElements;
+                        } else {
+
+                        }
+                    })
+            },
+
+            /**
+             * @description课外加分size事件
+             * **/
+            page_handleMoralOutSizeChange: function (value) {
+                this.pageMoralOut.size = value;
+                this.pageMoralOut.currentPage = 1;
+                this.getMoralOutData();
+            },
+
+            /**
+             * @description课外加分page事件
+             * **/
+            page_handleMoralOutCurrentChange: function (value) {
+                this.pageMoralOut.currentPage = value;
+                this.getMoralOutData();
+            },
+
+            /**
+             * @description编辑课外加分数据字典
+             * **/
+            updateMoralOut: function (value) {
+
+            },
+
+            /**
+             * @description删除课外加分数据字典
+             * **/
+            deleteMoralOut: function (value) {
+                const params = {
+                    id: value.id,
+                }
+                this.$http.get(Config.moralOut + '/delete', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success',
+                                center: true,
+                            })
+                            this.getMoralOutData();
+                        } else {
+                            this.$message({
+                                message: '删除失败',
+                                type: 'danger',
+                                center: true,
+                            })
+                        }
+                    })
+            },
+
+            /**
+             * @description保存新增课外加分数据字典
+             * **/
+            saveMoralOut:function(){
+                this.$http.post(Config.moralOut + '/update',this.moralOutAddForm)
+                    .then(response=>{
+                        if(response.data.code =='200'){
+                            this.$message({
+                              message:'保存成功',
+                              type:'success',
+                              center:true,
+                            })
+                            this.getMoralOutData();
+                        }else {
+                            this.$message({
+                                message:'保存失败',
+                                type:'danger',
+                                center:true,
+                            })
+                        }
+                    })
             },
 
             /**
@@ -789,7 +1005,7 @@
             /**
              * @description德育加分数据字典编辑
              * **/
-            updateMoralPlus:function (moralPlusInfo) {
+            updateMoralPlus: function (moralPlusInfo) {
                 this.moralPlusFormVisible = true;
                 this.moralPlusEditForm.id = moralPlusInfo.id;
                 this.moralPlusEditForm.moralPlusName = moralPlusInfo.moralPlusName;
@@ -802,11 +1018,11 @@
             /**
              * @description编辑德育减分数据字典
              * **/
-            saveMoralDeductionEdit:function () {
-                this.$http.post(Config.moralDeduction + '/add',this.moralDeductionEditForm).then(response=>{
-                    if(response.data.code == '200'){
+            saveMoralDeductionEdit: function () {
+                this.$http.post(Config.moralDeduction + '/add', this.moralDeductionEditForm).then(response => {
+                    if (response.data.code == '200') {
 
-                    }else {
+                    } else {
 
                     }
                 })
@@ -815,7 +1031,7 @@
             /**
              * @description德育减分数据字典数据获取
              * **/
-            updateMoralDeduction:function (moralDeductionInfo) {
+            updateMoralDeduction: function (moralDeductionInfo) {
                 this.moralDeductionFormVisible = true;
                 this.moralDeductionEditForm.id = moralDeductionInfo.id;
                 this.moralDeductionEditForm.moralDeductionName = moralDeductionInfo.moralDeductionName;
@@ -827,9 +1043,9 @@
             /**
              * @description保存新增德育加分数据字典
              * **/
-            saveMoralPlus:function () {
-                this.$http.post(Config.moralPlus + '/add',this.moralPlusAddForm).then(response=>{
-                    if (response.data.code == '200'){
+            saveMoralPlus: function () {
+                this.$http.post(Config.moralPlus + '/add', this.moralPlusAddForm).then(response => {
+                    if (response.data.code == '200') {
                         this.$message({
                             showClose: true,
                             message: '新增成功',
@@ -849,9 +1065,9 @@
             /**
              * @description保存新增德育减分数据字典
              * **/
-            saveMoralDeductionAdd:function () {
-                this.$http.post(Config.moralDeduction + '/add',this.moralDeductionAddForm).then(response=>{
-                    if (response.data.code == '200'){
+            saveMoralDeductionAdd: function () {
+                this.$http.post(Config.moralDeduction + '/add', this.moralDeductionAddForm).then(response => {
+                    if (response.data.code == '200') {
                         this.$message({
                             showClose: true,
                             message: '新增成功',

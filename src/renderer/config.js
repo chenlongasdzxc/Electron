@@ -8,6 +8,7 @@ export default {
     sketchScore: `${baseIp}/SketchScore`,  //素拓数据字典
     moralPlus:`${baseIp}/MoralPlus`,   //德育加分数据字典
     moralDeduction:`${baseIp}/moralDeduction`,  //德育减分数据字典
+    moralOut:`${baseIp}/moralOut`, //课外加分数据字典
     checkingIn:`${baseIp}/studentChecking`,  //考勤
     Leaving:`${baseIp}/Leaving`, //请假
     SketchAnalysis:`${baseIp}/sketchAnalysis`, //素拓分求和

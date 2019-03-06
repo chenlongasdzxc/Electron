@@ -72,7 +72,8 @@
                             <el-submenu index="5">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">考勤管理</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/PersonalCheckingIn" style="min-width: 50px">我的考勤</el-menu-item>
+                                    <el-menu-item index="/PersonalCheckingIn" style="min-width: 50px">我的考勤
+                                    </el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
                                     <el-menu-item index="/AskForLeave" style="min-width: 50px">请假申请</el-menu-item>
@@ -107,7 +108,19 @@
                                     <el-menu-item index="/DataDictionary" style="min-width: 50px">查看数据字典</el-menu-item>
                                 </el-menu-item-group>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/DataDictionaryEdit" style="min-width: 50px">设置数据字典
+                                    <el-menu-item index="/SketchDataDictionary" style="min-width: 50px">素拓分
+                                    </el-menu-item>
+                                </el-menu-item-group>
+                                <el-menu-item-group>
+                                    <el-menu-item index="/MoralPlusDataDictionary" style="min-width: 50px">德育加分
+                                    </el-menu-item>
+                                </el-menu-item-group>
+                                <el-menu-item-group>
+                                    <el-menu-item index="/MoralOutDataDictionary" style="min-width: 50px">课外加分
+                                    </el-menu-item>
+                                </el-menu-item-group>
+                                <el-menu-item-group>
+                                    <el-menu-item index="/MoralDeductionDataDicitionary" style="min-width: 50px">德育减分
                                     </el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
