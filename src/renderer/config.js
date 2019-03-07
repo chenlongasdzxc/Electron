@@ -13,4 +13,5 @@ export default {
     Leaving:`${baseIp}/Leaving`, //请假
     SketchAnalysis:`${baseIp}/sketchAnalysis`, //素拓分求和
     SketchCount:`${baseIp}/SketchCount`,  //素拓分总分
+    StudentMoral:`${baseIp}/studentMoralPlus`, //
 }

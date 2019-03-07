@@ -12,12 +12,14 @@
                                 size="mini"
                         >
                             <el-table-column
+                                    fixed
                                     label="序号"
                                     type="index"
                                     align="center"
                                     width="60px"
                             ></el-table-column>
                             <el-table-column
+                                    fixed
                                     prop="type"
                                     label="素拓分类型"
                                     align="center"
@@ -60,6 +62,7 @@
                             <el-table-column
                                     label="操 作"
                                     align="center"
+                                    fixed="right"
                             >
                                 <template slot-scope="scope">
                                     <el-button size="mini" type="primary" @click="updateSketchScore(scope.row)">编辑
@@ -93,20 +96,20 @@
                                     <el-col :span="8">
                                         <el-form-item label="类型" :label-width="formLabelWidth">
                                             <el-input v-model="sketchScoreAddForm.type" autocomplete="off"
-                                                      style="width: 150px" size="mini"></el-input>
+                                                      style="width: 120px" size="mini"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="参与者" :label-width="formLabelWidth">
                                             <el-input v-model="sketchScoreAddForm.participant" autocomplete="off"
-                                                      style="width: 150px"
+                                                      style="width: 120px"
                                                       size="mini"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="组织者" :label-width="formLabelWidth">
                                             <el-input v-model="sketchScoreAddForm.organizer" autocomplete="off"
-                                                      style="width:150px"
+                                                      style="width:120px"
                                                       size="mini"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -115,21 +118,21 @@
                                     <el-col :span="8">
                                         <el-form-item label="获奖者1" :label-width="formLabelWidth">
                                             <el-input v-model="sketchScoreAddForm.winnerOne" autocomplete="off"
-                                                      style="width: 150px"
+                                                      style="width: 120px"
                                                       size="mini"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="获奖者2" :label-width="formLabelWidth">
                                             <el-input v-model="sketchScoreAddForm.winnerTwo" autocomplete="off"
-                                                      style="width: 150px"
+                                                      style="width: 120px"
                                                       size="mini"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="获奖者3" :label-width="formLabelWidth">
                                             <el-input v-model="sketchScoreAddForm.winnerThree" autocomplete="off"
-                                                      style="width: 150px"
+                                                      style="width: 120px"
                                                       size="mini"></el-input>
                                         </el-form-item>
                                     </el-col>
