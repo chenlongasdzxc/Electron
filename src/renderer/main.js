@@ -48,7 +48,13 @@ function GetUserInfo(){
     }
     axios.get(Config.studentInfo + '/findPersonalInfo',{params:p}).then(response=>{
         if (response.data.code == '200'){
-            const user = response.data.data;
+            const user = {
+                studentName:response.data.data.studentName,
+                studentClass:response.data.data.studentClass,
+                studentNumber:response.data.data.studentNumber,
+                major:response.data.data.major,
+                grade:response.data.data.grade,
+            }
             sessionStorage.setItem("user",JSON.stringify(user));
         }
     })

@@ -14,4 +14,5 @@ export default {
     SketchAnalysis:`${baseIp}/sketchAnalysis`, //素拓分求和
     SketchCount:`${baseIp}/SketchCount`,  //素拓分总分
     StudentMoral:`${baseIp}/studentMoralPlus`, //
+    StudentMoralOut:`${baseIp}/studentMoralOut`,
 }

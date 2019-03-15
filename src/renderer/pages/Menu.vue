@@ -33,12 +33,8 @@
                             <el-submenu index="1">
                                 <template slot="title" style="padding: 0px 0px 0px 0px"><i></i>素拓分管理</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/Sketch" style="min-width: 50px">我的素拓分</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
+                                    <el-menu-item index="/Sketch" style="min-width: 50px;margin-top: -10px">我的素拓分</el-menu-item>
                                     <el-menu-item index="/SketchManage" style="min-width: 50px">素拓分审核</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
                                     <el-menu-item index="/SketchView" style="min-width: 50px">素拓分详情</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
@@ -46,30 +42,33 @@
                                 <template slot="title" style="padding: 0px 0px 0px 0px"><i></i>德育分管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/Moral" style="min-width: 50px">我的德育分</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
                                     <el-menu-item index="MoralAudit" style="min-width: 50px">德育分审核</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="3">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">德育加分</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/MoralPlus" style="min-width: 50px">我的德育加分</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
-                                    <el-menu-item index="" style="min-width: 50px">德育加分审核</el-menu-item>
+                                    <el-menu-item index="/MoralPlus" style="min-width: 50px">德育加分</el-menu-item>
+                                    <el-menu-item index="/PersonalMoralPlus" style="min-width: 50px">我的加分</el-menu-item>
+                                    <el-menu-item index="/MoralPlusManage" style="min-width: 50px">加分管理</el-menu-item>
+                                    <el-menu-item index="/MoralAudit" style="min-width: 50px">德育详情</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="4">
-                                <template slot="title" style="padding: 0px 0px 0px 0px;">学分管理</template>
+                                <template slot="title" style="padding: 0px 0px 0px 0px">课外加分</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="" style="min-width: 50px">我的学分</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
-                                    <el-menu-item index="" style="min-width: 50px">重修选课</el-menu-item>
+                                    <el-menu-item index="/MoralOut" style="min-width: 50px">课外加分</el-menu-item>
+                                    <el-menu-item index="/MoralOutManage" style="min-width: 50px">加分管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="5">
+                                <template slot="title" style="padding: 0px 0px 0px 0px;">学分管理</template>
+                                <el-menu-item-group>
+                                    <el-menu-item index="" style="min-width: 50px">我的学分</el-menu-item>
+                                    <el-menu-item index="" style="min-width: 50px">重修选课</el-menu-item>
+                                </el-menu-item-group>
+                            </el-submenu>
+                            <el-submenu index="6">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">考勤管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/PersonalCheckingIn" style="min-width: 50px">我的考勤
@@ -77,49 +76,33 @@
                                 </el-menu-item-group>
                                 <el-menu-item-group>
                                     <el-menu-item index="/AskForLeave" style="min-width: 50px">请假申请</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
                                     <el-menu-item index="/CheckingInAdd" style="min-width: 50px">上传考勤</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
                                     <el-menu-item index="/CheckingManage" style="min-width: 50px">考勤管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="6">
+                            <el-submenu index="7">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">个人中心</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/UserInformation" style="min-width: 50px">个人信息
                                     </el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="7">
+                            <el-submenu index="8">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">学生管理</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/StudentInformation" style="min-width: 50px">学生信息
-                                    </el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
+                                    <el-menu-item index="/StudentInformation" style="min-width: 50px">学生信息</el-menu-item>
                                     <el-menu-item index="/StudentFileCard" style="min-width: 50px">建档立卡</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="8">
+                            <el-submenu index="9">
                                 <template slot="title" style="padding: 0 0 0 0 ">数据字典</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/DataDictionary" style="min-width: 50px">查看数据字典</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
-                                    <el-menu-item index="/SketchDataDictionary" style="min-width: 50px">素拓分
-                                    </el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
+                                    <el-menu-item index="/SketchDataDictionary" style="min-width: 50px">素拓分</el-menu-item>
                                     <el-menu-item index="/MoralPlusDataDictionary" style="min-width: 50px">德育加分
                                     </el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
                                     <el-menu-item index="/MoralOutDataDictionary" style="min-width: 50px">课外加分
                                     </el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
                                     <el-menu-item index="/MoralDeductionDataDicitionary" style="min-width: 50px">德育减分
                                     </el-menu-item>
                                 </el-menu-item-group>

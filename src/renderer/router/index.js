@@ -45,6 +45,26 @@ export default new Router({
                     component: require('@/moral/MoralPlus').default,
                 },
                 {
+                    path: '/MoralPlusManage',
+                    name: 'MoralPlusManage',
+                    component: require('@/moral/MoralPlusManage').default,
+                },
+                {
+                    path: '/PersonalMoralPlus',
+                    name: 'PersonalMoralPlus',
+                    component: require('@/moral/PersonalMoralPlus').default,
+                },
+                {
+                    path: '/MoralOutManage',
+                    name: 'MoralOutManage',
+                    component: require('@/moral/MoralOutManage').default,
+                },
+                {
+                    path: '/MoralOut',
+                    name: 'MoralOut',
+                    component: require('@/moral/MoralOut').default,
+                },
+                {
                     path: '/UserInformation',
                     name: 'UserInformation',
                     component: require('@/pages/UserInformation').default,
