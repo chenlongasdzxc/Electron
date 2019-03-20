@@ -2,7 +2,7 @@
     <div>
         <el-card>
             <div>
-                <FormPanel name="课外加分" align="left">
+                <FormPanel name="我的课外加分" align="left">
                     <!--查询-->
                     <div>
 
@@ -70,11 +70,11 @@
                                     align="center"
                             >
                                 <template slot-scope="scope">
-                                   <!-- <el-button size="mini" type="danger" @click="deleteMoralPlus(scope.row)">删除
+                                    <el-button size="mini" type="danger" @click="deleteMoralOut(scope.row)">删除
                                     </el-button>
-                                    <el-button size="mini" type="primary" @click="editMoralPlus(scope.row)"
+                                    <el-button size="mini" type="primary" @click="editMoralOut(scope.row)"
                                                :disabled="buttonDisable(scope.row)">编辑
-                                    </el-button>-->
+                                    </el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -147,6 +147,11 @@
                             <el-button size="mini" type="primary" @click="saveMoralOut">保存</el-button>
                         </div>
                     </el-form>
+                </FormPanel>
+            </div>
+            <div>
+                <FormPanel name="申请综合素质课外加分" align="left">
+
                 </FormPanel>
             </div>
         </el-card>
@@ -333,6 +338,22 @@
                 this.moralOutPage.currentPage = value;
                 this.getMoralOut();
             },
+
+            /**
+             * @description删除德育加分弹窗
+             * **/
+            deleteMoralOut:function () {
+
+            },
+
+            /**
+             * @description编辑德育加分弹窗
+             * **/
+            buttonDisable:function () {
+
+            },
+
+
         },
 
 

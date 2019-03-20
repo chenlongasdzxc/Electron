@@ -15,4 +15,5 @@ export default {
     SketchCount:`${baseIp}/SketchCount`,  //素拓分总分
     StudentMoral:`${baseIp}/studentMoralPlus`, //
     StudentMoralOut:`${baseIp}/studentMoralOut`,
+    Apply:`${baseIp}/apply`, //
 }

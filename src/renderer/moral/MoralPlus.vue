@@ -136,7 +136,93 @@
                 </FormPanel>
             </div>
             <div>
-                <FormPanel name="班级德育加分" align="left">
+                <FormPanel name="申请综合素质" align="left">
+                    <!--表格-->
+                    <div>
+                        <el-table :data="moralPlusApplyData"
+                                  :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                  style="font-size: 12px"
+                                  border
+                                  size="mini">
+                            <el-table-column
+                                    type="index"
+                                    label="序号"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="moralPlusName"
+                                    label="项目名称"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="moralPlusType"
+                                    label="项目类型"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="moralPlusScore"
+                                    label="项目分数"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="year"
+                                    label="申报学年"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="applyPersonName"
+                                    label="审核人"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="comprehensiveQualityStates"
+                                    label="状态"
+                                    align="center"
+                                    width="120px"
+                            >
+                                <template slot-scope="scope">
+                                    <el-tag type="warning" size="mini"
+                                            v-if="scope.row.comprehensiveQualityStates =='MPCQS001' ">未审核
+                                    </el-tag>
+                                    <el-tag type="success" size="mini"
+                                            v-if="scope.row.comprehensiveQualityStates =='MPCQS002' ">审核通过
+                                    </el-tag>
+                                    <el-tag type="danger" size="mini"
+                                            v-if="scope.row.comprehensiveQualityStates =='MPCQS003' ">审核未通过
+                                    </el-tag>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    label="操作"
+                                    align="center"
+                            >
+                                <template slot-scope="scope">
+                                    <el-button size="mini" type="primary"
+                                               v-if="scope.row.comprehensiveQualityStates!='MPCQS001'"
+                                               @click="applyComprehensive(scope.row)">申请
+                                    </el-button>
+                                    <el-button size="mini" type="danger"
+                                               v-if="scope.row.comprehensiveQualityStates=='MPCQS001'"
+                                                @click="cancelComprehensive(scope.row)">取消申请
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                    <!--分页-->
+                    <div>
+                        <el-pagination
+                                style="display: flex;justify-content: center"
+                                background
+                                @size-change="applyMoralPageSize"
+                                @current-change="applyMoralPageCurrent"
+                                layout="prev, pager, next,total"
+                                :current-page="applyMoralPage.currentPage"
+                                :page-size="applyMoralPage.size"
+                                :total="applyMoralPage.total"
+                        >
+                        </el-pagination>
+                    </div>
                 </FormPanel>
             </div>
         </el-card>
@@ -215,6 +301,12 @@
                 moralPlusTypeList: [],
                 personalMoralPlus: [],
                 moralPlusNameList: [],
+                moralPlusApplyData: [],
+                applyMoralPage: {
+                    size: 10,
+                    total: 1,
+                    currentPage: 1
+                },
                 personalMoralPlusAddForm: {
                     studentName: '',
                     studentClass: '',
@@ -261,6 +353,7 @@
             this.studentData = JSON.parse(sessionStorage.getItem("user"));
             this.getMoralPlusTypeList();
             this.getPersonalMoralPlus();
+            this.getMoralPlusApplyData();
         },
 
         methods: {
@@ -282,6 +375,31 @@
                             this.personalMoralPlusPage.total = response.data.data.totalElements;
                         } else {
 
+                        }
+                    })
+            },
+
+            /**
+             * @description获取个人已审核德育加分数据
+             * **/
+            getMoralPlusApplyData: function () {
+                const params = {
+                    studentNumber: this.studentData.studentData,
+                    size: this.applyMoralPage.size,
+                    page: this.applyMoralPage.currentPage - 1,
+                    states: 'MP002',
+                    sort: 'id,desc',
+                }
+                this.$http.get(Config.StudentMoral + '/findPersonal', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.moralPlusApplyData = response.data.data.content;
+                            this.applyMoralPage.total = response.data.data.totalElements;
+                        } else {
+                            this.$message({
+                                message: '获取个人数据失败',
+                                type: 'danger',
+                            })
                         }
                     })
             },
@@ -517,6 +635,76 @@
                 } else {
                     return false
                 }
+            },
+
+
+            applyMoralPageSize: function (value) {
+                this.applyMoralPage.size = value;
+                this.applyMoralPage.currentPage = 1;
+                this.getMoralPlusApplyData();
+            },
+
+
+            applyMoralPageCurrent: function (value) {
+                this.applyMoralPage.currentPage = value;
+                this.getMoralPlusApplyData();
+            },
+
+            /**
+             * @description申请综合素质德育加分
+             * **/
+            applyComprehensive: function (value) {
+                const params = {
+                    id: value.id,
+                    comprehensiveQualityStates: 'MPCQS001',
+                }
+                this.$http.get(Config.Apply + '/update', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.$message({
+                                message: '申请成功',
+                                type: 'success',
+                            })
+                        }
+                        else if (response.data.code == '403') {
+                            this.$message({
+                                message: '已申请该类德育加分,请选择其他类进行申请',
+                                type: 'warning',
+                                center: true,
+                            })
+                        } else {
+                            this.$message({
+                                message: '申请失败',
+                                type: 'error',
+                            })
+                        }
+                        this.getMoralPlusApplyData();
+                    })
+            },
+
+
+            /**
+             * @description取消申请
+             * **/
+            cancelComprehensive:function (value) {
+                this.$http.get(Config.Apply + '/cancelApply',{params:{id:value.id}})
+                    .then(response=>{
+                        if (response.data.code == '200'){
+                            this.$message({
+                                message:'取消申请成功',
+                                type:'success',
+                                center:true,
+                            })
+                            this.getMoralPlusApplyData();
+                        } else {
+                            this.$message({
+                                message:'取消申请失败',
+                                type:'error',
+                                center:true,
+                            })
+                            this.getMoralPlusApplyData();
+                        }
+                    })
             }
 
         },

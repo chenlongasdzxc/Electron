@@ -128,6 +128,11 @@ export default new Router({
                     path: '/MoralOutDataDictionary',
                     name: 'MoralOutDataDictionary',
                     component: require('@/dataDictionary/MoralOutDataDictionary').default,
+                },
+                {
+                    path: '/ComprehensiveMoralPlus',
+                    name: 'ComprehensiveMoralPlus',
+                    component: require('@/comprehensive/ComprehensiveMoralPlus').default,
                 }
             ],
         },

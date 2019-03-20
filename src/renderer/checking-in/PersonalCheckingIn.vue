@@ -2,7 +2,7 @@
     <div>
         <el-card>
             <div>
-                <FormPanel name="我的出勤情况" align="left">
+                <FormPanel name="我的缺勤情况" align="left">
                     <div>
 
                     </div>
@@ -83,7 +83,7 @@
                 </FormPanel>
             </div>
             <div>
-                <FormPanel name="专业出勤情况" align="left">
+                <FormPanel name="专业缺勤情况" align="left">
                     <div>
                         <el-input style="width: 90%" size="small" v-model="findWord"
                                   class="value-search-box"

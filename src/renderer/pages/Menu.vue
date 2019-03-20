@@ -62,39 +62,43 @@
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="5">
+                                <template slot="title" style="padding: 0px 0px 0px 0px;">综合素质</template>
+                                <el-menu-item-group>
+                                    <el-menu-item index="/ComprehensiveMoralPlus" style="min-width: 50px">德育加分</el-menu-item>
+                                </el-menu-item-group>
+                            </el-submenu>
+                            <el-submenu index="6">
                                 <template slot="title" style="padding: 0px 0px 0px 0px;">学分管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="" style="min-width: 50px">我的学分</el-menu-item>
                                     <el-menu-item index="" style="min-width: 50px">重修选课</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="6">
+                            <el-submenu index="7">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">考勤管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/PersonalCheckingIn" style="min-width: 50px">我的考勤
                                     </el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group>
                                     <el-menu-item index="/AskForLeave" style="min-width: 50px">请假申请</el-menu-item>
                                     <el-menu-item index="/CheckingInAdd" style="min-width: 50px">上传考勤</el-menu-item>
                                     <el-menu-item index="/CheckingManage" style="min-width: 50px">考勤管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="7">
+                            <el-submenu index="8">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">个人中心</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/UserInformation" style="min-width: 50px">个人信息
                                     </el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="8">
+                            <el-submenu index="9">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">学生管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/StudentInformation" style="min-width: 50px">学生信息</el-menu-item>
                                     <el-menu-item index="/StudentFileCard" style="min-width: 50px">建档立卡</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="9">
+                            <el-submenu index="10">
                                 <template slot="title" style="padding: 0 0 0 0 ">数据字典</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/DataDictionary" style="min-width: 50px">查看数据字典</el-menu-item>
