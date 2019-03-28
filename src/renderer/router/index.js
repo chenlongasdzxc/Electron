@@ -30,14 +30,14 @@ export default new Router({
                     component: require('@/sketchs/SketchView').default,
                 },
                 {
-                    path: '/Moral',
-                    name: 'Moral',
-                    component: require('@/moral/Moral').default,
+                    path: '/MoralExpression',
+                    name: 'MoralExpression',
+                    component: require('@/moral/MoralExpression').default,
                 },
                 {
-                    path: '/MoralAudit',
-                    name: 'MoralAudit',
-                    component: require('@/moral/MoralAudit').default,
+                    path: '/MoralExpressionManage',
+                    name: 'MoralExpressionManage',
+                    component: require('@/moral/MoralExpressionManage').default,
                 },
                 {
                     path: '/MoralPlus',

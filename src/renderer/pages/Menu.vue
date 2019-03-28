@@ -31,7 +31,7 @@
                                 :unique-opened="true"
                         >
                             <el-submenu index="1">
-                                <template slot="title" style="padding: 0px 0px 0px 0px"><i></i>素拓分管理</template>
+                                <template slot="title" style="padding: 0px 0px 0px 0px">素拓分管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/Sketch" style="min-width: 50px;margin-top: -10px">我的素拓分</el-menu-item>
                                     <el-menu-item index="/SketchManage" style="min-width: 50px">素拓分审核</el-menu-item>
@@ -39,10 +39,10 @@
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="2">
-                                <template slot="title" style="padding: 0px 0px 0px 0px"><i></i>德育分管理</template>
+                                <template slot="title" style="padding: 0px 0px 0px 0px">德育表现</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/Moral" style="min-width: 50px">我的德育分</el-menu-item>
-                                    <el-menu-item index="MoralAudit" style="min-width: 50px">德育分审核</el-menu-item>
+                                    <el-menu-item index="/MoralExpression" style="min-width: 50px">我的德育表现</el-menu-item>
+                                    <el-menu-item index="/MoralExpressionManage" style="min-width: 50px">德育表现管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="3">

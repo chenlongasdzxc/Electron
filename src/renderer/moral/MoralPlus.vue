@@ -170,7 +170,7 @@
                                     align="center"
                             ></el-table-column>
                             <el-table-column
-                                    prop="applyPersonName"
+                                    prop="applyComprehensiveName"
                                     label="审核人"
                                     align="center"
                             ></el-table-column>
@@ -198,12 +198,12 @@
                             >
                                 <template slot-scope="scope">
                                     <el-button size="mini" type="primary"
-                                               v-if="scope.row.comprehensiveQualityStates!='MPCQS001'"
+                                               v-if="scope.row.comprehensiveQualityStates!='MPCQS001' && scope.row.comprehensiveQualityStates!='MPCQS002'"
                                                @click="applyComprehensive(scope.row)">申请
                                     </el-button>
                                     <el-button size="mini" type="danger"
-                                               v-if="scope.row.comprehensiveQualityStates=='MPCQS001'"
-                                                @click="cancelComprehensive(scope.row)">取消申请
+                                               v-if="scope.row.comprehensiveQualityStates=='MPCQS001' || scope.row.comprehensiveQualityStates=='MPCQS002'"
+                                               @click="cancelComprehensive(scope.row)">取消申请
                                     </el-button>
                                 </template>
                             </el-table-column>
@@ -637,14 +637,18 @@
                 }
             },
 
-
+            /**
+             * @description申请综合素质分页size事件
+             * **/
             applyMoralPageSize: function (value) {
                 this.applyMoralPage.size = value;
                 this.applyMoralPage.currentPage = 1;
                 this.getMoralPlusApplyData();
             },
 
-
+            /**
+             * @description申请综合素质分页current事件
+             * **/
             applyMoralPageCurrent: function (value) {
                 this.applyMoralPage.currentPage = value;
                 this.getMoralPlusApplyData();
@@ -686,21 +690,21 @@
             /**
              * @description取消申请
              * **/
-            cancelComprehensive:function (value) {
-                this.$http.get(Config.Apply + '/cancelApply',{params:{id:value.id}})
-                    .then(response=>{
-                        if (response.data.code == '200'){
+            cancelComprehensive: function (value) {
+                this.$http.get(Config.Apply + '/cancelApply', {params: {id: value.id}})
+                    .then(response => {
+                        if (response.data.code == '200') {
                             this.$message({
-                                message:'取消申请成功',
-                                type:'success',
-                                center:true,
+                                message: '取消申请成功',
+                                type: 'success',
+                                center: true,
                             })
                             this.getMoralPlusApplyData();
                         } else {
                             this.$message({
-                                message:'取消申请失败',
-                                type:'error',
-                                center:true,
+                                message: '取消申请失败',
+                                type: 'error',
+                                center: true,
                             })
                             this.getMoralPlusApplyData();
                         }

@@ -16,4 +16,6 @@ export default {
     StudentMoral:`${baseIp}/studentMoralPlus`, //
     StudentMoralOut:`${baseIp}/studentMoralOut`,
     Apply:`${baseIp}/apply`, //
+    moralExpression:`${baseIp}/MoralExpression`,
+    StudentMoralExpression:`${baseIp}/studentMoralExpression`,
 }
