@@ -31,8 +31,14 @@
                                     prop="moralExpressionScore"
                             ></el-table-column>
                             <el-table-column
+                                    label="上传人"
+                                    align="center"
+                                    prop="applyPersonName"
+                            ></el-table-column>
+                            <el-table-column
                                     label="状态"
                                     align="center"
+                                    width="100px"
                             >
                                 <template slot-scope="scope">
                                     <el-tag type="warning" size="mini" v-if="scope.row.states =='ME001' ">未查看
@@ -48,7 +54,15 @@
                                     align="center"
                             >
                                 <template slot-scope="scope">
-                                    <el-button size="mini" type="primary">是否有异议</el-button>
+                                    <el-button size="mini" type="danger"
+                                               @click="refuseMoralExpression(scope.row)"
+                                               :disabled="checkMoralExpressionButton(scope.row)"
+                                    >有异议
+                                    </el-button>
+                                    <el-button size="mini" type="primary"
+                                               @click="applyMoralExpression(scope.row)"
+                                               :disabled="applyMoralExpressionButton(scope.row)"
+                                    >无异议</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -57,7 +71,7 @@
 
                 <FormPanel name="班级德育表现详情" align="left">
                     <div>
-                        <el-table :data="moralExpression"
+                        <el-table :data="moralExpressionClassData"
                                   :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
                                   style="font-size: 12px"
                                   border
@@ -78,6 +92,11 @@
                                     prop="studentNumber"
                             ></el-table-column>
                             <el-table-column
+                                    label="班级"
+                                    align="center"
+                                    prop="studentClass"
+                            ></el-table-column>
+                            <el-table-column
                                     label="德育表现年度"
                                     align="center"
                                     prop="moralExpressionYear"
@@ -86,27 +105,15 @@
                             <el-table-column
                                     label="德育表现分数"
                                     align="center"
-                                    prop="moralExpressionScore"
+                                    prop="moralExpressionTotalScore"
                             ></el-table-column>
-                            <el-table-column
-                                    label="状态"
-                                    align="center"
-                            >
-                                <template slot-scope="scope">
-                                    <el-tag type="warning" size="mini" v-if="scope.row.states =='ME001' ">未查看
-                                    </el-tag>
-                                    <el-tag type="success" size="mini" v-if="scope.row.states =='ME002' ">无异议
-                                    </el-tag>
-                                    <el-tag type="danger" size="mini" v-if="scope.row.states =='ME003' ">有异议
-                                    </el-tag>
-                                </template>
-                            </el-table-column>
                             <el-table-column
                                     label="详情"
                                     align="center"
                             >
                                 <template slot-scope="scope">
-                                    <el-button size="mini" type="primary" @click="checkParticular(scope.row)">查看详情</el-button>
+                                    <el-button size="mini" type="primary" @click="checkParticular(scope.row)">查看详情
+                                    </el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -117,7 +124,7 @@
 
         <div>
             <el-dialog
-                    title="详情"
+                    title="德育表现详情"
                     :visible.sync="moralExpressionDialogVisible"
                     width="30%">
                 <div>
@@ -166,6 +173,29 @@
 
                 </div>
             </el-dialog>
+
+            <el-dialog
+                    title="操作"
+                    :visible.sync="dialogVisible"
+                    width="10%">
+                <el-form :model="PersonalMoralExpressionFormData">
+                    <el-form-item label="是否有异议：" :label-width="moralExpressionFormWidth">
+                        <el-select size="mini" style="width: 200px"
+                                   v-model="PersonalMoralExpressionFormData.value">
+                            <el-option
+                                    v-for="item in moralExpressionValue"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.label"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer">
+                    <el-button @click="dialogVisible = false" size="mini">取 消</el-button>
+                    <el-button type="primary" @click="dialogVisible = false" size="mini">确 定</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -173,44 +203,64 @@
 <script>
     import FormPanel from '../components/FormPanel'
     import Config from '../Config'
+
     export default {
-        components:{FormPanel},
+        components: {FormPanel},
         name: "MoralExpression",
-        data(){
-            return{
-                moralExpression:[],
-                studentData:[],
-                personalMoralExpression:[],
-                moralExpressionDialogVisible:false,
-                studentNumber:'',
-                year:'',
+        data() {
+            return {
+                moralExpression: [],
+                studentData: [],
+                personalMoralExpression: [],
+                moralExpressionClassData:[],
+                moralExpressionDialogVisible: false,
+                dialogVisible: false,
+                studentNumber: '',
+                year: '',
+                moralExpressionFormWidth: '100px',
+                PersonalMoralExpressionFormData: {
+                    id: '',
+                    value: '',
+                },
+                moralExpressionValue: [
+                    {
+                        value: '无异议',
+                        label: '无异议',
+                    }, {
+                        value: '有异议',
+                        label: '有异议',
+                    }
+                ],
             }
         },
 
-        mounted(){
+        mounted() {
             this.studentData = JSON.parse(sessionStorage.getItem("user"));
             this.getMoralExpressionData();
+            this.getMoralExpressionClassData();
         },
 
-        methods:{
+        methods: {
 
 
             /**
              * @description获取个人德育表现
              * **/
-            getMoralExpressionData:function () {
+            getMoralExpressionData: function () {
                 const params = {
-                    studentNumber:this.studentData.studentNumber,
+                    studentNumber: this.studentData.studentNumber,
+                    grade: this.studentData.grade,
+                    studentClass: this.studentData.studentClass,
                 }
-                this.$http.get(Config.StudentMoralExpression + '/findPersonal',{params:params})
-                    .then(response=>{
-                        if (response.data.code == '200'){
+                this.$http.get(Config.StudentMoralExpression + '/findPersonal', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
                             this.moralExpression = response.data.data
-                        }else {
+                        } else {
                             this.$message({
-                                message:'获取数据失败',
-                                type:'warning',
-                                center:true,
+                                message: '获取数据失败',
+                                type: 'warning',
+                                center: true,
                             })
                         }
                     })
@@ -219,21 +269,134 @@
             /**
              * @description查看详情
              * **/
-            checkParticular:function (value) {
-                this.studentNumber = value.studentNumber;
-                this.year = value.year;
-                this.getPersonalMoralExpression();
+            checkParticular: function (value) {
+                this.getPersonalMoralExpression(value);
                 this.moralExpressionDialogVisible = true;
+            },
+
+            /**
+             * @description查看详情
+             * **/
+            getPersonalMoralExpression: function (value) {
+                const params = {
+                    studentNumber: value.studentNumber,
+                    year: value.year,
+                    grade: value.grade,
+                    studentClass: value.studentClass,
+                }
+                this.$http.get(Config.StudentMoralExpression + '/findPersonal',{params:params})
+                    .then(response=>{
+                        if (response.data.code == '200'){
+                            this.personalMoralExpression = response.data.data;
+                        } else {
+                            this.$message({
+                                message:'查询失败',
+                                type:'danger',
+                                center:true,
+                            })
+                        }
+                    })
+            },
+
+
+            /**
+             * @description按钮禁用事件
+             * **/
+            checkMoralExpressionButton: function (value) {
+                if (value.states != 'ME001') {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+
+            applyMoralExpressionButton:function(value){
+                if (value.states == 'ME002') {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+
+            /**
+             * @description无异议
+             * **/
+            applyMoralExpression: function (value) {
+                const params = {
+                    id: value.id,
+                    states: 'ME002',
+                }
+                this.$http.get(Config.StudentMoralExpression + '/checkMoralExpression', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.$message({
+                                message: '上传成功',
+                                type: 'success',
+                                center: true,
+                            })
+                            this.getMoralExpressionData();
+                        } else {
+                            this.$message({
+                                message: '长传失败',
+                                type: 'warning',
+                                center: true,
+                            })
+                            this.getMoralExpressionData();
+                        }
+                    })
 
             },
 
-            getPersonalMoralExpression:function () {
-                const that = this;
+            /**
+             * @description有异议
+             * **/
+            refuseMoralExpression: function (value) {
                 const params = {
-                    studentNumber:that.studentNumber,
-                    year:that.year,
+                    id: value.id,
+                    states: 'ME003',
                 }
-                this.$http.get(Config.StudentMoralExpression + '/')
+                this.$http.get(Config.StudentMoralExpression + '/checkMoralExpression', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.$message({
+                                message: '上传成功',
+                                type: 'success',
+                                center: true,
+                            })
+                            this.getMoralExpressionData();
+                        } else {
+                            this.$message({
+                                message: '长传失败',
+                                type: 'warning',
+                                center: true,
+                            })
+                            this.getMoralExpressionData();
+                        }
+                    })
+
+            },
+
+            /**
+             * @description获取班级德育表现
+             * **/
+            getMoralExpressionClassData:function () {
+                const params = {
+                    studentClass: this.studentData.studentClass,
+                    grade:this.studentData.grade,
+                    major:this.studentData.major,
+                }
+                this.$http.get(Config.StudentMoralExpression + '/findMoralExpressionTotal',{params:params})
+                    .then(response=>{
+                        if (response.data.code == '200'){
+                            this.moralExpressionClassData = response.data.data.content;
+                        } else {
+                            this.$message({
+                                message:'获取班级德育表现失败',
+                                type:'danger',
+                                center:true
+                            })
+                        }
+                    })
             }
         },
     }
