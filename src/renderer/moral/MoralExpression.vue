@@ -26,14 +26,16 @@
                                     prop="moralExpressionName"
                             ></el-table-column>
                             <el-table-column
-                                    label="德育表现分数"
+                                    label="分数"
                                     align="center"
                                     prop="moralExpressionScore"
+                                    width="80px"
                             ></el-table-column>
                             <el-table-column
                                     label="上传人"
                                     align="center"
                                     prop="applyPersonName"
+                                    width="80px"
                             ></el-table-column>
                             <el-table-column
                                     label="状态"
@@ -153,6 +155,12 @@
                                 label="德育表现分数"
                                 align="center"
                                 prop="moralExpressionScore"
+                                width="120px"
+                        ></el-table-column>
+                        <el-table-column
+                                label="上传人"
+                                align="center"
+                                prop="applyPersonName"
                         ></el-table-column>
                         <el-table-column
                                 label="状态"
@@ -169,33 +177,9 @@
                         </el-table-column>
                     </el-table>
                 </div>
-                <div slot="footer">
-
-                </div>
             </el-dialog>
 
-            <el-dialog
-                    title="操作"
-                    :visible.sync="dialogVisible"
-                    width="10%">
-                <el-form :model="PersonalMoralExpressionFormData">
-                    <el-form-item label="是否有异议：" :label-width="moralExpressionFormWidth">
-                        <el-select size="mini" style="width: 200px"
-                                   v-model="PersonalMoralExpressionFormData.value">
-                            <el-option
-                                    v-for="item in moralExpressionValue"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.label"
-                            ></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer">
-                    <el-button @click="dialogVisible = false" size="mini">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false" size="mini">确 定</el-button>
-                </div>
-            </el-dialog>
+
         </div>
     </div>
 </template>
@@ -236,12 +220,15 @@
 
         mounted() {
             this.studentData = JSON.parse(sessionStorage.getItem("user"));
-            this.getMoralExpressionData();
-            this.getMoralExpressionClassData();
+            this.init();
         },
 
         methods: {
 
+            init:function(){
+                this.getMoralExpressionData();
+                this.getMoralExpressionClassData();
+            },
 
             /**
              * @description获取个人德育表现
@@ -334,14 +321,14 @@
                                 type: 'success',
                                 center: true,
                             })
-                            this.getMoralExpressionData();
+                            this.init();
                         } else {
                             this.$message({
                                 message: '长传失败',
                                 type: 'warning',
                                 center: true,
                             })
-                            this.getMoralExpressionData();
+                            this.init();
                         }
                     })
 
@@ -363,14 +350,14 @@
                                 type: 'success',
                                 center: true,
                             })
-                            this.getMoralExpressionData();
+                            this.init();
                         } else {
                             this.$message({
                                 message: '长传失败',
                                 type: 'warning',
                                 center: true,
                             })
-                            this.getMoralExpressionData();
+                            this.init();
                         }
                     })
 

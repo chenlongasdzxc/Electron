@@ -36,7 +36,9 @@
                                 </el-col>
                                 <el-col :span="8">
                                     <div style="float: right">
-                                        <el-button size="mini" type="danger" @click="resetForm('morelExpressionForm')" >重置</el-button>
+                                        <el-button size="mini" type="danger" @click="resetForm('morelExpressionForm')">
+                                            重置
+                                        </el-button>
                                         <el-button size="mini" type="success" @click="saveMoralExpressionForm">确认
                                         </el-button>
                                         <el-button size="mini" type="primary" @click="saveStudentMoralExpression">保存
@@ -127,10 +129,10 @@
             <div>
                 <FormPanel name="编辑德育表现" align="left">
                     <!--搜索-->
-                    <div>
-
+                    <div style="float: right">
+                        <el-button size="mini" type="primary">保存</el-button>
                     </div>
-                    <div>
+                    <div style="margin-top: 10px">
                         <el-table :data="moralExpressionEdit"
                                   :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
                                   style="font-size: 12px"
@@ -183,19 +185,52 @@
                                                      v-model="scope.row.moralExpressionScore"></el-input-number>
                                 </template>
                             </el-table-column>
-
+                            <el-table-column
+                                    label="状态"
+                                    align="center"
+                                    prop="states"
+                            >
+                                <template slot-scope="scope">
+                                    <el-tag type="warning" size="mini" v-if="scope.row.states =='ME001' ">未查看
+                                    </el-tag>
+                                    <el-tag type="success" size="mini" v-if="scope.row.states =='ME002' ">无异议
+                                    </el-tag>
+                                    <el-tag type="danger" size="mini" v-if="scope.row.states =='ME003' ">有异议
+                                    </el-tag>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    label="操作"
+                                    align="center"
+                            >
+                                <template slot-scope="scope">
+                                    <el-button size="mini" type="danger" @click="deleteMoralExpression(scope.row)">删除
+                                    </el-button>
+                                    <el-button size="mini" type="primary" @click="rejectMoralExpression(scope.row)">驳回
+                                    </el-button>
+                                </template>
+                            </el-table-column>
                         </el-table>
                     </div>
                     <!--分页-->
                     <div>
-
+                        <el-pagination
+                                style="display: flex;justify-content: center"
+                                background
+                                @size-change="moralExpressionEditSizeChange"
+                                @current-change="moralExpressionEditCurrentChange"
+                                layout="prev, pager, next,total"
+                                :current-page="moralExpressionEditPage.currentPage"
+                                :page-size="moralExpressionEditPage.size"
+                                :total="moralExpressionEditPage.total"
+                        ></el-pagination>
                     </div>
                 </FormPanel>
             </div>
             <div>
                 <FormPanel name="已上传德育表现" align="left">
                     <div>
-                        <el-form :model="moralExpressionFormUpdated" size="small">
+                        <el-form :model="moralExpressionFormUpdated" size="small" ref="moralExpressionFormUpdated">
                             <el-row>
                                 <el-col :span="8">
                                     <el-form-item label="德育表现年度：" :label-width="moralExpressionFormWidth">
@@ -227,7 +262,10 @@
                                 </el-col>
                                 <el-col :span="8">
                                     <div style="float: right">
-                                        <el-button size="mini" type="success" @click="searchMoralExpression">查询
+                                        <el-button size="mini" type="danger"
+                                                   @click="resetUpdateForm('moralExpressionFormUpdated')">重置
+                                        </el-button>
+                                        <el-button size="mini" type="primary" @click="searchMoralExpression">查询
                                         </el-button>
                                     </div>
                                 </el-col>
@@ -309,6 +347,24 @@
                 </FormPanel>
             </div>
         </el-card>
+
+        <div>
+            <el-dialog
+                    title="驳回"
+                    :visible.sync="moralExpressionUpdateDialogVisible"
+                    width="30%">
+                <div>
+                    <el-form :model="applyFormData" style="font-size: 12px;text-align: left" size="small">
+                        <el-form-item label="理由:" :label-width="formLabelWidth">
+                            <el-input v-model="applyFormData.value" style="width: 400px" type="textarea"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div slot="footer">
+                    <el-button size="small" type="primary" @click="rejectApply">保存</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -323,11 +379,21 @@
         data() {
             return {
                 moralExpressionFormWidth: '120px',
+                moralExpressionUpdateDialogVisible: false,
                 studentMoralExpressionUpdated: [],
                 studentMoralExpressionData: [],
                 studentData: [],
                 list: [],
-                moralExpressionUpdatedPage:{
+                applyFormData: {
+                    id: '',
+                    value: '',
+                },
+                moralExpressionUpdatedPage: {
+                    currentPage: 1,
+                    size: 10,
+                    total: 1,
+                },
+                moralExpressionEditPage: {
                     currentPage: 1,
                     size: 10,
                     total: 1,
@@ -337,7 +403,7 @@
                     year: '',
                     name: '',
                 },
-                moralExpressionFormUpdated:{
+                moralExpressionFormUpdated: {
                     year: '',
                     name: '',
                 },
@@ -367,12 +433,18 @@
 
         mounted() {
             this.studentData = JSON.parse(sessionStorage.getItem("user"));
-            this.getStudentMoralExpressionData();
-            this.getMoralExpressionName();
-            this.getStudentMoralExpressionUpdated();
+            this.init();
         },
 
         methods: {
+
+
+            init: function () {
+                this.getStudentMoralExpressionData();
+                this.getMoralExpressionName();
+                this.getStudentMoralExpressionUpdated();
+                this.getMoralExpressionEdit();
+            },
 
             /**
              * @description表格选中事件
@@ -520,18 +592,18 @@
                                 center: true,
                             })
                             this.clearSelection();
-                        }else if(response.data.code == '401'){
+                        } else if (response.data.code == '401') {
                             this.$message({
-                                message:'保存失败,已存在该学年德育表现数据',
-                                type:'warning',
-                                center:true,
+                                message: '保存失败,已存在该学年德育表现数据',
+                                type: 'warning',
+                                center: true,
                             })
                             this.clearSelection();
-                        }else {
+                        } else {
                             this.$message({
-                                message:'错误',
-                                type:'warning',
-                                center:true,
+                                message: '错误',
+                                type: 'warning',
+                                center: true,
                             })
                             this.clearSelection();
                         }
@@ -545,10 +617,12 @@
              * **/
             getStudentMoralExpressionUpdated: function () {
                 const params = {
+                    moralExpressionYear: this.moralExpressionFormUpdated.year,
+                    moralExpressionName: this.moralExpressionFormUpdated.name,
                     grade: this.studentData.grade,
                     studentClass: this.studentData.studentClass,
-                    size:this.moralExpressionUpdatedPage.size,
-                    page:this.moralExpressionUpdatedPage.currentPage - 1,
+                    size: this.moralExpressionUpdatedPage.size,
+                    page: this.moralExpressionUpdatedPage.currentPage - 1,
                 }
                 this.$http.get(Config.StudentMoralExpression + '/findFuzzy', {params: params})
                     .then(response => {
@@ -568,9 +642,9 @@
             /**
              * @description清除选中
              * **/
-            clearSelection:function (rows) {
+            clearSelection: function (rows) {
                 debugger
-                if (rows){
+                if (rows) {
                     rows.forEach(row => {
                         this.$refs.multipleTable.toggleRowSelection(row);
                     });
@@ -582,18 +656,34 @@
             /**
              * @description搜索数据
              * **/
-            searchMoralExpression:function () {
+            searchMoralExpression: function () {
                 const params = {
-                    studentClass:this.studentData.studentClass,
-                    year:this.moralExpressionFormUpdated.year,
-                    name:this.moralExpressionFormUpdated.name,
+                    moralExpressionYear: this.moralExpressionFormUpdated.year,
+                    moralExpressionName: this.moralExpressionFormUpdated.name,
+                    grade: this.studentData.grade,
+                    studentClass: this.studentData.studentClass,
+                    size: this.moralExpressionUpdatedPage.size,
+                    page: this.moralExpressionUpdatedPage.currentPage - 1,
                 }
+                this.$http.get(Config.StudentMoralExpression + '/findFuzzy', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.studentMoralExpressionUpdated = response.data.data.content;
+                            this.moralExpressionUpdatedPage.total = response.data.data.totalElements;
+                        } else {
+                            this.$message({
+                                message: '获取数据失败',
+                                type: 'warning',
+                                center: true,
+                            })
+                        }
+                    })
             },
 
             /**
              * @description已上传德育表现分页事件
              * **/
-            moralExpressionUpdatedSizeChange:function (value) {
+            moralExpressionUpdatedSizeChange: function (value) {
                 this.moralExpressionUpdatedPage.size = value;
                 this.moralExpressionUpdatedPage.currentPage = 1;
                 this.getStudentMoralExpressionUpdated();
@@ -602,7 +692,7 @@
             /**
              * @description已上传德育表现分页事件
              * **/
-            moralExpressionUpdatedCurrentChange:function (value) {
+            moralExpressionUpdatedCurrentChange: function (value) {
                 this.moralExpressionUpdatedPage.currentPage = value;
                 this.getStudentMoralExpressionUpdated();
             },
@@ -610,11 +700,121 @@
             /**
              * @description重置按钮
              * **/
-            resetForm:function (formName) {
+            resetForm: function (formName) {
                 this.$refs[formName].resetFields();
                 this.moralExpressionForm.year = '';
                 this.moralExpressionForm.name = '';
-            }
+
+            },
+
+            /**
+             * @description获取有异议德育表现
+             * **/
+            getMoralExpressionEdit: function () {
+                const params = {
+                    states: 'ME003',
+                    studentClass: this.studentData.studentClass,
+                    grade: this.studentData.grade,
+                }
+                this.$http.get(Config.StudentMoralExpression + '/findFuzzy', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.moralExpressionEdit = response.data.data.content;
+                        } else {
+                            this.$message({
+                                message: '查询失败',
+                                type: 'danger',
+                                center: true,
+                            })
+                        }
+                    })
+            },
+
+            /**
+             * @description删除德育表现
+             * **/
+            deleteMoralExpression: function (value) {
+                const params = {
+                    id: value.id,
+                }
+                this.$http.get(Config.StudentMoralExpression + '/deleteMoralExpression', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success',
+                                center: true,
+                            })
+                            this.init();
+                        } else {
+                            this.$message({
+                                message: '删除失败',
+                                type: 'danger',
+                                center: true,
+                            })
+                        }
+                    })
+            },
+
+            /**
+             * @description德育表现编辑size分页事件
+             * **/
+            moralExpressionEditSizeChange: function (value) {
+                this.moralExpressionEditPage.size = value;
+                this.moralExpressionEditPage.currentPage = 1;
+                this.getMoralExpressionEdit();
+            },
+
+            /**
+             * @description德育表现编辑current分页事件
+             * **/
+            moralExpressionEditCurrentChange: function (value) {
+                this.moralExpressionEditPage.currentPage = value;
+                this.getMoralExpressionEdit();
+            },
+
+            resetUpdateForm: function (formName) {
+                this.$refs[formName].resetFields();
+                this.moralExpressionFormUpdated.year = '';
+                this.moralExpressionFormUpdated.name = '';
+            },
+
+            rejectMoralExpression: function (value) {
+                this.applyFormData.id = value.id;
+                this.moralExpressionUpdateDialogVisible = true;
+            },
+
+
+            /**
+             * @description驳回德育表现
+             * **/
+            rejectApply: function () {
+                const params = {
+                    id: this.applyFormData.id,
+                    value: this.applyFormData.value,
+                    states: 'ME001'
+                }
+                this.$http.get(Config.StudentMoralExpression + '/checkMoralExpression',{params:params})
+                    .then(response=>{
+                        if (response.data.code == '200'){
+                            this.$message({
+                                message:'驳回成功',
+                                type:'success',
+                                center:true,
+                            })
+                            this.moralExpressionUpdateDialogVisible = false;
+                            this.getMoralExpressionEdit();
+                        }else {
+                            this.$message({
+                                message:'驳回失败',
+                                type:'danger',
+                                center:true,
+                            })
+                            this.moralExpressionUpdateDialogVisible = false;
+                            this.getMoralExpressionEdit();
+                        }
+                    })
+            },
         },
     }
 </script>
