@@ -129,8 +129,52 @@
             <div>
                 <FormPanel name="编辑德育表现" align="left">
                     <!--搜索-->
-                    <div style="float: right">
-                        <el-button size="mini" type="primary">保存</el-button>
+                    <div>
+                        <el-form :model="searchMoralExpressionForm" size="small" ref="morelExpressionForm">
+                            <el-row>
+                                <el-col :span="6">
+                                    <el-form-item label="德育表现年度：" :label-width="moralExpressionFormWidth">
+                                        <el-select size="mini" style="width: 140px"
+                                                   v-model="searchMoralExpressionForm.year"
+                                        >
+                                            <el-option
+                                                    v-for="item in moralExpressionYear"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                            ></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="德育表现名称：" :label-width="moralExpressionFormWidth">
+                                        <el-select size="mini" style="width: 140px"
+                                                   v-model="searchMoralExpressionForm.name"
+                                        >
+                                            <el-option
+                                                    v-for="item in moralExpressionName"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.label"
+                                            ></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="搜索信息：" :label-width="moralExpressionFormWidth">
+                                        <el-input size="mini" style="width: 140px" placeholder="请输入学生姓名" v-model="searchMoralExpressionForm.keyWord"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div style="float: right">
+                                        <el-button size="mini" type="danger">重置</el-button>
+                                        <el-button size="mini" type="success" @click="searchMoralExpressionEdit">搜索</el-button>
+                                        <el-button size="mini" type="primary" @click="saveEditMoralExpression">保存</el-button>
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                        </el-form>
                     </div>
                     <div style="margin-top: 10px">
                         <el-table :data="moralExpressionEdit"
@@ -138,7 +182,7 @@
                                   style="font-size: 12px"
                                   border
                                   height="452px"
-                                  @select="tableSelection"
+                                  @select="editSelection"
                                   size="mini">
                             <el-table-column
                                     type="selection"
@@ -378,6 +422,7 @@
         name: "MoralAudit",
         data() {
             return {
+                formLabelWidth:'120px',
                 moralExpressionFormWidth: '120px',
                 moralExpressionUpdateDialogVisible: false,
                 studentMoralExpressionUpdated: [],
@@ -387,6 +432,11 @@
                 applyFormData: {
                     id: '',
                     value: '',
+                },
+                searchMoralExpressionForm:{
+                    year: '',
+                    name: '',
+                    keyWord:'',
                 },
                 moralExpressionUpdatedPage: {
                     currentPage: 1,
@@ -427,6 +477,7 @@
                 }],
                 moralExpressionName: [],
                 selectList: [],
+                editList: [],
             }
 
         },
@@ -453,6 +504,12 @@
                 console.log(value)
                 this.selectList = JSON.parse(JSON.stringify(value));
             },
+
+            editSelection:function (value) {
+                console.log(value)
+                this.editList = JSON.parse(JSON.stringify(value));
+            },
+
 
             /**
              * @description获取本班学生基本信息
@@ -814,6 +871,76 @@
                             this.getMoralExpressionEdit();
                         }
                     })
+            },
+
+            /**
+             * @description搜索德育表现编辑数据
+             * **/
+            searchMoralExpressionEdit:function () {
+                const params = {
+                    grade: this.studentData.grade,
+                    studentClass:this.studentData.studentClass,
+                    studentName:this.searchMoralExpressionForm.keyWord,
+                    states: 'ME003'
+                }
+                 this.$http.get(Config.StudentMoralExpression + '/findFuzzy',{params:params})
+                     .then(response=>{
+                         if (response.data.code == '200'){
+                             this.moralExpressionEdit = response.data.data.content;
+                         } else {
+                             this.$message({
+                                 message:'查询失败',
+                                 type:'danger',
+                             })
+                         }
+                     })
+            },
+
+
+
+            /**
+             * @description保存德育表现编辑数据
+             * **/
+            saveMoralExpressionEdit:function (list) {
+               this.$http.post(Config.StudentMoralExpression + '/saveMoralExpressionEdit',list)
+                   .then(response=>{
+                       if (response.data.code == '200'){
+                            this.$message({
+                                message:'保存成功',
+                                type:'success',
+                                center:true,
+                            })
+                           this.getMoralExpressionEdit();
+                       }else {
+                           this.$message({
+                               message:'保存失败',
+                               type:'danger',
+                               center:true
+                           })
+                           this.getMoralExpressionEdit();
+                       }
+                   })
+            },
+
+            /**
+             * @description保存编辑德育表现数据
+             * **/
+            saveEditMoralExpression:function () {
+                var saveList = [];
+                var saveSelectList = [];
+                if (this.editList.length == 0) {
+                    this.$message({
+                        message: '请选择要保持的数据',
+                        type: 'warning',
+                        center: true,
+                    });
+                } else {
+                    saveSelectList = this.editList;
+                }
+                for (var i = 0; i < saveSelectList.length; i++) {
+                    saveList.push(saveSelectList[i]);
+                }
+                this.saveMoralExpressionEdit(saveList);
             },
         },
     }
