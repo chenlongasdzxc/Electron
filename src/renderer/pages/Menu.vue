@@ -111,6 +111,12 @@
                                     </el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
+                            <el-submenu index="11">
+                                <template slot="title" style="padding: 0 0 0 0 ">设置</template>
+                                <el-menu-item-group>
+                                    <el-menu-item index="/RoleSetting" style="min-width: 50px">权限设置</el-menu-item>
+                                </el-menu-item-group>
+                            </el-submenu>
                         </el-menu>
                     </el-aside>
                 </transition>

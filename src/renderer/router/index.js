@@ -133,7 +133,12 @@ export default new Router({
                     path: '/ComprehensiveMoralPlus',
                     name: 'ComprehensiveMoralPlus',
                     component: require('@/comprehensive/ComprehensiveMoralPlus').default,
-                }
+                },
+                {
+                    path:'/RoleSetting',
+                    name:'RoleSetting',
+                    component: require('@/Setting/RoleSetting').default,
+                },
             ],
         },
 

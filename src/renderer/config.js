@@ -18,4 +18,8 @@ export default {
     Apply:`${baseIp}/apply`, //
     moralExpression:`${baseIp}/MoralExpression`,
     StudentMoralExpression:`${baseIp}/studentMoralExpression`,
+    Role:`${baseIp}/role`, //角色
+    Permission:`${baseIp}/permission`, //权限
+    RolePermission:`${baseIp}/rolePermission`, //角色权限中间表
+    UserRole:`${baseIp}/userRole`, //用户角色中间表
 }
