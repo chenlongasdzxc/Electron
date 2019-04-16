@@ -66,7 +66,7 @@
                             <el-submenu index="5">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">德育减分</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/MoralDeduction" style="min-width: 50px">德育加分</el-menu-item>
+                                    <el-menu-item index="/MoralDeduction" style="min-width: 50px">我的减分</el-menu-item>
                                     <el-menu-item index="/MoralDeductionManage" style="min-width: 50px">减分管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
@@ -138,7 +138,7 @@
                     </el-main>
                     <el-footer
                             style="background: #fff; color: #999; font-size: 12px; text-align: right; vertical-align: center;height: 20px;font-family: 'Arial Rounded MT Bold'">
-                        @Maybe
+                        @Everything is possible
                     </el-footer>
                 </el-container>
             </el-container>
