@@ -13,13 +13,14 @@ export default {
     Leaving:`${baseIp}/Leaving`, //请假
     SketchAnalysis:`${baseIp}/sketchAnalysis`, //素拓分求和
     SketchCount:`${baseIp}/SketchCount`,  //素拓分总分
-    StudentMoral:`${baseIp}/studentMoralPlus`, //
-    StudentMoralOut:`${baseIp}/studentMoralOut`,
+    StudentMoral:`${baseIp}/studentMoralPlus`, // 德育加分
+    StudentMoralOut:`${baseIp}/studentMoralOut`, //课外加分
     Apply:`${baseIp}/apply`, //
     moralExpression:`${baseIp}/MoralExpression`,
-    StudentMoralExpression:`${baseIp}/studentMoralExpression`,
+    StudentMoralExpression:`${baseIp}/studentMoralExpression`, //德育表现
     Role:`${baseIp}/role`, //角色
     Permission:`${baseIp}/permission`, //权限
     RolePermission:`${baseIp}/rolePermission`, //角色权限中间表
     UserRole:`${baseIp}/userRole`, //用户角色中间表
+    StudentMoralDeduction:`${baseIp}/studentMoralDeduction`, //德育减分
 }

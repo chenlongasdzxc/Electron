@@ -72,6 +72,11 @@
                 </FormPanel>
 
                 <FormPanel name="班级德育表现详情" align="left">
+                    <!--搜索-->
+                    <div>
+
+                    </div>
+                    <!--表格-->
                     <div>
                         <el-table :data="moralExpressionClassData"
                                   :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
@@ -120,6 +125,19 @@
                             </el-table-column>
                         </el-table>
                     </div>
+                    <!--分页-->
+                    <div>
+                        <el-pagination
+                                style="display: flex;justify-content: center"
+                                background
+                                @size-change="moralExpressionClassDataSizeChange"
+                                @current-change="moralExpressionClassDataCurrentChange"
+                                layout="prev, pager, next,total"
+                                :current-page="moralExpressionClassDataPage.currentPage"
+                                :page-size="moralExpressionClassDataPage.size"
+                                :total="moralExpressionClassDataPage.total"
+                        ></el-pagination>
+                    </div>
                 </FormPanel>
             </div>
         </el-card>
@@ -129,6 +147,7 @@
                     title="德育表现详情"
                     :visible.sync="moralExpressionDialogVisible"
                     width="30%">
+                <!--表格-->
                 <div>
                     <el-table :data="personalMoralExpression"
                               :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
@@ -206,6 +225,11 @@
                     id: '',
                     value: '',
                 },
+                moralExpressionClassDataPage:{
+                    currentPage: 1,
+                    size: 10,
+                    total: 1,
+                },
                 moralExpressionValue: [
                     {
                         value: '无异议',
@@ -267,7 +291,7 @@
             getPersonalMoralExpression: function (value) {
                 const params = {
                     studentNumber: value.studentNumber,
-                    year: value.year,
+                    moralExpressionYear: value.moralExpressionYear,
                     grade: value.grade,
                     studentClass: value.studentClass,
                 }
@@ -376,6 +400,7 @@
                     .then(response=>{
                         if (response.data.code == '200'){
                             this.moralExpressionClassData = response.data.data.content;
+                            this.moralExpressionClassDataPage.total = response.data.data.totalElements;
                         } else {
                             this.$message({
                                 message:'获取班级德育表现失败',
@@ -384,7 +409,26 @@
                             })
                         }
                     })
-            }
+            },
+
+            /**
+             * @description获取班级德育表现分页size事件
+             * **/
+            moralExpressionClassDataSizeChange:function (value) {
+                this.moralExpressionClassDataPage.size = value;
+                this.moralExpressionClassDataPage.currentPage = 1;
+                this.getMoralExpressionClassData();
+            },
+
+
+            /**
+             * @description获取班级德育表现分页current事件
+             * **/
+            moralExpressionClassDataCurrentChange:function (value) {
+                this.moralExpressionClassDataPage.currentPage = value;
+                this.getMoralExpressionClassData();
+            },
+
         },
     }
 </script>

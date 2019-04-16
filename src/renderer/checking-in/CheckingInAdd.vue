@@ -306,10 +306,12 @@
                 },
                 studentInfoData: [],
                 multipleSelection: [],
+                studentData:[],
             }
         },
 
         mounted() {
+            this.studentData = JSON.parse(sessionStorage.getItem("user"));
             this.getCheckingData();
         },
 
@@ -329,7 +331,7 @@
             getStudentInfo: function () {
                 this.studentInfoFormVisible = true;
                 const that = this;
-                const studentClass = sessionStorage.getItem("userClass");
+                const studentClass = this.studentData.studentClass;
                 let p = {
                     size: that.page.size,
                     page: that.page.currentPage - 1,

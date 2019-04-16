@@ -139,6 +139,16 @@ export default new Router({
                     name:'RoleSetting',
                     component: require('@/Setting/RoleSetting').default,
                 },
+                {
+                    path: '/MoralDeduction',
+                    name: 'MoralDeduction',
+                    component: require('@/moral/MoralDeduction').default,
+                },
+                {
+                    path: '/MoralDeductionManage',
+                    name: 'MoralDeductionManage',
+                    component: require('@/moral/MoralDeductionManage').default,
+                },
             ],
         },
 
