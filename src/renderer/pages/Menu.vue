@@ -73,6 +73,8 @@
                             <el-submenu index="6">
                                 <template slot="title" style="padding: 0px 0px 0px 0px;">综合素质</template>
                                 <el-menu-item-group>
+                                    <el-menu-item index="/" style="min-width: 50px">我的综合素质
+                                    </el-menu-item>
                                     <el-menu-item index="/ComprehensiveMoralPlus" style="min-width: 50px">综合素质管理
                                     </el-menu-item>
                                 </el-menu-item-group>

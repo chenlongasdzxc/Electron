@@ -121,7 +121,8 @@
                                     width="100px"
                             >
                                 <template slot-scope="scope">
-                                    <el-button size="mini" type="primary" @click="comprehensiveMoralOutButton">审核</el-button>
+                                    <el-button size="mini" type="primary" @click="comprehensiveMoralOutButton">审核
+                                    </el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -160,6 +161,26 @@
                 </div>
             </el-dialog>
         </div>
+
+        <div>
+            <el-dialog
+                    title="审核"
+                    :visible.sync="moralOutDialogVisible"
+                    width="30%">
+                <div>
+                    <el-form :model="moralOutFormData" style="font-size: 12px;text-align: left" size="small">
+                        <el-form-item label="理由:" :label-width="formLabelWidth">
+                            <el-input v-model="moralOutFormData.value" style="width: 400px" type="textarea"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div slot="footer">
+                    <el-button size="small" type="success" @click="passMoralOutApply">通过</el-button>
+                    <el-button size="small" type="danger" @click="rejectMoralOutApply">驳回</el-button>
+                </div>
+            </el-dialog>
+        </div>
+
     </div>
 </template>
 
@@ -172,15 +193,16 @@
         name: "ComprehensiveMoralPlus",
         data() {
             return {
+                moralOutDialogVisible: false,
                 comprehensiveMoralPlus: [],
                 comprehensiveMoralOut: [],
                 studentData: [],
-                moralOutPage:{
+                moralOutPage: {
                     size: 10,
                     total: 1,
                     currentPage: 1
                 },
-                moralPlusPage:{
+                moralPlusPage: {
                     size: 10,
                     total: 1,
                     currentPage: 1
@@ -188,6 +210,10 @@
                 formLabelWidth: '100px',
                 dialogVisible: false,
                 applyFormData: {
+                    value: '',
+                    id: '',
+                },
+                moralOutFormData: {
                     value: '',
                     id: '',
                 },
@@ -206,24 +232,24 @@
             /**
              * @description获取申请综合素质课外加分数据
              * **/
-            getComprehensiveMoralOutData:function(){
-              const params = {
+            getComprehensiveMoralOutData: function () {
+                const params = {
                     studentClass: this.studentData.studentClass,
-                    comprehensiveQualityStates:'MOCQS001'
-              }
-              this.$http.get(Config.Apply + '/findFuzzyMoralOut',{params:params})
-                  .then(response=>{
-                      if(response.data.code == '200'){
-                          this.comprehensiveMoralOut = response.data.data.content;
-                          this.moralOutPage.total = response.data.data.totalElements;
-                      }else {
-                          this.$message({
-                              message:'查询失败',
-                              type:'warning',
-                              center:true,
-                          })
-                      }
-                  })
+                    comprehensiveQualityStates: 'MOCQS001'
+                }
+                this.$http.get(Config.Apply + '/findFuzzyMoralOut', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.comprehensiveMoralOut = response.data.data.content;
+                            this.moralOutPage.total = response.data.data.totalElements;
+                        } else {
+                            this.$message({
+                                message: '查询失败',
+                                type: 'warning',
+                                center: true,
+                            })
+                        }
+                    })
             },
 
             /**
@@ -265,13 +291,13 @@
              * @description同意申请
              * **/
             passApply: function () {
-                const parmas = {
+                const params = {
                     id: this.applyFormData.id,
                     comprehensiveQualityStates: 'MPCQS002',
                     applyComprehensiveNumber: this.studentData.studentNumber,
                     applyComprehensiveName: this.studentData.studentName,
                 }
-                this.$http.get(Config.Apply + '/update', {params: parmas})
+                this.$http.get(Config.Apply + '/update', {params: params})
                     .then(response => {
                         if (response.data.code == '200') {
                             this.dialogVisible = false;
@@ -303,20 +329,52 @@
              * @description审核不通过
              * **/
             rejectApply: function () {
-
+                const params = {
+                    id: this.applyFormData.id,
+                    comprehensiveQualityStates: 'MPCQS003',
+                    applyComprehensiveNumber: this.studentData.studentNumber,
+                    applyComprehensiveName: this.studentData.studentName,
+                }
+                this.$http.get(Config.Apply + '/update', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.dialogVisible = false;
+                            this.$message({
+                                message: '驳回成功',
+                                type: 'success',
+                                center: true,
+                            })
+                        } else if (response.data.code == '403') {
+                            this.dialogVisible = false;
+                            this.$message({
+                                message: '错误',
+                                type: 'warning',
+                                center: true,
+                            })
+                        } else {
+                            this.dialogVisible = false;
+                            this.$message({
+                                message: '错误',
+                                type: 'warning',
+                                center: true,
+                            })
+                        }
+                        this.getComprehensiveMoralPlusData();
+                    })
             },
 
             /**
              * @description审核综合素质课外加分申请
              * **/
-            comprehensiveMoralOutButton:function (value) {
-                console.log(value)
+            comprehensiveMoralOutButton: function (value) {
+                this.moralOutFormData.id = value.id;
+                this.moralOutDialogVisible = true;
             },
 
             /**
              * @description德育加分分页size事件
              * **/
-            moralPlusSizeChange:function (value) {
+            moralPlusSizeChange: function (value) {
                 this.moralPlusPage.size = value;
                 this.moralPlusPage.currentPage = 1;
                 this.getComprehensiveMoralPlusData();
@@ -326,7 +384,7 @@
             /**
              * @description德育加分分页current事件
              * **/
-            moralPlusCurrentChange:function (value) {
+            moralPlusCurrentChange: function (value) {
                 this.moralPlusPage.currentPage = value;
                 this.getComprehensiveMoralPlusData();
             },
@@ -334,7 +392,7 @@
             /**
              * @description课外加分分页page事件
              * **/
-            moralOutSizeChange:function (value) {
+            moralOutSizeChange: function (value) {
                 this.moralOutPage.size = value;
                 this.moralOutPage.currentPage = 1;
                 this.getComprehensiveMoralOutData();
@@ -342,9 +400,17 @@
             /**
              * @description课外加分分页current事件
              * **/
-            moralOutCurrentChange:function (value) {
+            moralOutCurrentChange: function (value) {
                 this.moralOutPage.currentPage = value;
                 this.getComprehensiveMoralOutData();
+            },
+
+            passMoralOutApply: function () {
+
+            },
+
+            rejectMoralOutApply: function () {
+
             },
 
 

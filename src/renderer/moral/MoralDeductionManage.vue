@@ -8,6 +8,7 @@
                                   :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
                                   style="font-size: 12px"
                                   border
+                                  height="451px"
                                   size="mini">
                             <el-table-column
                                     type="index"
@@ -71,6 +72,8 @@
                                     </el-tag>
                                     <el-tag type="danger" size="mini" v-if="scope.row.states =='MD003' ">有异议
                                     </el-tag>
+                                    <el-tag type="danger" size="mini" v-if="scope.row.states =='MD004' ">已驳回
+                                    </el-tag>
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -85,6 +88,7 @@
                                     </el-button>
                                     <el-button size="mini" type="primary"
                                                 :disabled="rejectMoralDeductionButton(scope.row)"
+                                               @click="rejectMoralDeduction(scope.row)"
                                     >驳回</el-button>
                                 </template>
                             </el-table-column>
@@ -497,6 +501,8 @@
                 const params = {
                     applyPersonName: this.studentData.studentName,
                     studentClass:this.studentData.studentClass,
+                    size:this.moralDeductionManagePage.size,
+                    page:this.moralDeductionManagePage.currentPage - 1,
                 }
                 this.$http.get(Config.StudentMoralDeduction + '/findFuzzy', {params: params})
                     .then(response => {
@@ -572,6 +578,30 @@
                 } else {
                     return true;
                 }
+            },
+
+            /**
+             * @description驳回有异议德育减分
+             * **/
+            rejectMoralDeduction:function (value) {
+                const states = 'MD004';
+                this.$http.get(`${Config.StudentMoralDeduction}/update/${value.id}/${states}`)
+                    .then(response=>{
+                        if (response.data.code == '200'){
+                            this.$message({
+                                message:'驳回成功',
+                                type:'success',
+                                center:true,
+                            })
+                        } else {
+                            this.$message({
+                                message:'操作失败',
+                                type:'warning',
+                                center:true,
+                            })
+                        }
+                        this.getMoralDeductionManageData();
+                    })
             },
             
 
