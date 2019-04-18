@@ -182,13 +182,13 @@
                             >
                                 <template slot-scope="scope">
                                     <el-tag type="warning" size="mini"
-                                            v-if="scope.row.comprehensiveQualityStates =='MPCQS001' ">未审核
+                                            v-if="scope.row.comprehensiveQualityStates =='CQMP001' ">未审核
                                     </el-tag>
                                     <el-tag type="success" size="mini"
-                                            v-if="scope.row.comprehensiveQualityStates =='MPCQS002' ">审核通过
+                                            v-if="scope.row.comprehensiveQualityStates =='CQMP002' ">审核通过
                                     </el-tag>
                                     <el-tag type="danger" size="mini"
-                                            v-if="scope.row.comprehensiveQualityStates =='MPCQS003' ">审核未通过
+                                            v-if="scope.row.comprehensiveQualityStates =='CQMP003' ">审核未通过
                                     </el-tag>
                                 </template>
                             </el-table-column>
@@ -198,11 +198,11 @@
                             >
                                 <template slot-scope="scope">
                                     <el-button size="mini" type="primary"
-                                               v-if="scope.row.comprehensiveQualityStates!='MPCQS001' && scope.row.comprehensiveQualityStates!='MPCQS002'"
+                                               v-if="scope.row.comprehensiveQualityStates!='CQMP001' && scope.row.comprehensiveQualityStates!='CQMP002'"
                                                @click="applyComprehensive(scope.row)">申请
                                     </el-button>
                                     <el-button size="mini" type="danger"
-                                               v-if="scope.row.comprehensiveQualityStates=='MPCQS001' || scope.row.comprehensiveQualityStates=='MPCQS002'"
+                                               v-if="scope.row.comprehensiveQualityStates=='CQMP001' || scope.row.comprehensiveQualityStates=='CQMP002'"
                                                @click="cancelComprehensive(scope.row)">取消申请
                                     </el-button>
                                 </template>
@@ -660,9 +660,9 @@
             applyComprehensive: function (value) {
                 const params = {
                     id: value.id,
-                    comprehensiveQualityStates: 'MPCQS001',
+                    comprehensiveQualityStates: 'CQMP001',
                 }
-                this.$http.get(Config.Apply + '/update', {params: params})
+                this.$http.get(Config.Apply + '/updateMoralPlus', {params: params})
                     .then(response => {
                         if (response.data.code == '200') {
                             this.$message({
@@ -709,7 +709,8 @@
                             this.getMoralPlusApplyData();
                         }
                     })
-            }
+            },
+
 
         },
     }

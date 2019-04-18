@@ -51,16 +51,15 @@
                             <el-submenu index="3">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">德育加分</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/MoralPlus" style="min-width: 50px">德育加分</el-menu-item>
-                                    <el-menu-item index="/PersonalMoralPlus" style="min-width: 50px">我的加分</el-menu-item>
-                                    <el-menu-item index="/MoralPlusManage" style="min-width: 50px">加分管理</el-menu-item>
+                                    <el-menu-item index="/MoralPlus" style="min-width: 50px">我的德育加分</el-menu-item>
+                                    <el-menu-item index="/MoralPlusManage" style="min-width: 50px">德育加分管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="4">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">课外加分</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/MoralOut" style="min-width: 50px">课外加分</el-menu-item>
-                                    <el-menu-item index="/MoralOutManage" style="min-width: 50px">加分管理</el-menu-item>
+                                    <el-menu-item index="/MoralOut" style="min-width: 50px">我的课外加分</el-menu-item>
+                                    <el-menu-item index="/MoralOutManage" style="min-width: 50px">课外加分管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="5">
@@ -73,8 +72,7 @@
                             <el-submenu index="6">
                                 <template slot="title" style="padding: 0px 0px 0px 0px;">综合素质</template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/" style="min-width: 50px">我的综合素质
-                                    </el-menu-item>
+                                    <el-menu-item index="/PersonalMoralPlus" style="min-width: 50px">我的综合素质</el-menu-item>
                                     <el-menu-item index="/ComprehensiveMoralPlus" style="min-width: 50px">综合素质管理
                                     </el-menu-item>
                                 </el-menu-item-group>

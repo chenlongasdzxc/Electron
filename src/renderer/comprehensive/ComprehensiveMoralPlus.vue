@@ -1,6 +1,7 @@
 <template>
     <div>
         <el-card>
+            <!--综合素质德育加分-->
             <div>
                 <FormPanel name="申请综合素质德育加分审核" align="left">
                     <div>
@@ -8,6 +9,7 @@
                                   :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
                                   style="font-size: 12px"
                                   border
+                                  height="256px"
                                   size="mini">
                             <el-table-column
                                     type="index"
@@ -71,7 +73,7 @@
                     </div>
                 </FormPanel>
             </div>
-
+            <!--综合素质课外加分-->
             <div>
                 <FormPanel name="申请综合素质课外加分审核" align="left">
                     <div>
@@ -79,6 +81,7 @@
                                   :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
                                   style="font-size: 12px"
                                   border
+                                  height="256px"
                                   size="mini">
                             <el-table-column
                                     type="index"
@@ -121,7 +124,8 @@
                                     width="100px"
                             >
                                 <template slot-scope="scope">
-                                    <el-button size="mini" type="primary" @click="comprehensiveMoralOutButton">审核
+                                    <el-button size="mini" type="primary"
+                                               @click="comprehensiveMoralOutButton(scope.row)">审核
                                     </el-button>
                                 </template>
                             </el-table-column>
@@ -142,15 +146,73 @@
                 </FormPanel>
             </div>
         </el-card>
-
+        <!--审核申请综合素质德育加分弹窗-->
         <div>
             <el-dialog
-                    title="审核"
+                    title="审核综合素质德育加分"
                     :visible.sync="dialogVisible"
                     width="30%">
                 <div>
+                    <el-table :data="personalApplyMoralPlusComprehensive"
+                              :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                              style="font-size: 12px"
+                              border
+                              size="mini">
+                        <el-table-column
+                                type="index"
+                                label="序号"
+                                align="center"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="studentName"
+                                label="学生姓名"
+                                align="center"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="moralPlusName"
+                                label="加分名称"
+                                align="center"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="moralPlusType"
+                                label="加分类型"
+                                align="center"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="moralPlusScore"
+                                label="加分分数"
+                                align="center"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="year"
+                                label="申报学年"
+                                align="center"
+                        ></el-table-column>
+                        <el-table-column
+                                prop="comprehensiveQualityStates"
+                                label="状态"
+                                align="center"
+                        >
+                            <template slot-scope="scope">
+                                <el-tag type="warning" size="mini"
+                                        v-if="scope.row.comprehensiveQualityStates =='CQMP001' ">未审核
+                                </el-tag>
+                                <el-tag type="success" size="mini"
+                                        v-if="scope.row.comprehensiveQualityStates =='CQMP002' ">同意申请
+                                </el-tag>
+                                <el-tag type="danger" size="mini"
+                                        v-if="scope.row.comprehensiveQualityStates =='CQMP003' ">被驳回
+                                </el-tag>
+                                <el-tag type="success" size="mini"
+                                        v-if="scope.row.comprehensiveQualityStates =='' ">未申请
+                                </el-tag>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <div>
                     <el-form :model="applyFormData" style="font-size: 12px;text-align: left" size="small">
-                        <el-form-item label="理由:" :label-width="formLabelWidth">
+                        <el-form-item label="审核理由:" :label-width="formLabelWidth">
                             <el-input v-model="applyFormData.value" style="width: 400px" type="textarea"></el-input>
                         </el-form-item>
                     </el-form>
@@ -161,18 +223,79 @@
                 </div>
             </el-dialog>
         </div>
-
+        <!--审核申请综合素质课外加分弹窗-->
         <div>
             <el-dialog
-                    title="审核"
+                    title="审核综合素质课外加分"
                     :visible.sync="moralOutDialogVisible"
                     width="30%">
                 <div>
-                    <el-form :model="moralOutFormData" style="font-size: 12px;text-align: left" size="small">
-                        <el-form-item label="理由:" :label-width="formLabelWidth">
-                            <el-input v-model="moralOutFormData.value" style="width: 400px" type="textarea"></el-input>
-                        </el-form-item>
-                    </el-form>
+                    <div>
+                        <el-table :data="personalApplyMoralOutComprehensive"
+                                  :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                  style="font-size: 12px"
+                                  border
+                                  size="mini">
+                            <el-table-column
+                                    type="index"
+                                    label="序号"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="studentName"
+                                    label="学生姓名"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="moralOutName"
+                                    label="加分名称"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="moralOutType"
+                                    label="加分类型"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="moralOutScore"
+                                    label="加分分数"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="year"
+                                    label="申报学年"
+                                    align="center"
+                            ></el-table-column>
+                            <el-table-column
+                                    prop="comprehensiveQualityStates"
+                                    label="状态"
+                                    align="center"
+                            >
+                                <template slot-scope="scope">
+                                    <el-tag type="warning" size="mini"
+                                            v-if="scope.row.comprehensiveQualityStates =='CQMO001' ">未审核
+                                    </el-tag>
+                                    <el-tag type="success" size="mini"
+                                            v-if="scope.row.comprehensiveQualityStates =='CQMO002' ">同意申请
+                                    </el-tag>
+                                    <el-tag type="danger" size="mini"
+                                            v-if="scope.row.comprehensiveQualityStates =='CQMO003' ">被驳回
+                                    </el-tag>
+                                    <el-tag type="success" size="mini"
+                                            v-if="scope.row.comprehensiveQualityStates =='' ">未申请
+                                    </el-tag>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                    <div>
+                        <el-form :model="moralOutFormData" style="font-size: 12px;text-align: left" size="small">
+                            <el-form-item label="审核理由:" :label-width="formLabelWidth">
+                                <el-input v-model="moralOutFormData.value"
+                                          type="textarea"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </div>
                 </div>
                 <div slot="footer">
                     <el-button size="small" type="success" @click="passMoralOutApply">通过</el-button>
@@ -193,8 +316,10 @@
         name: "ComprehensiveMoralPlus",
         data() {
             return {
+                personalApplyMoralOutComprehensive: [],
                 moralOutDialogVisible: false,
                 comprehensiveMoralPlus: [],
+                personalApplyMoralPlusComprehensive: [],
                 comprehensiveMoralOut: [],
                 studentData: [],
                 moralOutPage: {
@@ -222,20 +347,26 @@
 
         mounted() {
             this.studentData = JSON.parse(sessionStorage.getItem("user"));
-            this.getComprehensiveMoralPlusData();
-            this.getComprehensiveMoralOutData();
+            this.init();
         },
 
 
         methods: {
+
+            init: function () {
+                this.getComprehensiveMoralPlusData();
+                this.getComprehensiveMoralOutData();
+            },
 
             /**
              * @description获取申请综合素质课外加分数据
              * **/
             getComprehensiveMoralOutData: function () {
                 const params = {
+                    grade: this.studentData.grade,
+                    major: this.studentData.major,
                     studentClass: this.studentData.studentClass,
-                    comprehensiveQualityStates: 'MOCQS001'
+                    comprehensiveQualityStates: 'CQMO001'
                 }
                 this.$http.get(Config.Apply + '/findFuzzyMoralOut', {params: params})
                     .then(response => {
@@ -260,7 +391,7 @@
                     studentClass: this.studentData.studentClass,
                     grade: this.studentData.grade,
                     states: 'MP002',
-                    comprehensiveQualityStates: 'MPCQS001',
+                    comprehensiveQualityStates: 'CQMP001',
                     page: this.moralPlusPage.currentPage - 1,
                     size: this.moralPlusPage.size,
                 }
@@ -284,6 +415,7 @@
              * **/
             comprehensiveMoralPlusButton: function (value) {
                 this.applyFormData.id = value.id;
+                this.getComprehensiveMoralPlus(value);
                 this.dialogVisible = true;
             },
 
@@ -291,83 +423,42 @@
              * @description同意申请
              * **/
             passApply: function () {
-                const params = {
-                    id: this.applyFormData.id,
-                    comprehensiveQualityStates: 'MPCQS002',
-                    applyComprehensiveNumber: this.studentData.studentNumber,
-                    applyComprehensiveName: this.studentData.studentName,
-                }
-                this.$http.get(Config.Apply + '/update', {params: params})
-                    .then(response => {
-                        if (response.data.code == '200') {
-                            this.dialogVisible = false;
-                            this.$message({
-                                message: '审核成功',
-                                type: 'success',
-                                center: true,
-                            })
-                        } else if (response.data.code == '403') {
-                            this.dialogVisible = false;
-                            this.$message({
-                                message: '错误',
-                                type: 'warning',
-                                center: true,
-                            })
-                        } else {
-                            this.dialogVisible = false;
-                            this.$message({
-                                message: '错误',
-                                type: 'warning',
-                                center: true,
-                            })
-                        }
-                        this.getComprehensiveMoralPlusData();
-                    })
+                const value = 'CQMP002'
+                this.moralPlusApply(value);
             },
 
             /**
              * @description审核不通过
              * **/
             rejectApply: function () {
-                const params = {
-                    id: this.applyFormData.id,
-                    comprehensiveQualityStates: 'MPCQS003',
-                    applyComprehensiveNumber: this.studentData.studentNumber,
-                    applyComprehensiveName: this.studentData.studentName,
-                }
-                this.$http.get(Config.Apply + '/update', {params: params})
-                    .then(response => {
-                        if (response.data.code == '200') {
-                            this.dialogVisible = false;
-                            this.$message({
-                                message: '驳回成功',
-                                type: 'success',
-                                center: true,
-                            })
-                        } else if (response.data.code == '403') {
-                            this.dialogVisible = false;
-                            this.$message({
-                                message: '错误',
-                                type: 'warning',
-                                center: true,
-                            })
-                        } else {
-                            this.dialogVisible = false;
-                            this.$message({
-                                message: '错误',
-                                type: 'warning',
-                                center: true,
-                            })
-                        }
-                        this.getComprehensiveMoralPlusData();
-                    })
+                const value = 'CQMP003'
+                this.moralPlusApply(value);
             },
 
             /**
-             * @description审核综合素质课外加分申请
+             * @description审核综合素质课外加分申请弹窗
              * **/
             comprehensiveMoralOutButton: function (value) {
                 this.moralOutFormData.id = value.id;
+                const params = {
+                    studentNumber: value.studentNumber,
+                    moralOutType: value.moralOutType,
+                    year: value.year,
+                    states: 'MO002'
+
+                }
+                this.$http.get(Config.StudentMoralOut + '/findPersonal', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.personalApplyMoralOutComprehensive = response.data.data.content;
+                        } else {
+                            this.$message({
+                                message: "获取个人数据失败",
+                                type: 'success',
+                                center: true,
+                            })
+                        }
+                    })
                 this.moralOutDialogVisible = true;
             },
 
@@ -405,14 +496,115 @@
                 this.getComprehensiveMoralOutData();
             },
 
+            /**
+             * @description同意申请综合素质课外加分申请
+             * **/
             passMoralOutApply: function () {
-
+                const value = 'CQMO002'
+                this.moralOutApply(value);
             },
-
+            /**
+             * @description驳回申请综合素质课外加分申请
+             * **/
             rejectMoralOutApply: function () {
-
+                const value = 'CQMO003';
+                this.moralOutApply(value);
             },
 
+            /**
+             * @description审核申请综合素质课外加分
+             * **/
+            moralOutApply: function (value) {
+                const params = {
+                    id: this.moralOutFormData.id,
+                    applyValue: this.moralOutFormData.value,
+                    comprehensiveQualityStates: value,
+                    applyComprehensiveNumber: this.studentData.studentNumber,
+                    applyComprehensiveName: this.studentData.studentName,
+                }
+                this.$http.get(Config.Apply + '/updateMoralOut', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.$message({
+                                message: '审核成功',
+                                type: 'success',
+                                center: true,
+                            })
+                        } else {
+                            this.$message({
+                                message: '审核失败',
+                                type: 'warning',
+                                center: true,
+                            })
+                        }
+                        this.getComprehensiveMoralOutData();
+                        this.moralOutDialogVisible = false;
+                    })
+            },
+
+            /**
+             * @description审核申请综合素质德育加分
+             * **/
+            moralPlusApply: function (value) {
+                const params = {
+                    id: this.applyFormData.id,
+                    applyValue: this.applyFormData.value,
+                    comprehensiveQualityStates: value,
+                    applyComprehensiveNumber: this.studentData.studentNumber,
+                    applyComprehensiveName: this.studentData.studentName,
+                }
+                this.$http.get(Config.Apply + '/updateMoralPlus', {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.$message({
+                                message: '审核成功',
+                                type: 'success',
+                                center: true,
+                            })
+                        } else if (response.data.code == '403') {
+                            this.$message({
+                                message: '错误',
+                                type: 'warning',
+                                center: true,
+                            })
+                        } else {
+                            this.$message({
+                                message: '错误',
+                                type: 'warning',
+                                center: true,
+                            })
+                        }
+                        this.dialogVisible = false;
+                        this.getComprehensiveMoralPlusData();
+                    })
+            },
+
+
+            /**
+             * @description获取个人申请综合素质德育加分数据
+             * **/
+            getComprehensiveMoralPlus: function (value) {
+                console.log(value);
+                debugger
+                const params = {
+                    studentNumber: value.studentNumber,
+                    year: value.year,
+                    moralPlusType: value.moralPlusType,
+                    states: value.states,
+                }
+                this.$http.get(Config.Apply + "/findFuzzy", {params: params})
+                    .then(response => {
+                        if (response.data.code == '200') {
+                            this.personalApplyMoralPlusComprehensive = response.data.data.content;
+                        } else {
+                            this.$message({
+                                message: '获取个人申请综合素质德育加分数据失败',
+                                type: 'success',
+                                center: true,
+                            })
+                        }
+                    })
+            }
 
         }
     }
