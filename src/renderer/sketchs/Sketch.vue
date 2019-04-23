@@ -105,7 +105,7 @@
                             <span>素拓分信息</span>
                         </div>
                         <div>
-                            <el-form ref="form" :model="sketch" label-width="100px">
+                            <el-form ref="form" :rules="roleRules" :model="sketch" label-width="100px">
                                 <el-row>
                                     <el-col :span="12">
                                         <el-form-item label="素拓分名称:">
@@ -138,8 +138,8 @@
                                         </el-select>
                                     </el-form-item>
                                     <div style="float: right">
-                                        <el-button size="small" type="danger">取消</el-button>
-                                        <el-button size="small" type="primary" @click="savePersonalSketch">保存
+                                        <el-button size="mini" type="danger" @click="restForm('form')">重置</el-button>
+                                        <el-button size="mini" type="primary" @click="savePersonalSketch">保存
                                         </el-button>
                                     </div>
                                 </div>
@@ -237,6 +237,17 @@
                 },
                 ],
                 sketchTypeData: [],
+                roleRules: {
+                    sketchName: [
+                        {required: true, message: '请输入素拓分名称', trigger: 'blur'}
+                    ],
+                    type: [
+                        {required: true, message: '请选择素拓分类型', trigger: 'blur'}
+                    ],
+                    sketchPart: [
+                        {required: true, message: '前选择参与角色', trigger: 'blur'}
+                    ],
+                },
             }
         },
         mounted() {
@@ -245,6 +256,14 @@
             this.getSketchTypeData();
         },
         methods: {
+
+
+            restForm: function (formName) {
+                this.$refs[formName].resetFields();
+                this.sketch.type = '';
+                this.sketch.sketchName = '';
+                this.sketch.sketchPart = '';
+            },
 
             /**
              * @description 获取学生素拓list
@@ -403,7 +422,7 @@
                     sketchName: this.sketchDialogForm.sketchName,
                     type: this.sketchDialogForm.type,
                     sketchPart: this.sketchDialogForm.sketchPart,
-                    id:this.sketchDialogForm.id,
+                    id: this.sketchDialogForm.id,
                 }
                 console.log(params)
                 this.$http.post(Config.sketch + '/update', params).then(response => {
@@ -414,7 +433,7 @@
                             center: true
                         })
                         this.getPersonalSketchData();
-                        this.sketchFormVisible=false;
+                        this.sketchFormVisible = false;
                     } else {
                         this.$message({
                             message: '上传失败',
@@ -422,7 +441,7 @@
                             center: true
                         });
                         this.getPersonalSketchData();
-                        this.sketchFormVisible=false;
+                        this.sketchFormVisible = false;
                     }
                 })
             }

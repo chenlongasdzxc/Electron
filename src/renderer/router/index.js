@@ -149,6 +149,21 @@ export default new Router({
                     name: 'MoralDeductionManage',
                     component: require('@/moral/MoralDeductionManage').default,
                 },
+                {
+                    path: '/ComprehensiveQuality',
+                    name: 'ComprehensiveQuality',
+                    component: require('@/comprehensive/ComprehensiveQuality').default,
+                },
+                {
+                    path: '/Grade',
+                    name: 'grade',
+                    component: require('@/grade/Grade').default,
+                },
+                {
+                    path: '/GradeManage',
+                    name: 'gradeManage',
+                    component: require('@/grade/GradeManage').default,
+                },
             ],
         },
 

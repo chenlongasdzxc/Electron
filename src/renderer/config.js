@@ -23,4 +23,7 @@ export default {
     RolePermission:`${baseIp}/rolePermission`, //角色权限中间表
     UserRole:`${baseIp}/userRole`, //用户角色中间表
     StudentMoralDeduction:`${baseIp}/studentMoralDeduction`, //德育减分
+    ComprehensiveQuality:`${baseIp}/comprehensiveQuality`, //综合素质
+    Grade:`${baseIp}/studentGrade`,
+    GPA:`${baseIp}/studentGPA`
 }

@@ -70,21 +70,32 @@
                                 </el-menu-item-group>
                             </el-submenu>
                             <el-submenu index="6">
+                                <template slot="title" style="padding: 0px 0px 0px 0px;">学生成绩</template>
+                                <el-menu-item-group>
+                                    <el-menu-item index="/Grade" style="min-width: 50px">成绩管理
+                                    </el-menu-item>
+                                    <el-menu-item index="/GradeManage" style="min-width: 50px">我的成绩
+                                    </el-menu-item>
+                                </el-menu-item-group>
+                            </el-submenu>
+                            <el-submenu index="7">
                                 <template slot="title" style="padding: 0px 0px 0px 0px;">综合素质</template>
                                 <el-menu-item-group>
+                                    <el-menu-item index="/ComprehensiveQuality" style="min-width: 50px">综合素质详情
+                                    </el-menu-item>
                                     <el-menu-item index="/PersonalMoralPlus" style="min-width: 50px">我的综合素质</el-menu-item>
                                     <el-menu-item index="/ComprehensiveMoralPlus" style="min-width: 50px">综合素质管理
                                     </el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="7">
+                            <el-submenu index="8">
                                 <template slot="title" style="padding: 0px 0px 0px 0px;">学分管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="" style="min-width: 50px">我的学分</el-menu-item>
                                     <el-menu-item index="" style="min-width: 50px">重修选课</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="8">
+                            <el-submenu index="9">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">考勤管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/PersonalCheckingIn" style="min-width: 50px">我的考勤
@@ -94,14 +105,14 @@
                                     <el-menu-item index="/CheckingManage" style="min-width: 50px">考勤管理</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="9">
+                            <el-submenu index="10">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">个人中心</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/UserInformation" style="min-width: 50px">个人信息
                                     </el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="10">
+                            <el-submenu index="11">
                                 <template slot="title" style="padding: 0px 0px 0px 0px">学生管理</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/StudentInformation" style="min-width: 50px">学生信息
@@ -109,7 +120,7 @@
                                     <el-menu-item index="/StudentFileCard" style="min-width: 50px">建档立卡</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="11">
+                            <el-submenu index="12">
                                 <template slot="title" style="padding: 0 0 0 0 ">数据字典</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/DataDictionary" style="min-width: 50px">查看数据字典</el-menu-item>
@@ -123,7 +134,7 @@
                                     </el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-submenu index="12">
+                            <el-submenu index="13">
                                 <template slot="title" style="padding: 0 0 0 0 ">设置</template>
                                 <el-menu-item-group>
                                     <el-menu-item index="/RoleSetting" style="min-width: 50px">权限设置</el-menu-item>
