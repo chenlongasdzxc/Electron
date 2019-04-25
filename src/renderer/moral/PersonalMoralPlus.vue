@@ -46,12 +46,12 @@
                                     align="center"
                             ></el-table-column>
                             <el-table-column
-                                    prop="moralExpressionName"
+                                    prop="moralExpressionNameList"
                                     label="名称"
                                     align="center"
                             ></el-table-column>
                             <el-table-column
-                                    prop="moralExpressionScore"
+                                    prop="moralExpressionTotalScore"
                                     label="分数"
                                     align="center"
                             ></el-table-column>
@@ -60,23 +60,6 @@
                                     label="学年"
                                     align="center"
                             ></el-table-column>
-                            <el-table-column
-                                    prop="states"
-                                    label="申请综合素质状态"
-                                    align="center"
-                            >
-                                <template slot-scope="scope">
-                                    <el-tag type="warning" size="mini"
-                                            v-if="scope.row.states =='ME001' ">未查看
-                                    </el-tag>
-                                    <el-tag type="success" size="mini"
-                                            v-if="scope.row.states =='ME002' ">无异议
-                                    </el-tag>
-                                    <el-tag type="danger" size="mini"
-                                            v-if="scope.row.states =='ME003' ">有异议
-                                    </el-tag>
-                                </template>
-                            </el-table-column>
                         </el-table>
                         <div class="form-title">
                             <span>德育加分</span>
@@ -93,42 +76,20 @@
                                         align="center"
                                 ></el-table-column>
                                 <el-table-column
-                                        prop="moralPlusName"
+                                        prop="moralPlusNameList"
                                         label="名称"
                                         align="center"
                                 ></el-table-column>
                                 <el-table-column
-                                        prop="moralPlusType"
-                                        label="类型"
-                                        align="center"
-                                ></el-table-column>
-                                <el-table-column
-                                        prop="moralPlusScore"
+                                        prop="moralPlusTotal"
                                         label="分数"
                                         align="center"
                                 ></el-table-column>
                                 <el-table-column
-                                        prop="year"
+                                        prop="moralPlusYear"
                                         label="学年"
                                         align="center"
                                 ></el-table-column>
-                                <el-table-column
-                                        prop="comprehensiveQualityStates"
-                                        label="申请综合素质状态"
-                                        align="center"
-                                >
-                                    <template slot-scope="scope">
-                                        <el-tag type="warning" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMP001' ">未审核
-                                        </el-tag>
-                                        <el-tag type="success" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMP002' ">审核通过
-                                        </el-tag>
-                                        <el-tag type="danger" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMP003' ">审核未通过
-                                        </el-tag>
-                                    </template>
-                                </el-table-column>
                             </el-table>
                         </div>
                         <div class="form-title">
@@ -146,42 +107,20 @@
                                         align="center"
                                 ></el-table-column>
                                 <el-table-column
-                                        prop="moralOutName"
+                                        prop="moralOutNameList"
                                         label="名称"
                                         align="center"
                                 ></el-table-column>
                                 <el-table-column
-                                        prop="moralOutType"
-                                        label="类型"
-                                        align="center"
-                                ></el-table-column>
-                                <el-table-column
-                                        prop="moralOutScore"
+                                        prop="moralOutTotal"
                                         label="分数"
                                         align="center"
                                 ></el-table-column>
                                 <el-table-column
-                                        prop="year"
+                                        prop="moralOutYear"
                                         label="学年"
                                         align="center"
                                 ></el-table-column>
-                                <el-table-column
-                                        prop="comprehensiveQualityStates"
-                                        label="申请综合素质状态"
-                                        align="center"
-                                >
-                                    <template slot-scope="scope">
-                                        <el-tag type="warning" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMO001' ">未审核
-                                        </el-tag>
-                                        <el-tag type="success" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMO002' ">审核通过
-                                        </el-tag>
-                                        <el-tag type="danger" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMO003' ">审核未通过
-                                        </el-tag>
-                                    </template>
-                                </el-table-column>
                             </el-table>
                         </div>
                         <div class="form-title">
@@ -199,17 +138,12 @@
                                         align="center"
                                 ></el-table-column>
                                 <el-table-column
-                                        prop="moralOutName"
+                                        prop="moralDeductionNameList"
                                         label="名称"
                                         align="center"
                                 ></el-table-column>
                                 <el-table-column
-                                        prop="moralOutType"
-                                        label="类型"
-                                        align="center"
-                                ></el-table-column>
-                                <el-table-column
-                                        prop="moralOutScore"
+                                        prop="studentMoralDeductionScoreTotal"
                                         label="分数"
                                         align="center"
                                 ></el-table-column>
@@ -218,23 +152,6 @@
                                         label="学年"
                                         align="center"
                                 ></el-table-column>
-                                <el-table-column
-                                        prop="comprehensiveQualityStates"
-                                        label="申请综合素质状态"
-                                        align="center"
-                                >
-                                    <template slot-scope="scope">
-                                        <el-tag type="warning" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMO001' ">未审核
-                                        </el-tag>
-                                        <el-tag type="success" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMO002' ">审核通过
-                                        </el-tag>
-                                        <el-tag type="danger" size="mini"
-                                                v-if="scope.row.comprehensiveQualityStates =='CQMO003' ">审核未通过
-                                        </el-tag>
-                                    </template>
-                                </el-table-column>
                             </el-table>
                         </div>
                     </div>
@@ -292,17 +209,13 @@
         methods: {
 
 
-            init: function () {
-                this.getPersonalMoralPlus();
-                this.getPersonalMoralOut();
-                this.getPersonalMoralExpression();
-            },
 
             search:function(){
                 const value = this.personalComprehensive.year;
                 this.getPersonalMoralPlus(value);
                 this.getPersonalMoralOut(value);
                 this.getPersonalMoralExpression(value);
+                this.getPersonalMoralDeduction(value);
             },
 
             restForm:function(formName){
@@ -311,7 +224,7 @@
             },
 
             /**
-             * @description获取我的德育加分
+             * @description获取当前学号的德育加分
              * **/
             getPersonalMoralPlus: function (value) {
                 const params = {
@@ -331,6 +244,9 @@
                     })
             },
 
+            /**
+             * @description获取当前学号的课外加分
+             * **/
             getPersonalMoralOut: function (value) {
                 const params = {
                     studentNumber: this.studentData.studentNumber,
@@ -349,21 +265,40 @@
                     })
             },
 
+            /**
+             * @description获取当前学号的德育表现详情
+             * **/
             getPersonalMoralExpression: function (value) {
                 const params = {
                     studentNumber: this.studentData.studentNumber,
-                    states: 'ME002',
                     moralExpressionYear:value,
                 }
-                this.$http.get(Config.StudentMoralExpression + '/findPersonal', {params: params})
+                this.$http.get(Config.StudentMoralExpression + '/findMoralExpressionTotal', {params: params})
                     .then(response => {
                         if (response.data.code == '200') {
-                            this.personalMoralExpression = response.data.data;
+                            this.personalMoralExpression = response.data.data.content;
                         } else {
 
                         }
                     })
             },
+
+            /**
+             * @description获取当前学号的德育减分
+             * **/
+            getPersonalMoralDeduction:function (value) {
+                const params = {
+                    studentNumber:this.studentData.studentNumber,
+                    year:value,
+                }
+                this.$http.get(Config.StudentMoralDeduction + '/findFuzzyTotal',{params:params})
+                    .then(response=>{
+                        if (response.data.code =='200'){
+                            this.personalMoralDeduction = response.data.data.content;
+                        }
+                    })
+
+            }
 
         }
     }

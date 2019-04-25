@@ -6,7 +6,7 @@
                     <el-row>
                         <el-col :span="12">
                             <div>
-                                <el-button></el-button>
+                                <el-button size="mini" type="primary">下载模板</el-button>
                             </div>
                         </el-col>
                         <el-col :span="12">
@@ -314,6 +314,97 @@
                     </div>
                 </FormPanel>
             </div>
+            <div>
+                <FormPanel name="修改成绩" align="left">
+                    <div>
+                        <div>
+                            <el-table
+                                    :data="gradeWrongInformation"
+                                    :header-cell-style="{background:'#f0f0f0','text-align':'center'}"
+                                    style="font-size: 12px"
+                                    border
+                                    height="401px"
+                                    size="mini">
+                                <el-table-column
+                                        type="index"
+                                        label="序号"
+                                        align="center"
+                                ></el-table-column>
+                                <el-table-column
+                                        prop="studentName"
+                                        label="姓名"
+                                        align="center"
+                                        width="100px"
+                                ></el-table-column>
+                                <el-table-column
+                                        prop="studentNumber"
+                                        label="学号"
+                                        align="center"
+                                ></el-table-column>
+                                <el-table-column
+                                        prop="studentClass"
+                                        label="班级"
+                                        align="center"
+                                ></el-table-column>
+                                <el-table-column
+                                        prop="gradeYear"
+                                        label="学年"
+                                        align="center"
+                                ></el-table-column>
+                                <el-table-column
+                                        prop="gradeName"
+                                        label="科目"
+                                        align="center"
+                                ></el-table-column>
+                                <el-table-column
+                                        prop="gradeScore"
+                                        label="分数"
+                                        align="center"
+                                ></el-table-column>
+                                <el-table-column
+                                        prop="states"
+                                        label="状态"
+                                        align="center"
+                                >
+                                    <template slot-scope="scope">
+                                        <el-tag type="warning" size="mini"
+                                                v-if="scope.row.states =='GS001' ">未查看
+                                        </el-tag>
+                                        <el-tag type="success" size="mini"
+                                                v-if="scope.row.states =='GS002' ">正确
+                                        </el-tag>
+                                        <el-tag type="danger" size="mini"
+                                                v-if="scope.row.states =='GS003' ">不正确
+                                        </el-tag>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        label="操作"
+                                        align="center"
+                                >
+                                    <template slot-scope="scope">
+                                        <el-button size="mini" type="primary" @click="updateGrade(scope.row)">编辑</el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                        <!--分页-->
+                        <div>
+                            <el-pagination
+                                    style="display: flex;justify-content: center"
+                                    background
+                                    @size-change="wrongGradePageSize"
+                                    @current-change="wrongGradePageCurrent"
+                                    layout="prev, pager, next,total"
+                                    :current-page="wrongGradePage.currentPage"
+                                    :page-size="wrongGradePage.size"
+                                    :total="wrongGradePage.total"
+                            >
+                            </el-pagination>
+                        </div>
+                    </div>
+                </FormPanel>
+            </div>
         </el-card>
     </div>
 </template>
@@ -349,7 +440,13 @@
                     studentClass: '',
                     gradeName: '',
                 },
+                wrongGradePage:{
+                    size: 10,
+                    total: 1,
+                    currentPage: 1
+                },
                 gradeInformation: [],
+                gradeWrongInformation: [],
                 dev: [],
                 major: [],
                 year: [],
@@ -366,21 +463,34 @@
                     value: '第四学年',
                     label: '第四学年'
                 }],
+                studentData:[],
             }
         },
 
         mounted() {
-            this.createActionUrl();
-            this.getMajor();
-            this.getGpaData();
+            this.studentData = JSON.parse(sessionStorage.getItem("user"));
+            this.init();
         },
 
         methods: {
 
+            init(){
+                this.createActionUrl();
+                this.getMajor();
+                this.getGpaData();
+                this.getGradeWrongInformation();
+            },
+
+            /**
+             * @description导入表格
+             * **/
             createActionUrl: function () {
                 this.action = `${Config.Grade}/importExcel`
             },
 
+            /**
+             * @description专业改变事件
+             * **/
             majorChange: function (value) {
                 this.searchForm.studentClass = '';
                 this.studentClass = [];
@@ -393,6 +503,9 @@
 
             },
 
+            /**
+             * @description学年改变事件
+             * **/
             yearChange: function (value) {
                 this.searchForm.gradeName = '';
                 this.gradeName = [];
@@ -402,6 +515,9 @@
 
             },
 
+            /**
+             * @description重置
+             * **/
             restSearchForm: function (formName) {
                 this.$refs[formName].resetFields();
                 this.searchForm.year = '';
@@ -571,6 +687,9 @@
                 this.searchData.year = '';
             },
 
+            /**
+             *
+             * **/
             getGpaData: function () {
                 this.$http.get(Config.GPA + '/findAllGpa')
                     .then(response => {
@@ -580,7 +699,9 @@
                     })
             },
 
-
+            /**
+             * @description搜索成绩数据
+             * **/
             searchGradeData: function () {
                 const params = {
                     year: this.searchForm.year,
@@ -600,17 +721,72 @@
                     })
             },
 
-
+            /**
+             * @description分页size事件
+             * **/
             gradePageSize: function (value) {
                 this.gradePage.size = value;
                 this.gradePage.currentPage = 1;
                 this.searchGradeData();
             },
-
+            /**
+             * @description分页current事件
+             * **/
             gradePageCurrent: function (value) {
                 this.gradePage.currentPage = value;
                 this.searchGradeData();
             },
+
+
+            /**
+             * @description获取成绩不正确数据
+             * **/
+            getGradeWrongInformation:function () {
+                const params = {
+                    states:'GS003',
+                    grade:this.studentData.grade,
+                    page: this.wrongGradePage.currentPage - 1,
+                    size:this.wrongGradePage.size,
+                }
+                this.$http.get(Config.Grade+'/findFuzzy',{params:params})
+                    .then(response=>{
+                        if (response.data.code =='200'){
+                            this.gradeWrongInformation = response.data.data.content;
+                            this.wrongGradePage.total = response.data.data.totalElements;
+                        }else {
+                            this.$message({
+                                message:'获取不正确成绩数据失败',
+                                type:'warning',
+                                center:true,
+                            })
+                        }
+                    })
+            },
+
+            /**
+             * @description修改成绩
+             * **/
+            updateGrade:function (value) {
+
+            },
+
+            /**
+             * @description不正确成绩page size事件
+             * **/
+            wrongGradePageSize:function (value) {
+                this.wrongGradePage.size = value;
+                this.wrongGradePage.currentPage = 1;
+                this.getGradeWrongInformation();
+            },
+
+
+            /**
+             * @description不正确成绩page current事件
+             * **/
+            wrongGradePageCurrent:function (value) {
+                this.wrongGradePage.currentPage = value;
+                this.getGradeWrongInformation();
+            }
 
         },
 
